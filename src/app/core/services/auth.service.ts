@@ -32,6 +32,14 @@ export class AuthService {
   );
   readonly isAuthenticated$ = this.currentUser$.pipe(map(Boolean));
 
+  get currentUserSnapshot(): AppUser | null {
+    return this.auth.currentUser ? this.mapFirebaseUser(this.auth.currentUser) : null;
+  }
+
+  get isAuthenticatedSnapshot(): boolean {
+    return Boolean(this.auth.currentUser);
+  }
+
   async login(credentials: AuthCredentials): Promise<AppUser> {
     console.log('[AuthService] login called');
     return this.signIn(credentials);

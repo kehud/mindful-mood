@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, NgZone, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
@@ -17,6 +17,7 @@ import { WellnessHeaderComponent } from '../../../shared/components/wellness-hea
 export class RegisterPage {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly ngZone = inject(NgZone);
 
   isLoading = false;
   errorMessage = '';
@@ -28,7 +29,7 @@ export class RegisterPage {
   });
 
   async onRegisterButtonClick(): Promise<void> {
-    console.log('[RegisterPage] button clicked');
+    console.log('[RegisterPage] register clicked');
     await this.submit();
   }
 
@@ -64,12 +65,18 @@ export class RegisterPage {
       console.log(`[RegisterPage] auth action started: ${label}`);
       await action();
       console.log(`[RegisterPage] auth success: ${label}`);
-      await this.router.navigateByUrl('/tabs/home');
+      await this.navigateHome();
     } catch (error) {
       console.error(`[RegisterPage] auth error: ${label}`, error);
       this.errorMessage = this.authService.getErrorMessage(error);
     } finally {
       this.isLoading = false;
     }
+  }
+
+  private async navigateHome(): Promise<void> {
+    console.log('[RegisterPage] navigating to tabs home');
+    await this.ngZone.run(() => this.router.navigateByUrl('/tabs/home', { replaceUrl: true }));
+    console.log('[RegisterPage] navigation complete');
   }
 }

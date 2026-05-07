@@ -8,8 +8,16 @@ export const authGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
+  if (authService.isAuthenticatedSnapshot) {
+    console.log('[AuthGuard] authenticated from Firebase currentUser snapshot');
+    return true;
+  }
+
   return authService.isAuthenticated$.pipe(
     take(1),
-    map((isAuthenticated) => isAuthenticated || router.createUrlTree(['/login'])),
+    map((isAuthenticated) => {
+      console.log('[AuthGuard] authenticated from authState', isAuthenticated);
+      return isAuthenticated || router.createUrlTree(['/login']);
+    }),
   );
 };

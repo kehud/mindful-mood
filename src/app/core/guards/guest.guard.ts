@@ -8,8 +8,16 @@ export const guestGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
+  if (authService.isAuthenticatedSnapshot) {
+    console.log('[GuestGuard] authenticated from Firebase currentUser snapshot; redirecting home');
+    return router.createUrlTree(['/tabs/home']);
+  }
+
   return authService.isAuthenticated$.pipe(
     take(1),
-    map((isAuthenticated) => !isAuthenticated || router.createUrlTree(['/tabs/home'])),
+    map((isAuthenticated) => {
+      console.log('[GuestGuard] authenticated from authState', isAuthenticated);
+      return !isAuthenticated || router.createUrlTree(['/tabs/home']);
+    }),
   );
 };
