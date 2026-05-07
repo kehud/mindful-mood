@@ -1,0 +1,43 @@
+<ion-content class="wellness-content" fullscreen>
+  <main class="page-shell checkin-shell">
+    <nav class="checkin-nav">
+      <ion-button class="nav-button" fill="clear" size="small" routerLink="/check-in/mood">
+        <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
+        Back
+      </ion-button>
+      <span>2 of 4</span>
+    </nav>
+
+    <div class="step-dots" aria-hidden="true">
+      <span></span>
+      <span class="active"></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <section class="question-block">
+      <p class="eyebrow">Emotions</p>
+      <h1>What feelings are here?</h1>
+      <p>You can choose more than one. Mixed feelings count.</p>
+    </section>
+
+    <section class="selection-card">
+      <div class="selection-summary">
+        <span>{{ selectedEmotions.length }}</span>
+        <p>{{ selectedEmotions.length === 1 ? 'emotion selected' : 'emotions selected' }}</p>
+      </div>
+
+      <app-chip-selector
+        ariaLabel="Select emotions"
+        tone="mint"
+        [options]="emotions"
+        [selectedValues]="selectedEmotions"
+        (selectedValuesChange)="selectedEmotions = $event"
+      ></app-chip-selector>
+    </section>
+
+    <footer class="bottom-action">
+      <ion-button class="primary-action" expand="block" (click)="next()">Continue</ion-button>
+    </footer>
+  </main>
+</ion-content>

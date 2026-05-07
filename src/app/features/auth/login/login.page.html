@@ -1,0 +1,42 @@
+<ion-content class="wellness-content" fullscreen>
+  <main class="page-shell auth-shell">
+    <ion-button fill="clear" size="small" routerLink="/welcome">
+      <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
+      Back
+    </ion-button>
+
+    <app-wellness-header
+      eyebrow="Welcome back"
+      title="Log in"
+      subtitle="Return to your check-ins, history, and mood patterns."
+    ></app-wellness-header>
+
+    <form class="auth-card soft-panel" [formGroup]="form" (ngSubmit)="submit()">
+      <ion-item lines="none">
+        <ion-input label="Email" labelPlacement="stacked" type="email" formControlName="email"></ion-input>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-input label="Password" labelPlacement="stacked" type="password" formControlName="password"></ion-input>
+      </ion-item>
+
+      <p class="form-error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <ion-button class="primary-action" expand="block" type="submit" [disabled]="isLoading" (click)="onLoginButtonClick()">
+        <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+        <span *ngIf="!isLoading">Log in</span>
+      </ion-button>
+
+      <div class="auth-divider"><span>or</span></div>
+
+      <ion-button class="secondary-action google-action" expand="block" fill="outline" type="button" [disabled]="isLoading" (click)="signInWithGoogle()">
+        <ion-icon slot="start" name="logo-google"></ion-icon>
+        Continue with Google
+      </ion-button>
+
+      <ion-button class="secondary-action" expand="block" fill="clear" routerLink="/register">
+        Create account
+      </ion-button>
+    </form>
+  </main>
+</ion-content>

@@ -1,0 +1,54 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 46px;
+  border: 1px solid rgba(54, 89, 102, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.76);
+  color: #2a3b46;
+  font: inherit;
+  font-weight: 680;
+  padding: 0 16px;
+  box-shadow: 0 10px 24px rgba(46, 75, 86, 0.06);
+  transition:
+    background 150ms ease,
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    color 150ms ease,
+    transform 150ms ease;
+}
+
+.chip:focus-visible {
+  outline: 3px solid rgba(77, 141, 124, 0.22);
+  outline-offset: 2px;
+}
+
+.chip:active {
+  transform: scale(0.97);
+}
+
+.chip.selected {
+  border-color: rgba(77, 141, 124, 0.52);
+  background: linear-gradient(145deg, rgba(225, 246, 237, 0.96), rgba(255, 255, 255, 0.86));
+  box-shadow: 0 14px 28px rgba(77, 141, 124, 0.18);
+  color: #286657;
+}
+
+.chip.selected.peach {
+  border-color: rgba(231, 144, 126, 0.48);
+  background: linear-gradient(145deg, rgba(255, 232, 222, 0.98), rgba(255, 255, 255, 0.86));
+  box-shadow: 0 14px 28px rgba(231, 144, 126, 0.16);
+  color: #9b5a4d;
+}
+
+.chip.selected.blue {
+  border-color: rgba(123, 143, 214, 0.48);
+  background: linear-gradient(145deg, rgba(232, 237, 255, 0.98), rgba(255, 255, 255, 0.86));
+  box-shadow: 0 14px 28px rgba(123, 143, 214, 0.16);
+  color: #596eb5;
+}
+
+ion-icon {
+  font-size: 1rem;
+}

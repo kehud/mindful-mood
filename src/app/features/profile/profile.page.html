@@ -1,0 +1,40 @@
+<ion-content class="wellness-content" fullscreen>
+  <main class="page-shell">
+    <app-wellness-header
+      eyebrow="Profile"
+      title="Your space"
+      subtitle="Account, privacy, and app preferences will live here."
+    ></app-wellness-header>
+
+    <app-wellness-card tone="mint">
+      <div class="profile-row" *ngIf="user$ | async as user; else previewProfile">
+        <div class="avatar">{{ user.displayName.charAt(0) }}</div>
+        <div>
+          <h2>{{ user.displayName }}</h2>
+          <p>{{ user.email }}</p>
+        </div>
+      </div>
+
+      <ng-template #previewProfile>
+        <div class="profile-row">
+          <div class="avatar">M</div>
+          <div>
+            <h2>Preview mode</h2>
+            <p>Firebase Auth will provide profile details later.</p>
+          </div>
+        </div>
+      </ng-template>
+    </app-wellness-card>
+
+    <section class="settings-list">
+      <app-wellness-card title="Privacy" subtitle="Firestore rules and data export controls can be added next."></app-wellness-card>
+      <app-wellness-card title="Reminders" subtitle="Daily notification preferences can be added with Capacitor."></app-wellness-card>
+    </section>
+
+    <p class="profile-error" *ngIf="errorMessage">{{ errorMessage }}</p>
+    <ion-button class="secondary-action" expand="block" fill="clear" [disabled]="isSigningOut" (click)="signOut()">
+      <ion-spinner *ngIf="isSigningOut" name="crescent"></ion-spinner>
+      <span *ngIf="!isSigningOut">Sign out</span>
+    </ion-button>
+  </main>
+</ion-content>

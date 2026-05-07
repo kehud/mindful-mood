@@ -1,0 +1,36 @@
+.card {
+  border: 1px solid var(--app-soft-border);
+  border-radius: var(--app-radius-lg);
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: var(--app-card-shadow);
+  padding: 20px;
+}
+
+.card.mint {
+  background: linear-gradient(145deg, rgba(236, 249, 242, 0.94), rgba(255, 255, 255, 0.88));
+}
+
+.card.peach {
+  background: linear-gradient(145deg, rgba(255, 241, 232, 0.94), rgba(255, 255, 255, 0.9));
+}
+
+.card.blue {
+  background: linear-gradient(145deg, rgba(236, 241, 255, 0.95), rgba(255, 255, 255, 0.9));
+}
+
+.card-header {
+  margin-bottom: 16px;
+}
+
+h2 {
+  margin: 0;
+  color: #21333d;
+  font-size: 1.05rem;
+  font-weight: 760;
+}
+
+p {
+  margin: 6px 0 0;
+  color: #6a7b83;
+  line-height: 1.4;
+}

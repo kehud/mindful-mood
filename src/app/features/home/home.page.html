@@ -1,0 +1,38 @@
+<ion-content class="wellness-content" fullscreen>
+  <main class="page-shell">
+    <app-wellness-header
+      eyebrow="Today"
+      title="How are you feeling?"
+      subtitle="A daily check-in helps turn passing moments into patterns you can understand."
+    ></app-wellness-header>
+
+    <section class="hero-card soft-panel">
+      <div>
+        <span class="mood-badge">Daily mood</span>
+        <h2>Make space for a quick reflection.</h2>
+      </div>
+      <ion-button class="primary-action" expand="block" routerLink="/check-in/mood">Start check-in</ion-button>
+    </section>
+
+    <h2 class="section-title">Recent note</h2>
+    <app-wellness-card *ngIf="lastEntry$ | async as entry; else emptyRecent" tone="mint">
+      <div class="split-row">
+        <div>
+          <p class="entry-date">{{ entry.createdAt | date: 'MMM d' }}</p>
+          <h3>{{ entry.moodLevel | moodLabel }}</h3>
+        </div>
+        <span class="score">{{ entry.moodLevel }}</span>
+      </div>
+      <p class="note">{{ entry.journalNote }}</p>
+    </app-wellness-card>
+
+    <ng-template #emptyRecent>
+      <app-wellness-card tone="mint" title="No check-ins yet" subtitle="Your first entry will appear here."></app-wellness-card>
+    </ng-template>
+
+    <h2 class="section-title">Often tracked</h2>
+    <div class="influence-row">
+      <span *ngFor="let item of quickInfluences">{{ item }}</span>
+    </div>
+  </main>
+</ion-content>

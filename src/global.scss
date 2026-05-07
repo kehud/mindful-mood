@@ -1,0 +1,241 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+@import "@ionic/angular/css/palettes/dark.system.css";
+
+:root {
+  --app-page-max-width: 680px;
+  --app-radius-lg: 28px;
+  --app-radius-md: 20px;
+  --app-card-shadow: 0 22px 54px rgba(45, 72, 89, 0.12);
+  --app-soft-border: rgba(61, 92, 106, 0.12);
+  --ion-font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+}
+
+body {
+  background: #f7faf8;
+}
+
+ion-content.wellness-content {
+  --background: linear-gradient(180deg, #fff8f1 0%, #eef8f4 46%, #f8f9fd 100%);
+}
+
+.page-shell {
+  width: min(100%, var(--app-page-max-width));
+  margin: 0 auto;
+  padding: 24px 20px 32px;
+}
+
+.full-height-shell {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--ion-color-primary);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.section-title {
+  margin: 28px 0 14px;
+  color: #1f2f3a;
+  font-size: 1.1rem;
+  font-weight: 750;
+}
+
+.soft-panel {
+  border: 1px solid var(--app-soft-border);
+  border-radius: var(--app-radius-lg);
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: var(--app-card-shadow);
+  backdrop-filter: blur(18px);
+}
+
+.stack {
+  display: grid;
+  gap: 14px;
+}
+
+.split-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.muted {
+  color: #6a7b83;
+}
+
+.primary-action {
+  margin-top: 18px;
+  --border-radius: 18px;
+  --box-shadow: 0 14px 28px rgba(77, 141, 124, 0.24);
+  min-height: 52px;
+  font-weight: 700;
+}
+
+.secondary-action {
+  --border-radius: 18px;
+  min-height: 48px;
+  font-weight: 700;
+}
+
+.step-dots {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  margin: 6px 0 22px;
+}
+
+.step-dots span {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(63, 96, 107, 0.2);
+}
+
+.step-dots span.active {
+  width: 22px;
+  background: var(--ion-color-primary);
+}
+
+.checkin-shell {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: calc(18px + env(safe-area-inset-bottom));
+}
+
+.checkin-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 40px;
+  margin-bottom: 2px;
+}
+
+.nav-button {
+  margin-left: -12px;
+  --color: #4c646d;
+  font-weight: 700;
+}
+
+.checkin-nav span {
+  color: #7a8d94;
+  font-size: 0.86rem;
+  font-weight: 720;
+}
+
+.question-block {
+  max-width: 410px;
+  margin: 0 auto 22px;
+  text-align: center;
+}
+
+.question-block h1 {
+  margin: 0;
+  color: #1f2f3a;
+  font-size: 2.2rem;
+  font-weight: 840;
+  line-height: 1.03;
+}
+
+.question-block p:last-child {
+  margin: 13px 0 0;
+  color: #637780;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.selection-card {
+  border: 1px solid rgba(61, 92, 106, 0.11);
+  border-radius: 32px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(232, 248, 240, 0.95), rgba(255, 255, 255, 0) 42%),
+    rgba(255, 255, 255, 0.84);
+  box-shadow: 0 24px 58px rgba(45, 72, 89, 0.13);
+  padding: 18px 14px 20px;
+  backdrop-filter: blur(18px);
+}
+
+.selection-summary {
+  display: grid;
+  place-items: center;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.selection-summary span {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 21px;
+  background: rgba(77, 141, 124, 0.13);
+  color: var(--ion-color-primary);
+  font-size: 1.65rem;
+  font-weight: 850;
+}
+
+.selection-summary p {
+  margin: 8px 0 0;
+  color: #647880;
+  font-weight: 680;
+}
+
+.bottom-action {
+  position: sticky;
+  bottom: 0;
+  margin-top: auto;
+  padding-top: 22px;
+  background: linear-gradient(180deg, rgba(248, 249, 253, 0), rgba(248, 249, 253, 0.96) 48%);
+}
+
+.bottom-action .primary-action {
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .page-shell {
+    padding-top: 36px;
+  }
+}

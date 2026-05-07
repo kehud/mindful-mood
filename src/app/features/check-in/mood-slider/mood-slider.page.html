@@ -1,0 +1,67 @@
+<ion-content class="wellness-content" fullscreen>
+  <main class="page-shell checkin-shell">
+    <nav class="checkin-nav">
+      <ion-button class="nav-button" fill="clear" size="small" routerLink="/tabs/home">
+        <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
+        Back
+      </ion-button>
+      <span>1 of 4</span>
+    </nav>
+
+    <div class="step-dots" aria-hidden="true">
+      <span class="active"></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <section class="question-block">
+      <p class="eyebrow">Daily check-in</p>
+      <h1>How does this moment feel?</h1>
+      <p>Choose the point that feels closest. It does not have to be exact.</p>
+    </section>
+
+    <section class="mood-card">
+      <section class="mood-display">
+        <div class="mood-aura" [attr.data-mood]="moodLevel">
+          <span>{{ moodLevel }}</span>
+        </div>
+        <h2>{{ selectedMood.label }}</h2>
+        <p>{{ selectedMood.helper }}</p>
+      </section>
+
+      <ion-range
+        aria-label="Mood level"
+        min="1"
+        max="7"
+        step="1"
+        snaps="true"
+        ticks="true"
+        [(ngModel)]="moodLevel"
+      ></ion-range>
+
+      <div class="mood-scale" aria-label="Mood scale">
+        <button
+          *ngFor="let state of moodStates"
+          type="button"
+          [class.selected]="moodLevel === state.value"
+          [attr.aria-pressed]="moodLevel === state.value"
+          [attr.aria-label]="state.label"
+          (click)="selectMood(state.value)"
+        >
+          {{ state.value }}
+        </button>
+      </div>
+
+      <div class="range-labels">
+        <span>Very unpleasant</span>
+        <span>Neutral</span>
+        <span>Very pleasant</span>
+      </div>
+    </section>
+
+    <footer class="bottom-action">
+      <ion-button class="primary-action" expand="block" (click)="next()">Continue</ion-button>
+    </footer>
+  </main>
+</ion-content>

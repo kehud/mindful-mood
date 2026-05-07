@@ -1,0 +1,54 @@
+<ion-content class="wellness-content" fullscreen>
+  <main class="page-shell checkin-shell">
+    <nav class="checkin-nav">
+      <ion-button class="nav-button" fill="clear" size="small" routerLink="/check-in/emotions">
+        <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
+        Back
+      </ion-button>
+      <span>3 of 4</span>
+    </nav>
+
+    <div class="step-dots" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span class="active"></span>
+      <span></span>
+    </div>
+
+    <section class="question-block">
+      <p class="eyebrow">Influences</p>
+      <h1>What shaped this feeling?</h1>
+      <p>Select anything that may have nudged your mood today.</p>
+    </section>
+
+    <section class="selection-card">
+      <div class="selection-summary">
+        <span>{{ selectedInfluences.length }}</span>
+        <p>{{ selectedInfluences.length === 1 ? 'influence selected' : 'influences selected' }}</p>
+      </div>
+
+      <app-chip-selector
+        ariaLabel="Select influences"
+        tone="peach"
+        [options]="influences"
+        [selectedValues]="selectedInfluences"
+        (selectedValuesChange)="selectedInfluences = $event"
+      ></app-chip-selector>
+    </section>
+
+    <section class="journal-card">
+      <label for="journal-note">What else would you like to add?</label>
+      <ion-textarea
+        id="journal-note"
+        autoGrow="true"
+        rows="6"
+        placeholder="What else would you like to add?"
+        [(ngModel)]="journalNote"
+      ></ion-textarea>
+    </section>
+
+    <footer class="bottom-action">
+      <ion-button class="primary-action" expand="block" (click)="next()">Review</ion-button>
+    </footer>
+  </main>
+</ion-content>

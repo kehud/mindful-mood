@@ -1,0 +1,7 @@
+<section class="card" [class.mint]="tone === 'mint'" [class.peach]="tone === 'peach'" [class.blue]="tone === 'blue'">
+  <div *ngIf="title || subtitle" class="card-header">
+    <h2 *ngIf="title">{{ title }}</h2>
+    <p *ngIf="subtitle">{{ subtitle }}</p>
+  </div>
+  <ng-content></ng-content>
+</section>

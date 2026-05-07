@@ -1,0 +1,12 @@
+<button
+  type="button"
+  class="chip"
+  [class.selected]="selected"
+  [class.peach]="tone === 'peach'"
+  [class.blue]="tone === 'blue'"
+  [attr.aria-pressed]="selected"
+  (click)="toggleSelection.emit()"
+>
+  <ion-icon *ngIf="icon" [name]="icon" aria-hidden="true"></ion-icon>
+  <span>{{ label }}</span>
+</button>

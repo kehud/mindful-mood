@@ -1,0 +1,84 @@
+<ion-content class="wellness-content" fullscreen>
+  <main class="page-shell">
+    <app-wellness-header
+      eyebrow="Insights"
+      title="Mood patterns"
+      subtitle="A current view of the signals inside your saved Firestore check-ins."
+    ></app-wellness-header>
+
+    <section class="insight-state soft-panel" *ngIf="entriesLoading$ | async">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading your insights...</p>
+    </section>
+
+    <section class="insight-state error-state soft-panel" *ngIf="entriesError$ | async as error">
+      <p>{{ error }}</p>
+    </section>
+
+    <section class="stack" *ngIf="summary$ | async as summary">
+      <app-wellness-card
+        *ngIf="!summary.checkInCount"
+        tone="mint"
+        title="No insights yet"
+        subtitle="Save a few check-ins and this page will begin to show mood patterns."
+      ></app-wellness-card>
+
+      <section class="metric-grid">
+        <app-wellness-card tone="blue">
+          <p class="metric-label">Total</p>
+          <h2>{{ summary.checkInCount }}</h2>
+          <p class="metric-copy">check-ins</p>
+        </app-wellness-card>
+
+        <app-wellness-card tone="mint">
+          <p class="metric-label">This week</p>
+          <h2>{{ summary.checkInsThisWeek }}</h2>
+          <p class="metric-copy">saved</p>
+        </app-wellness-card>
+      </section>
+
+      <app-wellness-card tone="blue" *ngIf="summary.checkInCount">
+        <div class="average-row">
+          <div>
+            <p class="eyebrow">Average mood</p>
+            <h2>{{ summary.averageMood }}</h2>
+            <p class="muted">{{ summary.averageMood | moodLabel }}</p>
+          </div>
+          <span>{{ summary.checkInCount }} total</span>
+        </div>
+      </app-wellness-card>
+
+      <app-wellness-card title="Weekly trend" subtitle="Average mood for the last seven days." *ngIf="summary.checkInCount">
+        <div class="trend-chart">
+          <div *ngFor="let item of summary.weeklyTrend" class="trend-item">
+            <div class="trend-track">
+              <span [style.height.%]="item.percent"></span>
+            </div>
+            <strong>{{ item.label }}</strong>
+            <small>{{ item.count ? item.averageMood : '-' }}</small>
+          </div>
+        </div>
+      </app-wellness-card>
+
+      <app-wellness-card title="Most common emotions" *ngIf="summary.checkInCount">
+        <div class="rank-list" *ngIf="summary.topEmotionItems.length; else noEmotions">
+          <div *ngFor="let emotion of summary.topEmotionItems">
+            <span>{{ emotion.label }}</span>
+            <strong>{{ emotion.count }}</strong>
+          </div>
+        </div>
+        <ng-template #noEmotions><p class="muted">Save entries to see emotion patterns.</p></ng-template>
+      </app-wellness-card>
+
+      <app-wellness-card title="Most common influences" *ngIf="summary.checkInCount">
+        <div class="rank-list influence" *ngIf="summary.topInfluenceItems.length; else noInfluences">
+          <div *ngFor="let influence of summary.topInfluenceItems">
+            <span>{{ influence.label }}</span>
+            <strong>{{ influence.count }}</strong>
+          </div>
+        </div>
+        <ng-template #noInfluences><p class="muted">Save entries to see influence patterns.</p></ng-template>
+      </app-wellness-card>
+    </section>
+  </main>
+</ion-content>

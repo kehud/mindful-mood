@@ -1,0 +1,67 @@
+.hero-card {
+  padding: 22px;
+  background: linear-gradient(145deg, rgba(255, 239, 230, 0.92), rgba(238, 249, 244, 0.92));
+}
+
+.mood-badge {
+  display: inline-flex;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--ion-color-primary);
+  font-size: 0.8rem;
+  font-weight: 760;
+  padding: 8px 12px;
+}
+
+.hero-card h2 {
+  margin: 18px 0 4px;
+  color: #1f2f3a;
+  font-size: 1.75rem;
+  line-height: 1.1;
+}
+
+.entry-date,
+.note {
+  color: #6a7b83;
+}
+
+.entry-date {
+  margin: 0 0 4px;
+  font-size: 0.85rem;
+  font-weight: 650;
+}
+
+h3 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.score {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 18px;
+  background: rgba(77, 141, 124, 0.15);
+  color: var(--ion-color-primary);
+  font-weight: 800;
+}
+
+.note {
+  margin: 16px 0 0;
+  line-height: 1.45;
+}
+
+.influence-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.influence-row span {
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.75);
+  color: #40535d;
+  font-weight: 650;
+  padding: 10px 14px;
+}

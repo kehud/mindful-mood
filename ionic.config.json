@@ -1,0 +1,7 @@
+{
+  "name": "mindful-mood",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

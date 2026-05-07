@@ -1,0 +1,54 @@
+.auth-shell ion-button:first-child {
+  margin: 4px 0 12px -12px;
+}
+
+.auth-card {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+}
+
+ion-item {
+  --background: rgba(255, 255, 255, 0.72);
+  --border-radius: 18px;
+  --padding-start: 14px;
+  --inner-padding-end: 14px;
+}
+
+.form-error {
+  margin: 0;
+  border-radius: 16px;
+  background: rgba(217, 103, 103, 0.1);
+  color: var(--ion-color-danger);
+  font-size: 0.9rem;
+  font-weight: 650;
+  line-height: 1.35;
+  padding: 12px 14px;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #7b8a91;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(61, 92, 106, 0.12);
+}
+
+.google-action {
+  margin-top: 0;
+}
+
+ion-spinner {
+  width: 20px;
+  height: 20px;
+}

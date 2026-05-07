@@ -1,0 +1,104 @@
+.mood-card {
+  border: 1px solid rgba(61, 92, 106, 0.11);
+  border-radius: 32px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 236, 225, 0.95), rgba(255, 255, 255, 0) 44%),
+    rgba(255, 255, 255, 0.84);
+  box-shadow: 0 24px 58px rgba(45, 72, 89, 0.13);
+  padding: 22px 18px 20px;
+  backdrop-filter: blur(18px);
+}
+
+.mood-display {
+  display: grid;
+  place-items: center;
+  padding: 6px 0 20px;
+  text-align: center;
+}
+
+.mood-aura {
+  display: grid;
+  place-items: center;
+  width: 126px;
+  height: 126px;
+  border-radius: 42px;
+  background: linear-gradient(145deg, #ffe6d8, #e7f6ef);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75), 0 24px 42px rgba(77, 141, 124, 0.18);
+}
+
+.mood-aura span {
+  color: #25423d;
+  font-size: 3.45rem;
+  font-weight: 850;
+}
+
+.mood-display h2 {
+  margin: 16px 0 0;
+  color: #20323d;
+  font-size: 1.45rem;
+}
+
+.mood-display p {
+  max-width: 240px;
+  margin: 8px 0 0;
+  color: #677b83;
+  line-height: 1.35;
+}
+
+ion-range {
+  --bar-background: rgba(67, 94, 104, 0.16);
+  --bar-background-active: var(--ion-color-primary);
+  --knob-background: #ffffff;
+  --knob-box-shadow: 0 8px 22px rgba(43, 71, 82, 0.2);
+  padding: 14px 2px 10px;
+}
+
+.mood-scale {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 2px;
+}
+
+.mood-scale button {
+  aspect-ratio: 1;
+  border: 1px solid rgba(63, 96, 107, 0.12);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.7);
+  color: #51656e;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 780;
+  transition:
+    background 150ms ease,
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    color 150ms ease,
+    transform 150ms ease;
+}
+
+.mood-scale button.selected {
+  border-color: rgba(77, 141, 124, 0.5);
+  background: var(--ion-color-primary);
+  box-shadow: 0 12px 24px rgba(77, 141, 124, 0.24);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.range-labels {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 12px;
+  color: #6a7b83;
+  font-size: 0.75rem;
+  font-weight: 650;
+}
+
+.range-labels span:nth-child(2) {
+  text-align: center;
+}
+
+.range-labels span:last-child {
+  text-align: right;
+}
