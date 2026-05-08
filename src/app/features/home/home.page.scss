@@ -1,28 +1,34 @@
 .hero-card {
-  padding: 22px;
-  background: linear-gradient(145deg, rgba(255, 239, 230, 0.92), rgba(238, 249, 244, 0.92));
+  padding: 24px;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(var(--ion-color-tertiary-rgb), 0.14), rgba(255, 255, 255, 0) 42%),
+    radial-gradient(circle at 100% 0%, rgba(var(--ion-color-primary-rgb), 0.14), rgba(255, 255, 255, 0) 46%),
+    var(--app-surface-strong);
+  box-shadow: var(--app-card-shadow-strong);
 }
 
 .mood-badge {
   display: inline-flex;
+  align-items: center;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.66);
   color: var(--ion-color-primary);
-  font-size: 0.8rem;
+  font-size: 0.76rem;
   font-weight: 760;
-  padding: 8px 12px;
+  padding: 7px 11px;
 }
 
 .hero-card h2 {
-  margin: 18px 0 4px;
-  color: #1f2f3a;
-  font-size: 1.75rem;
-  line-height: 1.1;
+  margin: 18px 0 6px;
+  color: var(--app-text);
+  font-size: 1.72rem;
+  font-weight: 820;
+  line-height: 1.12;
 }
 
 .entry-date,
 .note {
-  color: #6a7b83;
+  color: var(--app-muted);
 }
 
 .entry-date {
@@ -33,7 +39,9 @@
 
 h3 {
   margin: 0;
-  font-size: 1.15rem;
+  color: var(--app-text);
+  font-size: 1.12rem;
+  font-weight: 780;
 }
 
 .score {
@@ -42,26 +50,29 @@ h3 {
   width: 48px;
   height: 48px;
   border-radius: 18px;
-  background: rgba(77, 141, 124, 0.15);
+  background: rgba(var(--ion-color-primary-rgb), 0.12);
   color: var(--ion-color-primary);
   font-weight: 800;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
 .note {
-  margin: 16px 0 0;
-  line-height: 1.45;
+  margin: 15px 0 0;
+  line-height: 1.5;
 }
 
 .influence-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 9px;
 }
 
 .influence-row span {
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(61, 92, 106, 0.08);
+  background: rgba(255, 255, 255, 0.62);
   color: #40535d;
-  font-weight: 650;
-  padding: 10px 14px;
+  box-shadow: 0 8px 18px rgba(45, 72, 89, 0.05);
+  font-weight: 660;
+  padding: 9px 13px;
 }

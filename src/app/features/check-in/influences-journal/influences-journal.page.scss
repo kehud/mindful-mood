@@ -1,13 +1,13 @@
 .selection-card,
 .journal-card {
-  border: 1px solid rgba(61, 92, 106, 0.11);
-  border-radius: 32px;
+  border: 1px solid var(--app-soft-border);
+  border-radius: var(--app-radius-lg);
   background:
-    radial-gradient(circle at 50% 0%, rgba(255, 237, 228, 0.95), rgba(255, 255, 255, 0) 42%),
-    rgba(255, 255, 255, 0.84);
-  box-shadow: 0 24px 58px rgba(45, 72, 89, 0.12);
-  padding: 18px 14px 20px;
-  backdrop-filter: blur(18px);
+    radial-gradient(circle at 50% -6%, rgba(255, 237, 228, 0.86), rgba(255, 255, 255, 0) 45%),
+    var(--app-surface);
+  box-shadow: var(--app-card-shadow);
+  padding: 20px 16px 22px;
+  backdrop-filter: blur(20px);
 }
 
 .config-loading {
@@ -27,34 +27,34 @@
 }
 
 .selection-summary span {
-  background: rgba(231, 144, 126, 0.14);
+  background: rgba(var(--ion-color-tertiary-rgb), 0.13);
   color: var(--ion-color-tertiary);
 }
 
 .journal-card {
   margin-top: 16px;
   background:
-    radial-gradient(circle at 50% 0%, rgba(236, 241, 255, 0.96), rgba(255, 255, 255, 0) 46%),
-    rgba(255, 255, 255, 0.86);
+    radial-gradient(circle at 50% -6%, rgba(236, 241, 255, 0.86), rgba(255, 255, 255, 0) 46%),
+    var(--app-surface);
 }
 
 .journal-card label {
   display: block;
   margin: 0 2px 12px;
-  color: #283a44;
+  color: var(--app-text);
   font-size: 1rem;
   font-weight: 760;
 }
 
 ion-textarea {
-  --background: rgba(255, 255, 255, 0.72);
+  --background: rgba(255, 255, 255, 0.66);
   --border-radius: 22px;
   --color: #263842;
   --padding-bottom: 14px;
   --padding-end: 14px;
   --padding-start: 14px;
   --padding-top: 14px;
-  border: 1px solid rgba(61, 92, 106, 0.11);
+  border: 1px solid rgba(61, 92, 106, 0.09);
   border-radius: 22px;
-  line-height: 1.45;
+  line-height: 1.5;
 }

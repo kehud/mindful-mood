@@ -1,36 +1,44 @@
 .card {
   border: 1px solid var(--app-soft-border);
   border-radius: var(--app-radius-lg);
-  background: rgba(255, 255, 255, 0.86);
+  background: var(--app-surface);
   box-shadow: var(--app-card-shadow);
-  padding: 20px;
+  padding: 21px;
+  backdrop-filter: blur(18px);
 }
 
 .card.mint {
-  background: linear-gradient(145deg, rgba(236, 249, 242, 0.94), rgba(255, 255, 255, 0.88));
+  background:
+    radial-gradient(circle at 0% 0%, rgba(var(--ion-color-primary-rgb), 0.11), rgba(255, 255, 255, 0) 44%),
+    var(--app-surface);
 }
 
 .card.peach {
-  background: linear-gradient(145deg, rgba(255, 241, 232, 0.94), rgba(255, 255, 255, 0.9));
+  background:
+    radial-gradient(circle at 0% 0%, rgba(var(--ion-color-tertiary-rgb), 0.13), rgba(255, 255, 255, 0) 44%),
+    var(--app-surface);
 }
 
 .card.blue {
-  background: linear-gradient(145deg, rgba(236, 241, 255, 0.95), rgba(255, 255, 255, 0.9));
+  background:
+    radial-gradient(circle at 0% 0%, rgba(var(--ion-color-secondary-rgb), 0.12), rgba(255, 255, 255, 0) 44%),
+    var(--app-surface);
 }
 
 .card-header {
-  margin-bottom: 16px;
+  margin-bottom: 15px;
 }
 
 h2 {
   margin: 0;
-  color: #21333d;
-  font-size: 1.05rem;
-  font-weight: 760;
+  color: var(--app-text);
+  font-size: 1.04rem;
+  font-weight: 780;
+  line-height: 1.22;
 }
 
 p {
-  margin: 6px 0 0;
-  color: #6a7b83;
-  line-height: 1.4;
+  margin: 7px 0 0;
+  color: var(--app-muted);
+  line-height: 1.46;
 }

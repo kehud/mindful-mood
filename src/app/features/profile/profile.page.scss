@@ -1,7 +1,7 @@
 .profile-row {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 17px;
 }
 
 .avatar {
@@ -9,27 +9,32 @@
   place-items: center;
   width: 64px;
   height: 64px;
-  border-radius: 24px;
-  background: linear-gradient(145deg, #e7f6ef, #eef1ff);
+  border-radius: 23px;
+  background:
+    radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0) 40%),
+    linear-gradient(145deg, rgba(var(--ion-color-primary-rgb), 0.16), rgba(var(--ion-color-secondary-rgb), 0.14));
   color: var(--ion-color-primary);
   font-size: 1.6rem;
   font-weight: 850;
+  box-shadow: 0 14px 28px rgba(45, 72, 89, 0.1);
 }
 
 h2 {
   margin: 0;
-  color: #1f2f3a;
+  color: var(--app-text);
   font-size: 1.15rem;
+  font-weight: 780;
 }
 
 p {
   margin: 5px 0 0;
-  color: #6a7b83;
+  color: var(--app-muted);
+  line-height: 1.42;
 }
 
 .settings-list {
   display: grid;
-  gap: 14px;
+  gap: 15px;
   margin-top: 18px;
 }
 

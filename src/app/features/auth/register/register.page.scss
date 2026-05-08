@@ -4,15 +4,17 @@
 
 .auth-card {
   display: grid;
-  gap: 14px;
-  padding: 18px;
+  gap: 13px;
+  padding: 20px;
 }
 
 ion-item {
-  --background: rgba(255, 255, 255, 0.72);
+  --background: rgba(255, 255, 255, 0.66);
   --border-radius: 18px;
   --padding-start: 14px;
   --inner-padding-end: 14px;
+  border: 1px solid rgba(61, 92, 106, 0.08);
+  border-radius: 18px;
 }
 
 .form-error {
@@ -30,8 +32,8 @@ ion-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  color: #7b8a91;
-  font-size: 0.82rem;
+  color: #7b8d94;
+  font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
 }
