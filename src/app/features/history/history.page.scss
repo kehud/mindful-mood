@@ -19,7 +19,7 @@
 }
 
 .error-state {
-  border-color: rgba(217, 103, 103, 0.22);
+  border-color: var(--app-danger-border);
 }
 
 .error-state p {
@@ -61,7 +61,7 @@ h2 {
   background: rgba(var(--ion-color-secondary-rgb), 0.13);
   color: var(--ion-color-secondary);
   font-weight: 850;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  box-shadow: inset 0 1px 0 var(--app-inset-highlight);
 }
 
 .entry-section {
@@ -70,7 +70,7 @@ h2 {
 
 .entry-section p {
   margin: 0 0 8px;
-  color: #73868e;
+  color: var(--app-subtle);
   font-size: 0.78rem;
   font-weight: 760;
   text-transform: uppercase;
@@ -85,7 +85,7 @@ h2 {
 .tag-row span {
   border-radius: 999px;
   background: rgba(var(--ion-color-primary-rgb), 0.1);
-  color: #2f6f60;
+  color: var(--app-primary-text);
   font-size: 0.86rem;
   font-weight: 650;
   padding: 7px 11px;
@@ -93,12 +93,12 @@ h2 {
 
 .tag-row.influence span {
   background: rgba(var(--ion-color-tertiary-rgb), 0.12);
-  color: #a05f52;
+  color: var(--app-tertiary-text);
 }
 
 .journal {
   margin: 14px 0 0;
-  color: #40535d;
+  color: var(--app-chip-text);
   display: -webkit-box;
   line-height: 1.5;
   overflow: hidden;

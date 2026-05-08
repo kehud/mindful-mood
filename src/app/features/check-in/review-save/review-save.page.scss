@@ -16,7 +16,7 @@
   align-items: center;
   gap: 16px;
   background:
-    radial-gradient(circle at 0% 0%, rgba(232, 248, 240, 0.86), rgba(255, 255, 255, 0) 48%),
+    radial-gradient(circle at 0% 0%, var(--app-mint-glow), transparent 48%),
     var(--app-surface);
 }
 
@@ -26,9 +26,7 @@
   width: 78px;
   height: 78px;
   border-radius: 26px;
-  background:
-    radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0) 38%),
-    linear-gradient(145deg, #e3f6ed, #f8e9df);
+  background: var(--app-mood-ring-background);
   box-shadow: 0 14px 28px rgba(var(--ion-color-primary-rgb), 0.14);
 }
 
@@ -90,37 +88,33 @@
 .tag-row span {
   border-radius: 999px;
   background: rgba(var(--ion-color-primary-rgb), 0.1);
-  color: #2f6f60;
+  color: var(--app-primary-text);
   font-weight: 650;
   padding: 9px 12px;
 }
 
 .tag-row.influence span {
   background: rgba(var(--ion-color-tertiary-rgb), 0.12);
-  color: #9b5a4d;
+  color: var(--app-tertiary-text);
 }
 
 .empty-copy,
 .note-card p {
   margin: 0;
-  color: #60727b;
+  color: var(--app-muted);
   line-height: 1.45;
 }
 
 .note-card {
   background:
-    radial-gradient(circle at 100% 0%, rgba(236, 241, 255, 0.86), rgba(255, 255, 255, 0) 48%),
+    radial-gradient(circle at 100% 0%, var(--app-blue-glow), transparent 48%),
     var(--app-surface);
-}
-
-.note-card p {
-  color: #40535d;
 }
 
 .save-error {
   margin: 0 0 10px;
   border-radius: 16px;
-  background: rgba(217, 103, 103, 0.1);
+  background: var(--app-danger-soft);
   color: var(--ion-color-danger);
   font-size: 0.9rem;
   font-weight: 650;

@@ -14,6 +14,21 @@
 
   <link rel="icon" type="image/png" href="assets/icon/favicon.png" />
 
+  <script>
+    (function () {
+      try {
+        var storedTheme = localStorage.getItem('mindful-mood-theme');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var useDarkTheme = storedTheme === 'dark' || (storedTheme !== 'light' && prefersDark);
+
+        document.documentElement.classList.toggle('ion-palette-dark', useDarkTheme);
+        document.documentElement.style.colorScheme = useDarkTheme ? 'dark' : 'light';
+      } catch (error) {
+        document.documentElement.style.colorScheme = 'light dark';
+      }
+    })();
+  </script>
+
   <!-- add to homescreen for ios -->
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />

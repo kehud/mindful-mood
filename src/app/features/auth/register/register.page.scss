@@ -9,18 +9,18 @@
 }
 
 ion-item {
-  --background: rgba(255, 255, 255, 0.66);
+  --background: var(--app-input-surface);
   --border-radius: 18px;
   --padding-start: 14px;
   --inner-padding-end: 14px;
-  border: 1px solid rgba(61, 92, 106, 0.08);
+  border: 1px solid var(--app-control-border);
   border-radius: 18px;
 }
 
 .form-error {
   margin: 0;
   border-radius: 16px;
-  background: rgba(217, 103, 103, 0.1);
+  background: var(--app-danger-soft);
   color: var(--ion-color-danger);
   font-size: 0.9rem;
   font-weight: 650;
@@ -32,7 +32,7 @@ ion-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  color: #7b8d94;
+  color: var(--app-subtle);
   font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -43,7 +43,7 @@ ion-item {
   content: "";
   flex: 1;
   height: 1px;
-  background: rgba(61, 92, 106, 0.12);
+  background: var(--app-divider);
 }
 
 .google-action {

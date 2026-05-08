@@ -3,7 +3,7 @@
   border: 1px solid var(--app-soft-border);
   border-radius: var(--app-radius-lg);
   background:
-    radial-gradient(circle at 50% -6%, rgba(255, 237, 228, 0.86), rgba(255, 255, 255, 0) 45%),
+    radial-gradient(circle at 50% -6%, var(--app-peach-glow), transparent 45%),
     var(--app-surface);
   box-shadow: var(--app-card-shadow);
   padding: 20px 16px 22px;
@@ -16,7 +16,7 @@
   justify-content: center;
   gap: 8px;
   margin-bottom: 12px;
-  color: #647880;
+  color: var(--app-muted);
   font-size: 0.82rem;
   font-weight: 680;
 }
@@ -34,7 +34,7 @@
 .journal-card {
   margin-top: 16px;
   background:
-    radial-gradient(circle at 50% -6%, rgba(236, 241, 255, 0.86), rgba(255, 255, 255, 0) 46%),
+    radial-gradient(circle at 50% -6%, var(--app-blue-glow), transparent 46%),
     var(--app-surface);
 }
 
@@ -47,14 +47,14 @@
 }
 
 ion-textarea {
-  --background: rgba(255, 255, 255, 0.66);
+  --background: var(--app-input-surface);
   --border-radius: 22px;
-  --color: #263842;
+  --color: var(--app-text);
   --padding-bottom: 14px;
   --padding-end: 14px;
   --padding-start: 14px;
   --padding-top: 14px;
-  border: 1px solid rgba(61, 92, 106, 0.09);
+  border: 1px solid var(--app-control-border);
   border-radius: 22px;
   line-height: 1.5;
 }

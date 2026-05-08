@@ -27,6 +27,23 @@
     </app-wellness-card>
 
     <section class="settings-list">
+      <app-wellness-card title="Appearance" subtitle="Match your device, or keep the app in one mode.">
+        <ion-segment
+          class="theme-segment"
+          mode="ios"
+          [value]="themePreference$ | async"
+          (ionChange)="setTheme($event.detail.value)"
+        >
+          <ion-segment-button *ngFor="let option of themeOptions" [value]="option.value">
+            <ion-icon [name]="option.icon" aria-hidden="true"></ion-icon>
+            <ion-label>{{ option.label }}</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+
+        <p class="theme-current" *ngIf="resolvedTheme$ | async as resolvedTheme">
+          Using {{ resolvedTheme | titlecase }} colors.
+        </p>
+      </app-wellness-card>
       <app-wellness-card title="Privacy" subtitle="Firestore rules and data export controls can be added next."></app-wellness-card>
       <app-wellness-card title="Reminders" subtitle="Daily notification preferences can be added with Capacitor."></app-wellness-card>
     </section>

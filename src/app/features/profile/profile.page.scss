@@ -11,12 +11,12 @@
   height: 64px;
   border-radius: 23px;
   background:
-    radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0) 40%),
+    radial-gradient(circle at 30% 22%, var(--app-white-glow), transparent 40%),
     linear-gradient(145deg, rgba(var(--ion-color-primary-rgb), 0.16), rgba(var(--ion-color-secondary-rgb), 0.14));
   color: var(--ion-color-primary);
   font-size: 1.6rem;
   font-weight: 850;
-  box-shadow: 0 14px 28px rgba(45, 72, 89, 0.1);
+  box-shadow: var(--app-control-shadow);
 }
 
 h2 {
@@ -38,10 +38,41 @@ p {
   margin-top: 18px;
 }
 
+.theme-segment {
+  --background: var(--app-control-surface);
+  border: 1px solid var(--app-control-border);
+  border-radius: 18px;
+  padding: 4px;
+}
+
+ion-segment-button {
+  --border-radius: 14px;
+  --color: var(--app-muted);
+  --color-checked: var(--app-text);
+  --indicator-color: var(--app-theme-segment-indicator);
+  --indicator-box-shadow: var(--app-theme-segment-shadow);
+  min-height: 48px;
+  font-size: 0.78rem;
+  font-weight: 720;
+  letter-spacing: 0;
+}
+
+ion-segment-button ion-icon {
+  margin-bottom: 3px;
+  font-size: 1.05rem;
+}
+
+.theme-current {
+  margin: 12px 2px 0;
+  color: var(--app-muted);
+  font-size: 0.88rem;
+  font-weight: 650;
+}
+
 .profile-error {
   margin: 16px 0 0;
   border-radius: 16px;
-  background: rgba(217, 103, 103, 0.1);
+  background: var(--app-danger-soft);
   color: var(--ion-color-danger);
   font-size: 0.9rem;
   font-weight: 650;

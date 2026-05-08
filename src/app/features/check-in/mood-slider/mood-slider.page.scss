@@ -6,12 +6,10 @@
   --mood-color: var(--ion-color-primary);
   --mood-faint: color-mix(in srgb, var(--mood-color) 18%, transparent);
   overflow: hidden;
-  border: 1px solid rgba(61, 92, 106, 0.1);
+  border: 1px solid var(--app-soft-border);
   border-radius: 34px;
-  background:
-    radial-gradient(circle at 50% -8%, var(--mood-faint), transparent 48%),
-    rgba(255, 255, 255, 0.88);
-  box-shadow: 0 26px 62px rgba(45, 72, 89, 0.14);
+  background: var(--app-mood-card-background);
+  box-shadow: var(--app-card-shadow-strong);
   padding: 18px 16px 16px;
   backdrop-filter: blur(18px);
 }
@@ -70,17 +68,17 @@
 .mood-shape--main {
   width: 68%;
   height: 68%;
-  border: 1px solid rgba(255, 255, 255, 0.74);
+  border: 1px solid var(--app-mood-shape-border);
   border-radius: var(--shape-radius);
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.96), var(--mood-faint));
-  box-shadow: 0 26px 42px var(--mood-faint), inset 0 1px 2px rgba(255, 255, 255, 0.82);
+  background: var(--app-mood-shape-background);
+  box-shadow: 0 26px 42px var(--mood-faint), inset 0 1px 2px var(--app-inset-highlight-strong);
   transform: translateY(var(--shape-y)) rotate(var(--mood-tilt));
 }
 
 .mood-shape ion-icon {
   color: var(--mood-color);
   font-size: 4.35rem;
-  filter: drop-shadow(0 10px 16px rgba(45, 72, 89, 0.14));
+  filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.14));
 }
 
 .mood-visual--very-low {
@@ -121,8 +119,8 @@
 .mood-tone {
   justify-self: center;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.64);
-  color: #536872;
+  background: var(--app-pill-surface);
+  color: var(--app-muted-strong);
   padding: 6px 12px;
   font-size: 0.76rem;
   font-weight: 760;
@@ -131,7 +129,7 @@
 
 .mood-copy h2 {
   margin: 4px 0 0;
-  color: #20323d;
+  color: var(--app-text-strong);
   font-size: 1.56rem;
   font-weight: 830;
   letter-spacing: 0;
@@ -139,7 +137,7 @@
 
 .mood-copy p {
   margin: 0;
-  color: #637780;
+  color: var(--app-muted);
   font-size: 0.94rem;
   line-height: 1.42;
 }
@@ -147,16 +145,16 @@
 .mood-control {
   margin-top: 15px;
   border-radius: 28px;
-  background: rgba(255, 255, 255, 0.54);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 18px 38px rgba(45, 72, 89, 0.08);
+  background: var(--app-control-surface);
+  box-shadow: inset 0 1px 0 var(--app-inset-highlight), var(--app-control-shadow);
   padding: 12px 10px 11px;
 }
 
 ion-range {
-  --bar-background: rgba(67, 94, 104, 0.13);
+  --bar-background: var(--app-mood-range-bar);
   --bar-background-active: var(--mood-color);
   --bar-height: 9px;
-  --knob-background: #ffffff;
+  --knob-background: var(--app-mood-knob-background);
   --knob-box-shadow: 0 11px 25px rgba(43, 71, 82, 0.2), 0 0 0 8px var(--mood-faint);
   --knob-size: 34px;
   padding: 0 4px 12px;
@@ -175,8 +173,8 @@ ion-range {
   aspect-ratio: 1;
   border: 0;
   border-radius: 17px;
-  background: rgba(255, 255, 255, 0.62);
-  box-shadow: inset 0 0 0 1px rgba(63, 96, 107, 0.11);
+  background: var(--app-control-surface-strong);
+  box-shadow: inset 0 0 0 1px var(--app-strong-border);
   color: var(--mood-color);
   transition: 180ms ease;
 }
@@ -187,7 +185,7 @@ ion-range {
   width: 34px;
   height: 34px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.68);
+  background: var(--app-control-surface-strong);
   transition: 180ms ease;
 }
 
@@ -203,7 +201,7 @@ ion-range {
 .mood-scale button.selected .scale-shape {
   border-radius: 16px;
   background: var(--mood-color);
-  color: #ffffff;
+  color: var(--app-mood-on-color);
   transform: scale(1.06);
 }
 
@@ -211,7 +209,7 @@ ion-range {
   display: flex;
   gap: 10px;
   margin-top: 15px;
-  color: #6a7b83;
+  color: var(--app-subtle);
   font-size: 0.75rem;
   font-weight: 650;
   line-height: 1.22;

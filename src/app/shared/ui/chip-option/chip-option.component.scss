@@ -3,14 +3,14 @@
   align-items: center;
   gap: 8px;
   min-height: 44px;
-  border: 1px solid rgba(54, 89, 102, 0.11);
+  border: 1px solid var(--app-strong-border);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.68);
-  color: #2a3b46;
+  background: var(--app-control-surface-strong);
+  color: var(--app-chip-text);
   font: inherit;
   font-weight: 660;
   padding: 0 15px;
-  box-shadow: 0 8px 20px rgba(46, 75, 86, 0.05);
+  box-shadow: var(--app-control-shadow);
   transition:
     background 180ms ease,
     border-color 180ms ease,
@@ -20,7 +20,7 @@
 }
 
 .chip:focus-visible {
-  outline: 3px solid rgba(77, 141, 124, 0.22);
+  outline: 3px solid var(--app-focus-ring);
   outline-offset: 2px;
 }
 
@@ -30,25 +30,44 @@
 
 .chip.selected {
   border-color: rgba(var(--ion-color-primary-rgb), 0.34);
-  background: linear-gradient(145deg, rgba(231, 246, 239, 0.94), rgba(255, 255, 255, 0.76));
+  background: linear-gradient(145deg, rgba(var(--ion-color-primary-rgb), 0.18), var(--app-control-surface-strong));
   box-shadow: 0 12px 24px rgba(var(--ion-color-primary-rgb), 0.14);
-  color: #286657;
+  color: var(--app-primary-text);
 }
 
 .chip.selected.peach {
   border-color: rgba(var(--ion-color-tertiary-rgb), 0.32);
-  background: linear-gradient(145deg, rgba(255, 235, 226, 0.94), rgba(255, 255, 255, 0.78));
+  background: linear-gradient(145deg, rgba(var(--ion-color-tertiary-rgb), 0.18), var(--app-control-surface-strong));
   box-shadow: 0 12px 24px rgba(var(--ion-color-tertiary-rgb), 0.13);
-  color: #9b5a4d;
+  color: var(--app-tertiary-text);
 }
 
 .chip.selected.blue {
   border-color: rgba(var(--ion-color-secondary-rgb), 0.32);
-  background: linear-gradient(145deg, rgba(235, 240, 255, 0.94), rgba(255, 255, 255, 0.78));
+  background: linear-gradient(145deg, rgba(var(--ion-color-secondary-rgb), 0.18), var(--app-control-surface-strong));
   box-shadow: 0 12px 24px rgba(var(--ion-color-secondary-rgb), 0.13);
-  color: #596eb5;
+  color: var(--app-secondary-text);
 }
 
 ion-icon {
   font-size: 1rem;
+}
+
+:host-context(.emotion-chip-selector) .chip {
+  border-color: var(--app-control-border);
+  background: var(--app-control-surface);
+  color: var(--app-muted-strong);
+}
+
+:host-context(.emotion-chip-selector) .chip.selected {
+  border-color: rgba(var(--ion-color-primary-rgb), 0.58);
+  background:
+    linear-gradient(145deg, rgba(var(--ion-color-primary-rgb), 0.26), rgba(var(--ion-color-primary-rgb), 0.12)),
+    var(--app-control-surface-strong);
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--ion-color-primary-rgb), 0.18),
+    0 14px 28px rgba(var(--ion-color-primary-rgb), 0.16);
+  color: var(--app-primary-text);
+  font-weight: 740;
+  transform: translateY(-1px);
 }
