@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, addDoc, collection, collectionData, orderBy, query } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, collectionData, query, where } from '@angular/fire/firestore';
 import { FirebaseError } from 'firebase/app';
 import { BehaviorSubject, catchError, firstValueFrom, map, of, shareReplay, switchMap, take, tap } from 'rxjs';
 
@@ -30,8 +30,8 @@ export class MoodEntryService {
         return of([]);
       }
 
-      const entriesRef = collection(this.firestore, this.entriesPath(user.uid));
-      const entriesQuery = query(entriesRef, orderBy('createdAt', 'desc'));
+      const entriesRef = collection(this.firestore, this.entriesPath());
+      const entriesQuery = query(entriesRef, where('userId', '==', user.uid));
 
       return collectionData(entriesQuery, { idField: 'id' }).pipe(
         map((entries) =>
@@ -72,9 +72,10 @@ export class MoodEntryService {
       throw new Error('You need to be logged in before saving a check-in.');
     }
 
+    const uid = user.uid;
     const draft = this.draftSubject.value;
     const entryPayload: Omit<MoodEntry, 'id'> = {
-      userId: user.uid,
+      userId: uid,
       moodLevel: draft.moodLevel,
       emotions: [...draft.emotions],
       influences: [...draft.influences],
@@ -82,7 +83,7 @@ export class MoodEntryService {
       createdAt: new Date().toISOString(),
     };
 
-    const docRef = await addDoc(collection(this.firestore, this.entriesPath(user.uid)), entryPayload);
+    const docRef = await addDoc(collection(this.firestore, this.entriesPath()), entryPayload);
     const entry: MoodEntry = {
       id: docRef.id,
       ...entryPayload,
@@ -117,7 +118,7 @@ export class MoodEntryService {
     };
   }
 
-  private entriesPath(userId: string): string {
-    return `users/${userId}/moodEntries`;
+  private entriesPath(): string {
+    return 'moodEntries';
   }
 }

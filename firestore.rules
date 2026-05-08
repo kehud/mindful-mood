@@ -1,0 +1,49 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidMoodEntry() {
+      return request.resource.data.keys().hasOnly([
+        'userId',
+        'moodLevel',
+        'emotions',
+        'influences',
+        'journalNote',
+        'createdAt'
+      ])
+      && request.resource.data.userId == request.auth.uid
+      && request.resource.data.moodLevel is number
+      && request.resource.data.moodLevel >= 1
+      && request.resource.data.moodLevel <= 7
+      && request.resource.data.emotions is list
+      && request.resource.data.influences is list
+      && request.resource.data.journalNote is string
+      && request.resource.data.createdAt is string;
+    }
+
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+
+    match /moodEntries/{entryId} {
+      allow create: if isSignedIn() && isValidMoodEntry();
+      allow read, delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow update: if isSignedIn()
+        && resource.data.userId == request.auth.uid
+        && request.resource.data.userId == request.auth.uid
+        && isValidMoodEntry();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
