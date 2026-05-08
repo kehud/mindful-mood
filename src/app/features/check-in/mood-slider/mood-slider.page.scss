@@ -9,6 +9,22 @@
   backdrop-filter: blur(18px);
 }
 
+.config-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: #647880;
+  font-size: 0.82rem;
+  font-weight: 680;
+}
+
+.config-loading ion-spinner {
+  width: 18px;
+  height: 18px;
+}
+
 .mood-display {
   display: grid;
   place-items: center;
@@ -26,10 +42,9 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75), 0 24px 42px rgba(77, 141, 124, 0.18);
 }
 
-.mood-aura span {
-  color: #25423d;
+.mood-aura ion-icon {
+  color: var(--mood-color);
   font-size: 3.45rem;
-  font-weight: 850;
 }
 
 .mood-display h2 {
@@ -61,6 +76,7 @@ ion-range {
 }
 
 .mood-scale button {
+  --mood-color: var(--ion-color-primary);
   aspect-ratio: 1;
   border: 1px solid rgba(63, 96, 107, 0.12);
   border-radius: 15px;
@@ -78,8 +94,8 @@ ion-range {
 }
 
 .mood-scale button.selected {
-  border-color: rgba(77, 141, 124, 0.5);
-  background: var(--ion-color-primary);
+  border-color: var(--mood-color);
+  background: var(--mood-color);
   box-shadow: 0 12px 24px rgba(77, 141, 124, 0.24);
   color: #ffffff;
   transform: translateY(-2px);

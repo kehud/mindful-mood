@@ -1,8 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { MoodLevel } from '../../core/models/mood-entry.model';
-
-const labels: Record<MoodLevel, string> = {
+const labels: Record<number, string> = {
   1: 'Very unpleasant',
   2: 'Unpleasant',
   3: 'Slightly unpleasant',
@@ -17,12 +15,12 @@ const labels: Record<MoodLevel, string> = {
   standalone: true,
 })
 export class MoodLabelPipe implements PipeTransform {
-  transform(value: MoodLevel | number): string {
+  transform(value: number): string {
     if (!Number.isFinite(value) || value < 1) {
       return 'Not set';
     }
 
-    const level = Math.min(7, Math.max(1, Math.round(value))) as MoodLevel;
-    return labels[level];
+    const level = Math.round(value);
+    return labels[level] ?? `Mood ${level}`;
   }
 }

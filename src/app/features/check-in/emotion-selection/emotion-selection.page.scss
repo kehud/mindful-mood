@@ -1,0 +1,15 @@
+.config-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: #647880;
+  font-size: 0.82rem;
+  font-weight: 680;
+}
+
+.config-loading ion-spinner {
+  width: 18px;
+  height: 18px;
+}

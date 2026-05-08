@@ -21,20 +21,27 @@
       <p>Select anything that may have nudged your mood today.</p>
     </section>
 
-    <section class="selection-card">
-      <div class="selection-summary">
-        <span>{{ selectedInfluences.length }}</span>
-        <p>{{ selectedInfluences.length === 1 ? 'influence selected' : 'influences selected' }}</p>
-      </div>
+    <ng-container *ngIf="influenceOptionsState$ | async as influenceConfig">
+      <section class="selection-card">
+        <div class="config-loading" *ngIf="influenceConfig.loading" aria-live="polite">
+          <ion-spinner name="crescent"></ion-spinner>
+          <span>Loading influence options</span>
+        </div>
 
-      <app-chip-selector
-        ariaLabel="Select influences"
-        tone="peach"
-        [options]="influences"
-        [selectedValues]="selectedInfluences"
-        (selectedValuesChange)="selectedInfluences = $event"
-      ></app-chip-selector>
-    </section>
+        <div class="selection-summary">
+          <span>{{ selectedInfluences.length }}</span>
+          <p>{{ selectedInfluences.length === 1 ? 'influence selected' : 'influences selected' }}</p>
+        </div>
+
+        <app-chip-selector
+          ariaLabel="Select influences"
+          tone="peach"
+          [options]="optionLabels(influenceConfig.options)"
+          [selectedValues]="selectedInfluences"
+          (selectedValuesChange)="selectedInfluences = $event"
+        ></app-chip-selector>
+      </section>
+    </ng-container>
 
     <section class="journal-card">
       <label for="journal-note">What else would you like to add?</label>

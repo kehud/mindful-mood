@@ -21,23 +21,30 @@
       <p>You can choose more than one. Mixed feelings count.</p>
     </section>
 
-    <section class="selection-card">
-      <div class="selection-summary">
-        <span>{{ selectedEmotions.length }}</span>
-        <p>{{ selectedEmotions.length === 1 ? 'emotion selected' : 'emotions selected' }}</p>
-      </div>
+    <ng-container *ngIf="emotionOptionsState$ | async as emotionConfig">
+      <section class="selection-card">
+        <div class="config-loading" *ngIf="emotionConfig.loading" aria-live="polite">
+          <ion-spinner name="crescent"></ion-spinner>
+          <span>Loading emotion options</span>
+        </div>
 
-      <app-chip-selector
-        ariaLabel="Select emotions"
-        tone="mint"
-        [options]="emotions"
-        [selectedValues]="selectedEmotions"
-        (selectedValuesChange)="selectedEmotions = $event"
-      ></app-chip-selector>
-    </section>
+        <div class="selection-summary">
+          <span>{{ selectedEmotions.length }}</span>
+          <p>{{ selectedEmotions.length === 1 ? 'emotion selected' : 'emotions selected' }}</p>
+        </div>
 
-    <footer class="bottom-action">
-      <ion-button class="primary-action" expand="block" (click)="next()">Continue</ion-button>
-    </footer>
+        <app-chip-selector
+          ariaLabel="Select emotions"
+          tone="mint"
+          [options]="optionLabels(emotionConfig.options)"
+          [selectedValues]="selectedEmotions"
+          (selectedValuesChange)="selectedEmotions = $event"
+        ></app-chip-selector>
+      </section>
+
+      <footer class="bottom-action">
+        <ion-button class="primary-action" expand="block" (click)="next()">Continue</ion-button>
+      </footer>
+    </ng-container>
   </main>
 </ion-content>

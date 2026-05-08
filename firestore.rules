@@ -21,8 +21,6 @@ service cloud.firestore {
       ])
       && request.resource.data.userId == request.auth.uid
       && request.resource.data.moodLevel is number
-      && request.resource.data.moodLevel >= 1
-      && request.resource.data.moodLevel <= 7
       && request.resource.data.emotions is list
       && request.resource.data.influences is list
       && request.resource.data.journalNote is string
@@ -40,6 +38,21 @@ service cloud.firestore {
         && resource.data.userId == request.auth.uid
         && request.resource.data.userId == request.auth.uid
         && isValidMoodEntry();
+    }
+
+    match /moodOptions/{optionId} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
+
+    match /emotionOptions/{optionId} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
+
+    match /influenceOptions/{optionId} {
+      allow read: if isSignedIn();
+      allow write: if false;
     }
 
     match /{document=**} {

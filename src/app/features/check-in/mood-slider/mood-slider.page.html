@@ -21,47 +21,55 @@
       <p>Choose the point that feels closest. It does not have to be exact.</p>
     </section>
 
-    <section class="mood-card">
-      <section class="mood-display">
-        <div class="mood-aura" [attr.data-mood]="moodLevel">
-          <span>{{ moodLevel }}</span>
+    <ng-container *ngIf="moodOptionsState$ | async as moodConfig">
+      <section class="mood-card">
+        <div class="config-loading" *ngIf="moodConfig.loading" aria-live="polite">
+          <ion-spinner name="crescent"></ion-spinner>
+          <span>Loading mood options</span>
         </div>
-        <h2>{{ selectedMood.label }}</h2>
-        <p>{{ selectedMood.helper }}</p>
+
+        <section class="mood-display">
+          <div class="mood-aura" [style.--mood-color]="selectedMood(moodConfig.options).color">
+            <ion-icon [name]="selectedMood(moodConfig.options).icon" aria-hidden="true"></ion-icon>
+          </div>
+          <h2>{{ selectedMood(moodConfig.options).label }}</h2>
+        </section>
+
+        <ion-range
+          aria-label="Mood level"
+          [min]="moodRangeMin(moodConfig.options)"
+          [max]="moodRangeMax(moodConfig.options)"
+          step="1"
+          snaps="true"
+          ticks="true"
+          [(ngModel)]="moodLevel"
+          (ionChange)="snapMoodLevel(moodConfig.options)"
+        ></ion-range>
+
+        <div class="mood-scale" aria-label="Mood scale">
+          <button
+            *ngFor="let option of moodConfig.options"
+            type="button"
+            [class.selected]="selectedMood(moodConfig.options).value === option.value"
+            [style.--mood-color]="option.color"
+            [attr.aria-pressed]="selectedMood(moodConfig.options).value === option.value"
+            [attr.aria-label]="option.label"
+            (click)="selectMood(option.value)"
+          >
+            {{ option.value }}
+          </button>
+        </div>
+
+        <div class="range-labels">
+          <span>{{ moodRangeLabel(moodConfig.options, 'start') }}</span>
+          <span>{{ moodRangeLabel(moodConfig.options, 'middle') }}</span>
+          <span>{{ moodRangeLabel(moodConfig.options, 'end') }}</span>
+        </div>
       </section>
 
-      <ion-range
-        aria-label="Mood level"
-        min="1"
-        max="7"
-        step="1"
-        snaps="true"
-        ticks="true"
-        [(ngModel)]="moodLevel"
-      ></ion-range>
-
-      <div class="mood-scale" aria-label="Mood scale">
-        <button
-          *ngFor="let state of moodStates"
-          type="button"
-          [class.selected]="moodLevel === state.value"
-          [attr.aria-pressed]="moodLevel === state.value"
-          [attr.aria-label]="state.label"
-          (click)="selectMood(state.value)"
-        >
-          {{ state.value }}
-        </button>
-      </div>
-
-      <div class="range-labels">
-        <span>Very unpleasant</span>
-        <span>Neutral</span>
-        <span>Very pleasant</span>
-      </div>
-    </section>
-
-    <footer class="bottom-action">
-      <ion-button class="primary-action" expand="block" (click)="next()">Continue</ion-button>
-    </footer>
+      <footer class="bottom-action">
+        <ion-button class="primary-action" expand="block" (click)="next(moodConfig.options)">Continue</ion-button>
+      </footer>
+    </ng-container>
   </main>
 </ion-content>
