@@ -13,3 +13,24 @@
   width: 18px;
   height: 18px;
 }
+
+.emotion-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0 2px 12px;
+}
+
+.emotion-list-header p {
+  margin: 0;
+  color: #283a44;
+  font-size: 0.95rem;
+  font-weight: 760;
+}
+
+.emotion-list-header ion-button {
+  margin: 0;
+  --color: var(--ion-color-primary);
+  font-weight: 700;
+}

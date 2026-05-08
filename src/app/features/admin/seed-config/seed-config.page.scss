@@ -1,0 +1,30 @@
+.seed-shell {
+  min-height: 100%;
+}
+
+.seed-card {
+  border: 1px solid rgba(61, 92, 106, 0.11);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.84);
+  box-shadow: 0 24px 58px rgba(45, 72, 89, 0.12);
+  padding: 18px;
+}
+
+.seed-card ion-spinner {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+}
+
+.state-message {
+  margin: 14px 0 0;
+  font-weight: 700;
+}
+
+.state-message.success {
+  color: var(--ion-color-primary);
+}
+
+.state-message.error {
+  color: var(--ion-color-danger);
+}

@@ -21,14 +21,47 @@ export class EmotionSelectionPage {
   private readonly router = inject(Router);
 
   readonly emotionOptionsState$ = this.configService.emotionOptionsState$;
+  readonly selectedMoodValue = this.moodEntryService.draftSnapshot.moodLevel;
   selectedEmotions = this.moodEntryService.draftSnapshot.emotions;
+  showAllEmotions = false;
 
   optionLabels(options: readonly EmotionOption[]): string[] {
     return options.map((option) => option.label);
   }
 
+  displayedEmotionOptions(options: readonly EmotionOption[]): readonly EmotionOption[] {
+    const suggestedOptions = this.suggestedEmotionOptions(options);
+
+    if (this.showAllEmotions || !suggestedOptions.length) {
+      return this.suggestedFirstEmotionOptions(options);
+    }
+
+    return suggestedOptions;
+  }
+
+  suggestedEmotionOptions(options: readonly EmotionOption[]): readonly EmotionOption[] {
+    return options.filter((option) => option.moodRange?.includes(this.selectedMoodValue));
+  }
+
+  shouldShowAllButton(options: readonly EmotionOption[]): boolean {
+    const suggestedCount = this.suggestedEmotionOptions(options).length;
+    return !this.showAllEmotions && suggestedCount > 0 && suggestedCount < options.length;
+  }
+
+  showAll(): void {
+    this.showAllEmotions = true;
+  }
+
   async next(): Promise<void> {
     this.moodEntryService.updateDraft({ emotions: this.selectedEmotions });
     await this.router.navigateByUrl('/check-in/influences');
+  }
+
+  private suggestedFirstEmotionOptions(options: readonly EmotionOption[]): readonly EmotionOption[] {
+    const suggestedOptions = this.suggestedEmotionOptions(options);
+    const suggestedLabels = new Set(suggestedOptions.map((option) => option.label));
+    const remainingOptions = options.filter((option) => !suggestedLabels.has(option.label));
+
+    return [...suggestedOptions, ...remainingOptions];
   }
 }

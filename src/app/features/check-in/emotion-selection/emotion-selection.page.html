@@ -33,10 +33,23 @@
           <p>{{ selectedEmotions.length === 1 ? 'emotion selected' : 'emotions selected' }}</p>
         </div>
 
+        <div class="emotion-list-header">
+          <p>{{ showAllEmotions || !suggestedEmotionOptions(emotionConfig.options).length ? 'All emotions' : 'Suggested emotions' }}</p>
+          <ion-button
+            *ngIf="shouldShowAllButton(emotionConfig.options)"
+            fill="clear"
+            size="small"
+            type="button"
+            (click)="showAll()"
+          >
+            Show all emotions
+          </ion-button>
+        </div>
+
         <app-chip-selector
           ariaLabel="Select emotions"
           tone="mint"
-          [options]="optionLabels(emotionConfig.options)"
+          [options]="optionLabels(displayedEmotionOptions(emotionConfig.options))"
           [selectedValues]="selectedEmotions"
           (selectedValuesChange)="selectedEmotions = $event"
         ></app-chip-selector>

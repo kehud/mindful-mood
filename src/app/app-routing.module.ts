@@ -1,8 +1,20 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
+import { environment } from '../environments/environment';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
+
+const developmentRoutes: Routes = environment.production
+  ? []
+  : [
+      {
+        path: 'admin/seed-config',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./features/admin/seed-config/seed-config.page').then((m) => m.SeedConfigPage),
+      },
+    ];
 
 const routes: Routes = [
   {
@@ -91,6 +103,7 @@ const routes: Routes = [
       },
     ],
   },
+  ...developmentRoutes,
   {
     path: '',
     redirectTo: 'welcome',

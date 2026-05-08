@@ -1,0 +1,30 @@
+<ion-content class="wellness-content" fullscreen>
+  <main class="page-shell seed-shell">
+    <nav class="checkin-nav">
+      <ion-button class="nav-button" fill="clear" size="small" routerLink="/tabs/home">
+        <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
+        Back
+      </ion-button>
+      <span>Internal</span>
+    </nav>
+
+    <section class="question-block">
+      <p class="eyebrow">Development only</p>
+      <h1>Seed Firestore config</h1>
+      <p>Creates initial mood, emotion, and influence options for the signed-in Firebase user session.</p>
+    </section>
+
+    <section class="seed-card">
+      <p *ngIf="currentUser" class="muted">Signed in as {{ currentUser.email || currentUser.uid }}</p>
+      <p class="muted">{{ totalDocumentCount - missingDocumentCount }} of {{ totalDocumentCount }} config documents exist.</p>
+
+      <ion-button class="primary-action" expand="block" [disabled]="!canSeed" (click)="seedConfig()">
+        <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+        <span>{{ configExists ? 'Update Config' : 'Seed Config' }}</span>
+      </ion-button>
+
+      <p *ngIf="successMessage" class="state-message success">{{ successMessage }}</p>
+      <p *ngIf="errorMessage" class="state-message error">{{ errorMessage }}</p>
+    </section>
+  </main>
+</ion-content>

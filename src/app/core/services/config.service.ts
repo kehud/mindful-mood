@@ -9,7 +9,7 @@ import {
   MoodOption,
 } from '../models/config-option.model';
 
-const DEFAULT_MOOD_OPTIONS: readonly MoodOption[] = [
+export const DEFAULT_MOOD_OPTIONS: readonly MoodOption[] = [
   { value: 1, label: 'Very unpleasant', icon: 'rainy-outline', color: '#6b7280', order: 1 },
   { value: 2, label: 'Unpleasant', icon: 'cloud-outline', color: '#78909c', order: 2 },
   { value: 3, label: 'Slightly unpleasant', icon: 'partly-sunny-outline', color: '#7aa7a1', order: 3 },
@@ -19,26 +19,26 @@ const DEFAULT_MOOD_OPTIONS: readonly MoodOption[] = [
   { value: 7, label: 'Very pleasant', icon: 'heart-outline', color: '#d9737f', order: 7 },
 ];
 
-const DEFAULT_EMOTION_OPTIONS: readonly EmotionOption[] = [
-  { label: 'Calm', category: 'pleasant', order: 1 },
-  { label: 'Happy', category: 'pleasant', order: 2 },
-  { label: 'Grateful', category: 'pleasant', order: 3 },
-  { label: 'Focused', category: 'pleasant', order: 4 },
-  { label: 'Excited', category: 'pleasant', order: 5 },
-  { label: 'Proud', category: 'pleasant', order: 6 },
-  { label: 'Sad', category: 'unpleasant', order: 7 },
-  { label: 'Anxious', category: 'unpleasant', order: 8 },
-  { label: 'Angry', category: 'unpleasant', order: 9 },
-  { label: 'Tired', category: 'unpleasant', order: 10 },
-  { label: 'Lonely', category: 'unpleasant', order: 11 },
-  { label: 'Overwhelmed', category: 'unpleasant', order: 12 },
-  { label: 'Hopeful', category: 'pleasant', order: 13 },
-  { label: 'Relaxed', category: 'pleasant', order: 14 },
-  { label: 'Stressed', category: 'unpleasant', order: 15 },
-  { label: 'Frustrated', category: 'unpleasant', order: 16 },
+export const DEFAULT_EMOTION_OPTIONS: readonly EmotionOption[] = [
+  { label: 'Calm', category: 'pleasant', moodRange: [4, 5, 6], order: 1 },
+  { label: 'Happy', category: 'pleasant', moodRange: [5, 6, 7], order: 2 },
+  { label: 'Grateful', category: 'pleasant', moodRange: [5, 6, 7], order: 3 },
+  { label: 'Focused', category: 'pleasant', moodRange: [4, 5, 6], order: 4 },
+  { label: 'Excited', category: 'pleasant', moodRange: [5, 6, 7], order: 5 },
+  { label: 'Proud', category: 'pleasant', moodRange: [5, 6, 7], order: 6 },
+  { label: 'Sad', category: 'unpleasant', moodRange: [1, 2, 3], order: 7 },
+  { label: 'Anxious', category: 'unpleasant', moodRange: [1, 2, 3, 4], order: 8 },
+  { label: 'Angry', category: 'unpleasant', moodRange: [1, 2, 3], order: 9 },
+  { label: 'Tired', category: 'unpleasant', moodRange: [1, 2, 3, 4], order: 10 },
+  { label: 'Lonely', category: 'unpleasant', moodRange: [1, 2, 3], order: 11 },
+  { label: 'Overwhelmed', category: 'unpleasant', moodRange: [1, 2, 3], order: 12 },
+  { label: 'Hopeful', category: 'pleasant', moodRange: [4, 5, 6], order: 13 },
+  { label: 'Relaxed', category: 'pleasant', moodRange: [4, 5, 6], order: 14 },
+  { label: 'Stressed', category: 'unpleasant', moodRange: [1, 2, 3, 4], order: 15 },
+  { label: 'Frustrated', category: 'unpleasant', moodRange: [1, 2, 3], order: 16 },
 ];
 
-const DEFAULT_INFLUENCE_OPTIONS: readonly InfluenceOption[] = [
+export const DEFAULT_INFLUENCE_OPTIONS: readonly InfluenceOption[] = [
   { label: 'Family', order: 1 },
   { label: 'Partner', order: 2 },
   { label: 'Friends', order: 3 },
@@ -129,7 +129,18 @@ export class ConfigService {
     }
 
     const category = readString(data, 'category');
-    return category ? { label, category, order } : { label, order };
+    const moodRange = readOptionalNumberArray(data, 'moodRange');
+
+    if (moodRange === null) {
+      return null;
+    }
+
+    return {
+      label,
+      ...(category ? { category } : {}),
+      ...(moodRange ? { moodRange } : {}),
+      order,
+    };
   }
 
   private toInfluenceOption(data: unknown): InfluenceOption | null {
@@ -169,4 +180,18 @@ function readNumber(data: Record<string, unknown>, key: string): number | null {
   const value = data[key];
 
   return typeof value === 'number' && Number.isFinite(value) ? value : null;
+}
+
+function readOptionalNumberArray(data: Record<string, unknown>, key: string): number[] | null | undefined {
+  const value = data[key];
+
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (!Array.isArray(value) || !value.every((item) => typeof item === 'number' && Number.isFinite(item))) {
+    return null;
+  }
+
+  return value;
 }

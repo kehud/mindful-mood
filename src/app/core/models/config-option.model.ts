@@ -14,6 +14,7 @@ export interface MoodOption {
 export interface EmotionOption {
   label: string;
   category?: string;
+  moodRange?: number[];
   order: number;
 }
 

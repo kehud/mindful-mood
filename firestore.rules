@@ -27,6 +27,46 @@ service cloud.firestore {
       && request.resource.data.createdAt is string;
     }
 
+    function isValidMoodOption() {
+      return request.resource.data.keys().hasOnly([
+        'value',
+        'label',
+        'icon',
+        'color',
+        'order'
+      ])
+      && request.resource.data.value is number
+      && request.resource.data.label is string
+      && request.resource.data.icon is string
+      && request.resource.data.color is string
+      && request.resource.data.order is number;
+    }
+
+    function isValidEmotionOption() {
+      return request.resource.data.keys().hasOnly([
+        'label',
+        'category',
+        'moodRange',
+        'isActive',
+        'order'
+      ])
+      && request.resource.data.keys().hasAll(['label', 'order'])
+      && request.resource.data.label is string
+      && (!request.resource.data.keys().hasAny(['category']) || request.resource.data.category is string)
+      && (!request.resource.data.keys().hasAny(['moodRange']) || request.resource.data.moodRange is list)
+      && (!request.resource.data.keys().hasAny(['isActive']) || request.resource.data.isActive is bool)
+      && request.resource.data.order is number;
+    }
+
+    function isValidInfluenceOption() {
+      return request.resource.data.keys().hasOnly([
+        'label',
+        'order'
+      ])
+      && request.resource.data.label is string
+      && request.resource.data.order is number;
+    }
+
     match /users/{userId} {
       allow read, write: if isOwner(userId);
     }
@@ -42,17 +82,20 @@ service cloud.firestore {
 
     match /moodOptions/{optionId} {
       allow read: if isSignedIn();
-      allow write: if false;
+      allow create, update: if isSignedIn() && isValidMoodOption();
+      allow delete: if false;
     }
 
     match /emotionOptions/{optionId} {
       allow read: if isSignedIn();
-      allow write: if false;
+      allow create, update: if isSignedIn() && isValidEmotionOption();
+      allow delete: if false;
     }
 
     match /influenceOptions/{optionId} {
       allow read: if isSignedIn();
-      allow write: if false;
+      allow create, update: if isSignedIn() && isValidInfluenceOption();
+      allow delete: if false;
     }
 
     match /{document=**} {
