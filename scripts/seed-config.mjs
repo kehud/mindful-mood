@@ -21,13 +21,62 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const moodOptions = [
-  { value: 1, label: "Very Unpleasant", icon: "mood-very-unpleasant", color: "purple", order: 1 },
-  { value: 2, label: "Unpleasant", icon: "mood-unpleasant", color: "indigo", order: 2 },
-  { value: 3, label: "Slightly Unpleasant", icon: "mood-slightly-unpleasant", color: "blue", order: 3 },
-  { value: 4, label: "Neutral", icon: "mood-neutral", color: "teal", order: 4 },
-  { value: 5, label: "Slightly Pleasant", icon: "mood-slightly-pleasant", color: "green", order: 5 },
-  { value: 6, label: "Pleasant", icon: "mood-pleasant", color: "orange", order: 6 },
-  { value: 7, label: "Very Pleasant", icon: "mood-very-pleasant", color: "yellow", order: 7 },
+  {
+    value: 1,
+    label: "Very Unpleasant",
+    translations: { en: "Very Unpleasant", he: "מאוד לא נעים" },
+    icon: "mood-very-unpleasant",
+    color: "purple",
+    order: 1,
+  },
+  {
+    value: 2,
+    label: "Unpleasant",
+    translations: { en: "Unpleasant", he: "לא נעים" },
+    icon: "mood-unpleasant",
+    color: "indigo",
+    order: 2,
+  },
+  {
+    value: 3,
+    label: "Slightly Unpleasant",
+    translations: { en: "Slightly Unpleasant", he: "קצת לא נעים" },
+    icon: "mood-slightly-unpleasant",
+    color: "blue",
+    order: 3,
+  },
+  {
+    value: 4,
+    label: "Neutral",
+    translations: { en: "Neutral", he: "ניטרלי" },
+    icon: "mood-neutral",
+    color: "teal",
+    order: 4,
+  },
+  {
+    value: 5,
+    label: "Slightly Pleasant",
+    translations: { en: "Slightly Pleasant", he: "קצת נעים" },
+    icon: "mood-slightly-pleasant",
+    color: "green",
+    order: 5,
+  },
+  {
+    value: 6,
+    label: "Pleasant",
+    translations: { en: "Pleasant", he: "נעים" },
+    icon: "mood-pleasant",
+    color: "orange",
+    order: 6,
+  },
+  {
+    value: 7,
+    label: "Very Pleasant",
+    translations: { en: "Very Pleasant", he: "מאוד נעים" },
+    icon: "mood-very-pleasant",
+    color: "yellow",
+    order: 7,
+  },
 ];
 
 const emotionMoodRanges = {
@@ -67,6 +116,45 @@ const emotionMoodRanges = {
   Sad: [1, 2, 3],
   Stressed: [1, 2, 3],
   Worried: [1, 2, 3],
+};
+
+const emotionTranslations = {
+  Amazed: "נדהם",
+  Amused: "משועשע",
+  Calm: "רגוע",
+  Confident: "בטוח בעצמי",
+  Content: "מסופק",
+  Excited: "נרגש",
+  Grateful: "אסיר תודה",
+  Happy: "שמח",
+  Hopeful: "מלא תקווה",
+  Loved: "אהוב",
+  Proud: "גאה",
+  Relaxed: "נינוח",
+  Relieved: "חש הקלה",
+  Satisfied: "מרוצה",
+
+  Bored: "משועמם",
+  Distracted: "מוסח",
+  Indifferent: "אדיש",
+  Neutral: "ניטרלי",
+  Tired: "עייף",
+
+  Afraid: "מפחד",
+  Angry: "כועס",
+  Annoyed: "מוטרד",
+  Anxious: "חרד",
+  Ashamed: "מתבייש",
+  Disappointed: "מאוכזב",
+  Embarrassed: "נבוך",
+  Frustrated: "מתוסכל",
+  Guilty: "חש אשמה",
+  Irritated: "עצבני",
+  Lonely: "בודד",
+  Overwhelmed: "מוצף",
+  Sad: "עצוב",
+  Stressed: "לחוץ",
+  Worried: "מודאג",
 };
 
 const emotionOptions = [
@@ -109,9 +197,36 @@ const emotionOptions = [
 ].map(([label, category], index) => ({
   label,
   category,
+  translations: {
+    en: label,
+    he: emotionTranslations[label],
+  },
   moodRange: emotionMoodRanges[label],
   order: index + 1,
 }));
+
+const influenceTranslations = {
+  Family: "משפחה",
+  Partner: "בן/בת זוג",
+  Friends: "חברים",
+  Dating: "דייטינג",
+  Work: "עבודה",
+  School: "לימודים",
+  Health: "בריאות",
+  Fitness: "כושר",
+  Sleep: "שינה",
+  Food: "אוכל",
+  Weather: "מזג אוויר",
+  Money: "כסף",
+  "Current Events": "אקטואליה",
+  "Social Media": "רשתות חברתיות",
+  Hobbies: "תחביבים",
+  Travel: "נסיעות",
+  Spirituality: "רוחניות",
+  "Self-care": "טיפוח עצמי",
+  Tasks: "משימות",
+  Other: "אחר",
+};
 
 const influenceOptions = [
   "Family",
@@ -136,6 +251,10 @@ const influenceOptions = [
   "Other",
 ].map((label, index) => ({
   label,
+  translations: {
+    en: label,
+    he: influenceTranslations[label],
+  },
   order: index + 1,
 }));
 
@@ -155,7 +274,6 @@ async function seedCollection(collectionName, items, idFactory) {
       {
         ...item,
         isActive: true,
-        createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       },
       { merge: true }
@@ -166,25 +284,11 @@ async function seedCollection(collectionName, items, idFactory) {
 }
 
 async function main() {
-  await seedCollection(
-    "moodOptions",
-    moodOptions,
-    (item) => `mood-${item.value}`
-  );
+  await seedCollection("moodOptions", moodOptions, (item) => `mood-${item.value}`);
+  await seedCollection("emotionOptions", emotionOptions, (item) => idFromLabel(item.label));
+  await seedCollection("influenceOptions", influenceOptions, (item) => idFromLabel(item.label));
 
-  await seedCollection(
-    "emotionOptions",
-    emotionOptions,
-    (item) => idFromLabel(item.label)
-  );
-
-  await seedCollection(
-    "influenceOptions",
-    influenceOptions,
-    (item) => idFromLabel(item.label)
-  );
-
-  console.log("✅ Config seed completed");
+  console.log("✅ Config seed completed with EN/HE translations");
 }
 
 main().catch((error) => {
