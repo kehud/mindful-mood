@@ -30,6 +30,7 @@ export interface InsightFrequencyItem {
 
 export interface WeeklyMoodTrendItem {
   label: string;
+  dateIso: string;
   averageMood: number;
   count: number;
   percent: number;

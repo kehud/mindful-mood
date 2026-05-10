@@ -1,9 +1,9 @@
 <ion-content class="wellness-content" fullscreen>
   <main class="page-shell">
     <app-wellness-header
-      eyebrow="Profile"
-      title="Your space"
-      subtitle="Account, privacy, and app preferences will live here."
+      [eyebrow]="'profile.eyebrow' | t"
+      [title]="'profile.title' | t"
+      [subtitle]="'profile.subtitle' | t"
     ></app-wellness-header>
 
     <app-wellness-card tone="mint">
@@ -19,15 +19,15 @@
         <div class="profile-row">
           <div class="avatar">M</div>
           <div>
-            <h2>Preview mode</h2>
-            <p>Firebase Auth will provide profile details later.</p>
+            <h2>{{ 'profile.previewTitle' | t }}</h2>
+            <p>{{ 'profile.previewSubtitle' | t }}</p>
           </div>
         </div>
       </ng-template>
     </app-wellness-card>
 
     <section class="settings-list">
-      <app-wellness-card title="Appearance" subtitle="Match your device, or keep the app in one mode.">
+      <app-wellness-card [title]="'profile.appearance' | t" [subtitle]="'profile.appearanceSubtitle' | t">
         <ion-segment
           class="theme-segment"
           mode="ios"
@@ -36,22 +36,41 @@
         >
           <ion-segment-button *ngFor="let option of themeOptions" [value]="option.value">
             <ion-icon [name]="option.icon" aria-hidden="true"></ion-icon>
-            <ion-label>{{ option.label }}</ion-label>
+            <ion-label>{{ themeLabel(option.value) }}</ion-label>
           </ion-segment-button>
         </ion-segment>
 
         <p class="theme-current" *ngIf="resolvedTheme$ | async as resolvedTheme">
-          Using {{ resolvedTheme | titlecase }} colors.
+          {{ 'profile.themeCurrent' | t: { theme: themeLabel(resolvedTheme) } }}
         </p>
       </app-wellness-card>
-      <app-wellness-card title="Privacy" subtitle="Firestore rules and data export controls can be added next."></app-wellness-card>
-      <app-wellness-card title="Reminders" subtitle="Daily notification preferences can be added with Capacitor."></app-wellness-card>
+
+      <app-wellness-card [title]="'profile.language' | t" [subtitle]="'profile.languageSubtitle' | t">
+        <ion-segment
+          class="theme-segment language-segment"
+          mode="ios"
+          [attr.aria-label]="'language.current' | t"
+          [value]="currentLanguage()"
+          (ionChange)="setLanguage($event.detail.value)"
+        >
+          <ion-segment-button *ngFor="let option of languageOptions" [value]="option.code">
+            <ion-label>{{ option.nativeLabel }}</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+
+        <p class="theme-current">
+          {{ 'profile.languageCurrent' | t: { language: languageLabel(currentLanguage()) } }}
+        </p>
+      </app-wellness-card>
+
+      <app-wellness-card [title]="'profile.privacy' | t" [subtitle]="'profile.privacySubtitle' | t"></app-wellness-card>
+      <app-wellness-card [title]="'profile.reminders' | t" [subtitle]="'profile.remindersSubtitle' | t"></app-wellness-card>
     </section>
 
     <p class="profile-error" *ngIf="errorMessage">{{ errorMessage }}</p>
     <ion-button class="secondary-action" expand="block" fill="clear" [disabled]="isSigningOut" (click)="signOut()">
       <ion-spinner *ngIf="isSigningOut" name="crescent"></ion-spinner>
-      <span *ngIf="!isSigningOut">Sign out</span>
+      <span *ngIf="!isSigningOut">{{ 'profile.signOut' | t }}</span>
     </ion-button>
   </main>
 </ion-content>

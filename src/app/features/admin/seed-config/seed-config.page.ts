@@ -18,7 +18,7 @@ type ConfigCollectionName = 'moodOptions' | 'emotionOptions' | 'influenceOptions
 interface SeedDocument {
   collectionName: ConfigCollectionName;
   id: string;
-  data: Record<string, number | string | number[]>;
+  data: Record<string, number | string | number[] | Record<string, string | undefined> | undefined>;
 }
 
 const SEED_DOCUMENTS: readonly SeedDocument[] = [
@@ -28,6 +28,7 @@ const SEED_DOCUMENTS: readonly SeedDocument[] = [
     data: {
       value: option.value,
       label: option.label,
+      ...(option.translations ? { translations: option.translations } : {}),
       icon: option.icon,
       color: option.color,
       order: option.order,
@@ -39,6 +40,7 @@ const SEED_DOCUMENTS: readonly SeedDocument[] = [
     data: {
       label: option.label,
       order: option.order,
+      ...(option.translations ? { translations: option.translations } : {}),
       ...(option.moodRange ? { moodRange: [...option.moodRange] } : {}),
       ...(option.category ? { category: option.category } : {}),
     },
@@ -49,6 +51,7 @@ const SEED_DOCUMENTS: readonly SeedDocument[] = [
     data: {
       label: option.label,
       order: option.order,
+      ...(option.translations ? { translations: option.translations } : {}),
     },
   })),
 ];

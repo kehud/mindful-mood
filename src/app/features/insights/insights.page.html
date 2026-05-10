@@ -1,14 +1,14 @@
 <ion-content class="wellness-content" fullscreen>
   <main class="page-shell">
     <app-wellness-header
-      eyebrow="Insights"
-      title="Mood patterns"
-      subtitle="A current view of the signals inside your saved Firestore check-ins."
+      [eyebrow]="'insights.eyebrow' | t"
+      [title]="'insights.title' | t"
+      [subtitle]="'insights.subtitle' | t"
     ></app-wellness-header>
 
     <section class="insight-state soft-panel" *ngIf="entriesLoading$ | async">
       <ion-spinner name="crescent"></ion-spinner>
-      <p>Loading your insights...</p>
+      <p>{{ 'insights.loading' | t }}</p>
     </section>
 
     <section class="insight-state error-state soft-panel" *ngIf="entriesError$ | async as error">
@@ -19,65 +19,69 @@
       <app-wellness-card
         *ngIf="!summary.checkInCount"
         tone="mint"
-        title="No insights yet"
-        subtitle="Save a few check-ins and this page will begin to show mood patterns."
+        [title]="'insights.emptyTitle' | t"
+        [subtitle]="'insights.emptySubtitle' | t"
       ></app-wellness-card>
 
       <section class="metric-grid">
         <app-wellness-card tone="blue">
-          <p class="metric-label">Total</p>
+          <p class="metric-label">{{ 'insights.total' | t }}</p>
           <h2>{{ summary.checkInCount }}</h2>
-          <p class="metric-copy">check-ins</p>
+          <p class="metric-copy">{{ 'insights.checkIns' | t }}</p>
         </app-wellness-card>
 
         <app-wellness-card tone="mint">
-          <p class="metric-label">This week</p>
+          <p class="metric-label">{{ 'insights.thisWeek' | t }}</p>
           <h2>{{ summary.checkInsThisWeek }}</h2>
-          <p class="metric-copy">saved</p>
+          <p class="metric-copy">{{ 'insights.saved' | t }}</p>
         </app-wellness-card>
       </section>
 
-      <app-wellness-card tone="blue" *ngIf="summary.checkInCount">
+      <app-wellness-card tone="blue" *ngIf="summary.checkInCount && (moodOptionsState$ | async) as moodConfig">
         <div class="average-row">
           <div>
-            <p class="eyebrow">Average mood</p>
+            <p class="eyebrow">{{ 'insights.averageMood' | t }}</p>
             <h2>{{ summary.averageMood }}</h2>
-            <p class="muted">{{ summary.averageMood | moodLabel }}</p>
+            <p class="muted">{{ summary.averageMood | moodLabel: moodConfig.options }}</p>
           </div>
-          <span>{{ summary.checkInCount }} total</span>
+          <span>{{ summary.checkInCount }} {{ 'common.total' | t }}</span>
         </div>
       </app-wellness-card>
 
-      <app-wellness-card title="Weekly trend" subtitle="Average mood for the last seven days." *ngIf="summary.checkInCount">
+      <app-wellness-card
+        [title]="'insights.weeklyTrend' | t"
+        [subtitle]="'insights.weeklyTrendSubtitle' | t"
+        *ngIf="summary.checkInCount"
+      >
         <div class="trend-chart">
           <div *ngFor="let item of summary.weeklyTrend" class="trend-item">
             <div class="trend-track">
               <span [style.height.%]="item.percent"></span>
             </div>
-            <strong>{{ item.label }}</strong>
+            <strong>{{ item.dateIso | date: 'EEE': undefined : currentLanguage() }}</strong>
             <small>{{ item.count ? item.averageMood : '-' }}</small>
           </div>
         </div>
       </app-wellness-card>
 
-      <app-wellness-card title="Most common emotions" *ngIf="summary.checkInCount">
+      <app-wellness-card [title]="'insights.commonEmotions' | t" *ngIf="summary.checkInCount && (emotionOptionsState$ | async) as emotionConfig">
         <div class="rank-list" *ngIf="summary.topEmotionItems.length; else noEmotions">
           <div *ngFor="let emotion of summary.topEmotionItems">
-            <span>{{ emotion.label }}</span>
+            <span>{{ emotion.label | configLabel: emotionConfig.options }}</span>
             <strong>{{ emotion.count }}</strong>
           </div>
         </div>
-        <ng-template #noEmotions><p class="muted">Save entries to see emotion patterns.</p></ng-template>
+        <ng-template #noEmotions><p class="muted">{{ 'insights.noEmotionPatterns' | t }}</p></ng-template>
       </app-wellness-card>
 
-      <app-wellness-card title="Most common influences" *ngIf="summary.checkInCount">
+      <app-wellness-card [title]="'insights.commonInfluences' | t" *ngIf="summary.checkInCount && (influenceOptionsState$ | async) as influenceConfig">
         <div class="rank-list influence" *ngIf="summary.topInfluenceItems.length; else noInfluences">
           <div *ngFor="let influence of summary.topInfluenceItems">
-            <span>{{ influence.label }}</span>
+            <span>{{ influence.label | configLabel: influenceConfig.options }}</span>
             <strong>{{ influence.count }}</strong>
           </div>
         </div>
-        <ng-template #noInfluences><p class="muted">Save entries to see influence patterns.</p></ng-template>
+        <ng-template #noInfluences><p class="muted">{{ 'insights.noInfluencePatterns' | t }}</p></ng-template>
       </app-wellness-card>
     </section>
   </main>

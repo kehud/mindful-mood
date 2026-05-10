@@ -3,9 +3,9 @@
     <nav class="checkin-nav">
       <ion-button class="nav-button" fill="clear" size="small" routerLink="/check-in/influences">
         <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
-        Back
+        {{ 'common.back' | t }}
       </ion-button>
-      <span>4 of 4</span>
+      <span>{{ 'checkIn.progress' | t: { current: 4, total: 4 } }}</span>
     </nav>
 
     <div class="step-dots" aria-hidden="true">
@@ -16,55 +16,57 @@
     </div>
 
     <section class="question-block">
-      <p class="eyebrow">Review</p>
-      <h1>Ready to save this check-in?</h1>
-      <p>Take one last look. You can go back and adjust anything.</p>
+      <p class="eyebrow">{{ 'checkIn.review.eyebrow' | t }}</p>
+      <h1>{{ 'checkIn.review.heading' | t }}</h1>
+      <p>{{ 'checkIn.review.subtitle' | t }}</p>
     </section>
 
-    <section class="review-card mood-review">
-      <div class="mood-ring">
-        <span>{{ draft.moodLevel }}</span>
-      </div>
-      <div>
-        <p class="review-kicker">Selected mood</p>
-        <h2>{{ draft.moodLevel | moodLabel }}</h2>
-      </div>
-    </section>
+    <ng-container *ngIf="moodOptionsState$ | async as moodConfig">
+      <section class="review-card mood-review">
+        <div class="mood-ring">
+          <span>{{ draft.moodLevel }}</span>
+        </div>
+        <div>
+          <p class="review-kicker">{{ 'checkIn.review.selectedMood' | t }}</p>
+          <h2>{{ draft.moodLevel | moodLabel: moodConfig.options }}</h2>
+        </div>
+      </section>
+    </ng-container>
 
-    <section class="review-card">
+    <section class="review-card" *ngIf="emotionOptionsState$ | async as emotionConfig">
       <div class="section-heading">
-        <h2>Emotions</h2>
+        <h2>{{ 'checkIn.review.emotions' | t }}</h2>
         <span>{{ draft.emotions.length }}</span>
       </div>
       <div class="tag-row" *ngIf="draft.emotions.length; else noEmotions">
-        <span *ngFor="let emotion of draft.emotions">{{ emotion }}</span>
+        <span *ngFor="let emotion of draft.emotions">{{ emotion | configLabel: emotionConfig.options }}</span>
       </div>
-      <ng-template #noEmotions><p class="empty-copy">No emotions selected.</p></ng-template>
+      <ng-template #noEmotions><p class="empty-copy">{{ 'checkIn.review.noEmotions' | t }}</p></ng-template>
     </section>
 
-    <section class="review-card">
+    <section class="review-card" *ngIf="influenceOptionsState$ | async as influenceConfig">
       <div class="section-heading">
-        <h2>Influences</h2>
+        <h2>{{ 'checkIn.review.influences' | t }}</h2>
         <span>{{ draft.influences.length }}</span>
       </div>
       <div class="tag-row influence" *ngIf="draft.influences.length; else noInfluences">
-        <span *ngFor="let influence of draft.influences">{{ influence }}</span>
+        <span *ngFor="let influence of draft.influences">{{ influence | configLabel: influenceConfig.options }}</span>
       </div>
-      <ng-template #noInfluences><p class="empty-copy">No influences selected.</p></ng-template>
+      <ng-template #noInfluences><p class="empty-copy">{{ 'checkIn.review.noInfluences' | t }}</p></ng-template>
     </section>
 
     <section class="review-card note-card">
       <div class="section-heading">
-        <h2>Note</h2>
+        <h2>{{ 'checkIn.review.note' | t }}</h2>
       </div>
-      <p>{{ draft.journalNote || 'No note added.' }}</p>
+      <p>{{ draft.journalNote || ('checkIn.review.noNote' | t) }}</p>
     </section>
 
     <footer class="bottom-action">
       <p class="save-error" *ngIf="errorMessage">{{ errorMessage }}</p>
       <ion-button class="primary-action" expand="block" [disabled]="isSaving" (click)="save()">
         <ion-spinner *ngIf="isSaving" name="crescent"></ion-spinner>
-        <span *ngIf="!isSaving">Save Check-in</span>
+        <span *ngIf="!isSaving">{{ 'checkIn.review.save' | t }}</span>
       </ion-button>
     </footer>
   </main>

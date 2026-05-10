@@ -3,9 +3,9 @@
     <nav class="checkin-nav">
       <ion-button class="nav-button" fill="clear" size="small" routerLink="/check-in/emotions">
         <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
-        Back
+        {{ 'common.back' | t }}
       </ion-button>
-      <span>3 of 4</span>
+      <span>{{ 'checkIn.progress' | t: { current: 3, total: 4 } }}</span>
     </nav>
 
     <div class="step-dots" aria-hidden="true">
@@ -16,27 +16,27 @@
     </div>
 
     <section class="question-block">
-      <p class="eyebrow">Influences</p>
-      <h1>What shaped this feeling?</h1>
-      <p>Select anything that may have nudged your mood today.</p>
+      <p class="eyebrow">{{ 'checkIn.influences.eyebrow' | t }}</p>
+      <h1>{{ 'checkIn.influences.heading' | t }}</h1>
+      <p>{{ 'checkIn.influences.subtitle' | t }}</p>
     </section>
 
     <ng-container *ngIf="influenceOptionsState$ | async as influenceConfig">
       <section class="selection-card">
         <div class="config-loading" *ngIf="influenceConfig.loading" aria-live="polite">
           <ion-spinner name="crescent"></ion-spinner>
-          <span>Loading influence options</span>
+          <span>{{ 'checkIn.influences.loading' | t }}</span>
         </div>
 
         <div class="selection-summary">
           <span>{{ selectedInfluences.length }}</span>
-          <p>{{ selectedInfluences.length === 1 ? 'influence selected' : 'influences selected' }}</p>
+          <p>{{ selectedInfluences.length === 1 ? ('checkIn.influences.oneSelected' | t) : ('checkIn.influences.manySelected' | t) }}</p>
         </div>
 
         <app-chip-selector
-          ariaLabel="Select influences"
+          [ariaLabel]="'checkIn.influences.aria' | t"
           tone="peach"
-          [options]="optionLabels(influenceConfig.options)"
+          [options]="optionItems(influenceConfig.options, currentLanguage())"
           [selectedValues]="selectedInfluences"
           (selectedValuesChange)="selectedInfluences = $event"
         ></app-chip-selector>
@@ -44,18 +44,18 @@
     </ng-container>
 
     <section class="journal-card">
-      <label for="journal-note">What else would you like to add?</label>
+      <label for="journal-note">{{ 'checkIn.journal.label' | t }}</label>
       <ion-textarea
         id="journal-note"
         autoGrow="true"
         rows="6"
-        placeholder="What else would you like to add?"
+        [placeholder]="'checkIn.journal.label' | t"
         [(ngModel)]="journalNote"
       ></ion-textarea>
     </section>
 
     <footer class="bottom-action">
-      <ion-button class="primary-action" expand="block" (click)="next()">Review</ion-button>
+      <ion-button class="primary-action" expand="block" (click)="next()">{{ 'common.review' | t }}</ion-button>
     </footer>
   </main>
 </ion-content>

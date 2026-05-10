@@ -5,28 +5,35 @@ import { IonicModule } from '@ionic/angular';
 
 import { EmotionOption } from '../../../core/models/config-option.model';
 import { ConfigService } from '../../../core/services/config.service';
+import { LocalizationService } from '../../../core/services/localization.service';
 import { MoodEntryService } from '../../../core/services/mood-entry.service';
-import { ChipSelectorComponent } from '../../../shared/ui/chip-selector/chip-selector.component';
+import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
+import { ChipSelectorComponent, ChipSelectorOption } from '../../../shared/ui/chip-selector/chip-selector.component';
 
 @Component({
   selector: 'app-emotion-selection',
   standalone: true,
-  imports: [AsyncPipe, ChipSelectorComponent, IonicModule, NgIf, RouterLink],
+  imports: [AsyncPipe, ChipSelectorComponent, IonicModule, NgIf, RouterLink, TranslatePipe],
   templateUrl: './emotion-selection.page.html',
   styleUrls: ['./emotion-selection.page.scss'],
 })
 export class EmotionSelectionPage {
   private readonly configService = inject(ConfigService);
+  private readonly localization = inject(LocalizationService);
   private readonly moodEntryService = inject(MoodEntryService);
   private readonly router = inject(Router);
 
   readonly emotionOptionsState$ = this.configService.emotionOptionsState$;
+  readonly currentLanguage = this.localization.currentLanguage;
   readonly selectedMoodValue = this.moodEntryService.draftSnapshot.moodLevel;
   selectedEmotions = this.moodEntryService.draftSnapshot.emotions;
   showAllEmotions = false;
 
-  optionLabels(options: readonly EmotionOption[]): string[] {
-    return options.map((option) => option.label);
+  optionItems(options: readonly EmotionOption[], _language: string): ChipSelectorOption[] {
+    return options.map((option) => ({
+      value: option.label,
+      label: this.localization.configLabel(option),
+    }));
   }
 
   displayedEmotionOptions(options: readonly EmotionOption[]): readonly EmotionOption[] {

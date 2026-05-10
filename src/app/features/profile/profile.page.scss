@@ -43,6 +43,11 @@ p {
   border: 1px solid var(--app-control-border);
   border-radius: 18px;
   padding: 4px;
+  direction: inherit;
+}
+
+.language-segment ion-segment-button {
+  min-height: 46px;
 }
 
 ion-segment-button {

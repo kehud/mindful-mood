@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 
+import { LocalizationService } from './core/services/localization.service';
 import { ThemeService } from './core/services/theme.service';
 
 @Component({
@@ -10,4 +11,5 @@ import { ThemeService } from './core/services/theme.service';
 })
 export class AppComponent {
   private readonly themeService = inject(ThemeService);
+  protected readonly localization = inject(LocalizationService);
 }

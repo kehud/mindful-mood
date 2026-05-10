@@ -1,7 +1,7 @@
 <div class="chip-selector" role="group" [attr.aria-label]="ariaLabel">
   <app-chip-option
     *ngFor="let option of options"
-    [label]="option"
+    [label]="optionLabel(option)"
     [tone]="tone"
     [selected]="isSelected(option)"
     (toggleSelection)="toggleOption(option)"

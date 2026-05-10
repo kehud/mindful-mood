@@ -45,11 +45,39 @@
   --ion-font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
 }
 
+html[dir="rtl"] {
+  direction: rtl;
+}
+
+html[dir="ltr"] {
+  direction: ltr;
+}
+
 body {
   background: var(--app-page-background);
   color: var(--app-text);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+body[dir="rtl"] {
+  text-align: start;
+}
+
+ion-app,
+ion-content,
+ion-modal,
+ion-popover,
+ion-alert,
+ion-action-sheet {
+  direction: inherit;
+}
+
+input,
+textarea,
+ion-input,
+ion-textarea {
+  text-align: start;
 }
 
 ion-content.wellness-content {
@@ -152,6 +180,10 @@ ion-button[fill="clear"] {
   --background-activated: var(--app-clear-button-background-activated);
 }
 
+html[dir="rtl"] ion-icon[name="chevron-back-outline"] {
+  transform: scaleX(-1);
+}
+
 .step-dots {
   display: flex;
   justify-content: center;
@@ -190,7 +222,7 @@ ion-button[fill="clear"] {
 }
 
 .nav-button {
-  margin-left: -12px;
+  margin-inline-start: -12px;
   --color: var(--app-clear-button-color);
   font-weight: 700;
 }
@@ -199,6 +231,10 @@ ion-button[fill="clear"] {
   color: var(--app-subtle);
   font-size: 0.84rem;
   font-weight: 720;
+}
+
+ion-tab-bar {
+  direction: inherit;
 }
 
 .question-block {

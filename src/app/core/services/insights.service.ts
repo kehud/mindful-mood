@@ -89,6 +89,7 @@ export class InsightsService {
 
       return {
         label: date.toLocaleDateString(undefined, { weekday: 'short' }),
+        dateIso: date.toISOString(),
         averageMood,
         count: dayEntries.length,
         percent: averageMood ? Math.round((averageMood / 7) * 100) : 0,

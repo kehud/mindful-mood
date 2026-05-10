@@ -1,55 +1,64 @@
 <ion-content class="wellness-content" fullscreen>
   <main class="page-shell">
     <app-wellness-header
-      eyebrow="History"
-      title="Your check-ins"
-      subtitle="Review the moods, emotions, and influences you have saved."
+      [eyebrow]="'history.eyebrow' | t"
+      [title]="'history.title' | t"
+      [subtitle]="'history.subtitle' | t"
     ></app-wellness-header>
 
-    <ion-button class="primary-action" expand="block" routerLink="/check-in/mood">Add today's mood</ion-button>
+    <ion-button class="primary-action" expand="block" routerLink="/check-in/mood">{{ 'history.addToday' | t }}</ion-button>
 
     <section class="history-state soft-panel" *ngIf="entriesLoading$ | async">
       <ion-spinner name="crescent"></ion-spinner>
-      <p>Loading your check-ins...</p>
+      <p>{{ 'history.loading' | t }}</p>
     </section>
 
     <section class="history-state error-state soft-panel" *ngIf="entriesError$ | async as error">
       <p>{{ error }}</p>
     </section>
 
-    <section class="history-list" *ngIf="entries$ | async as entries">
+    <section
+      class="history-list"
+      *ngIf="entries$ | async as entries"
+    >
       <app-wellness-card
         *ngIf="!entries.length"
         tone="mint"
-        title="No check-ins yet"
-        subtitle="Save your first mood entry to start building history."
+        [title]="'history.emptyTitle' | t"
+        [subtitle]="'history.emptySubtitle' | t"
       ></app-wellness-card>
 
-      <app-wellness-card *ngFor="let entry of entries" tone="plain" class="entry-card">
-        <div class="entry-header">
-          <div>
-            <p class="date">{{ entry.createdAt | date: 'EEEE, MMM d' }}</p>
-            <h2>{{ entry.moodLevel | moodLabel }}</h2>
-          </div>
-          <span class="score">{{ entry.moodLevel }}</span>
-        </div>
+      <ng-container *ngIf="moodOptionsState$ | async as moodConfig">
+        <ng-container *ngIf="emotionOptionsState$ | async as emotionConfig">
+          <ng-container *ngIf="influenceOptionsState$ | async as influenceConfig">
+            <app-wellness-card *ngFor="let entry of entries" tone="plain" class="entry-card">
+              <div class="entry-header">
+                <div>
+                  <p class="date">{{ entry.createdAt | date: 'EEEE, MMM d': undefined : currentLanguage() }}</p>
+                  <h2>{{ entry.moodLevel | moodLabel: moodConfig.options }}</h2>
+                </div>
+                <span class="score">{{ entry.moodLevel }}</span>
+              </div>
 
-        <section class="entry-section" *ngIf="entry.emotions.length">
-          <p>Emotions</p>
-          <div class="tag-row">
-            <span *ngFor="let emotion of entry.emotions">{{ emotion }}</span>
-          </div>
-        </section>
+              <section class="entry-section" *ngIf="entry.emotions.length">
+                <p>{{ 'history.emotions' | t }}</p>
+                <div class="tag-row">
+                  <span *ngFor="let emotion of entry.emotions">{{ emotion | configLabel: emotionConfig.options }}</span>
+                </div>
+              </section>
 
-        <section class="entry-section" *ngIf="entry.influences.length">
-          <p>Influences</p>
-          <div class="tag-row influence">
-            <span *ngFor="let influence of entry.influences">{{ influence }}</span>
-          </div>
-        </section>
+              <section class="entry-section" *ngIf="entry.influences.length">
+                <p>{{ 'history.influences' | t }}</p>
+                <div class="tag-row influence">
+                  <span *ngFor="let influence of entry.influences">{{ influence | configLabel: influenceConfig.options }}</span>
+                </div>
+              </section>
 
-        <p class="journal" *ngIf="entry.journalNote">{{ entry.journalNote }}</p>
-      </app-wellness-card>
+              <p class="journal" *ngIf="entry.journalNote">{{ entry.journalNote }}</p>
+            </app-wellness-card>
+          </ng-container>
+        </ng-container>
+      </ng-container>
     </section>
   </main>
 </ion-content>

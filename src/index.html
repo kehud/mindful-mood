@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 
 <head>
   <meta charset="utf-8" />
-  <title>Ionic App</title>
+  <title>Mindful Mood</title>
 
   <base href="/" />
 
@@ -23,6 +23,17 @@
 
         document.documentElement.classList.toggle('ion-palette-dark', useDarkTheme);
         document.documentElement.style.colorScheme = useDarkTheme ? 'dark' : 'light';
+
+        var storedLanguage = localStorage.getItem('mindful-mood-language');
+        var browserLanguage = navigator.language && navigator.language.toLowerCase();
+        var useHebrew = storedLanguage === 'he' || (storedLanguage !== 'en' && browserLanguage && browserLanguage.indexOf('he') === 0);
+        var language = useHebrew ? 'he' : 'en';
+        var direction = useHebrew ? 'rtl' : 'ltr';
+
+        document.documentElement.lang = language;
+        document.documentElement.dir = direction;
+        document.documentElement.classList.toggle('app-rtl', useHebrew);
+        document.documentElement.classList.toggle('app-ltr', !useHebrew);
       } catch (error) {
         document.documentElement.style.colorScheme = 'light dark';
       }

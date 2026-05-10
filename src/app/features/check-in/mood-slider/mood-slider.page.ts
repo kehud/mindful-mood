@@ -7,7 +7,10 @@ import { IonicModule, RangeCustomEvent } from '@ionic/angular';
 import { MoodOption } from '../../../core/models/config-option.model';
 import { MoodLevel } from '../../../core/models/mood-entry.model';
 import { ConfigService } from '../../../core/services/config.service';
+import { LocalizationService } from '../../../core/services/localization.service';
 import { MoodEntryService } from '../../../core/services/mood-entry.service';
+import { ConfigLabelPipe } from '../../../shared/pipes/config-label.pipe';
+import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 
 const FALLBACK_MOOD_OPTION: MoodOption = {
   value: 4,
@@ -18,30 +21,31 @@ const FALLBACK_MOOD_OPTION: MoodOption = {
 };
 
 const MOOD_TONES = ['very-low', 'low', 'middle', 'high', 'very-high'] as const;
-const MOOD_TONE_LABELS: Record<(typeof MOOD_TONES)[number], string> = {
-  'very-low': 'Soft and low',
-  low: 'Settling',
-  middle: 'Steady',
-  high: 'Opening up',
-  'very-high': 'Light and bright',
+const MOOD_TONE_LABEL_KEYS: Record<(typeof MOOD_TONES)[number], string> = {
+  'very-low': 'checkIn.mood.tone.veryLow',
+  low: 'checkIn.mood.tone.low',
+  middle: 'checkIn.mood.tone.middle',
+  high: 'checkIn.mood.tone.high',
+  'very-high': 'checkIn.mood.tone.veryHigh',
 };
-const MOOD_SUPPORT_COPY: Record<(typeof MOOD_TONES)[number], string> = {
-  'very-low': 'There is room for this. Start with the closest feeling.',
-  low: 'Notice it gently, without needing to fix it right now.',
-  middle: 'A steady place counts too. Let it be simple.',
-  high: 'Take in the easier parts of this moment.',
-  'very-high': 'Let the good feeling register for a breath.',
+const MOOD_SUPPORT_KEYS: Record<(typeof MOOD_TONES)[number], string> = {
+  'very-low': 'checkIn.mood.support.veryLow',
+  low: 'checkIn.mood.support.low',
+  middle: 'checkIn.mood.support.middle',
+  high: 'checkIn.mood.support.high',
+  'very-high': 'checkIn.mood.support.veryHigh',
 };
 
 @Component({
   selector: 'app-mood-slider',
   standalone: true,
-  imports: [AsyncPipe, FormsModule, IonicModule, NgClass, NgFor, NgIf, RouterLink],
+  imports: [AsyncPipe, ConfigLabelPipe, FormsModule, IonicModule, NgClass, NgFor, NgIf, RouterLink, TranslatePipe],
   templateUrl: './mood-slider.page.html',
   styleUrls: ['./mood-slider.page.scss'],
 })
 export class MoodSliderPage {
   private readonly configService = inject(ConfigService);
+  private readonly localization = inject(LocalizationService);
   private readonly moodEntryService = inject(MoodEntryService);
   private readonly router = inject(Router);
 
@@ -74,18 +78,18 @@ export class MoodSliderPage {
 
   moodRangeLabel(options: readonly MoodOption[], position: 'start' | 'middle' | 'end'): string {
     if (!options.length) {
-      return FALLBACK_MOOD_OPTION.label;
+      return this.localization.configLabel(FALLBACK_MOOD_OPTION);
     }
 
     if (position === 'start') {
-      return options[0].label;
+      return this.localization.configLabel(options[0]);
     }
 
     if (position === 'end') {
-      return options[options.length - 1].label;
+      return this.localization.configLabel(options[options.length - 1]);
     }
 
-    return options[Math.floor(options.length / 2)].label;
+    return this.localization.configLabel(options[Math.floor(options.length / 2)]);
   }
 
   moodVisualTone(mood: MoodOption, options: readonly MoodOption[]): string {
@@ -93,11 +97,11 @@ export class MoodSliderPage {
   }
 
   moodToneLabel(mood: MoodOption, options: readonly MoodOption[]): string {
-    return MOOD_TONE_LABELS[this.moodTone(mood, options)];
+    return this.localization.translate(MOOD_TONE_LABEL_KEYS[this.moodTone(mood, options)]);
   }
 
   moodSupportText(mood: MoodOption, options: readonly MoodOption[]): string {
-    return MOOD_SUPPORT_COPY[this.moodTone(mood, options)];
+    return this.localization.translate(MOOD_SUPPORT_KEYS[this.moodTone(mood, options)]);
   }
 
   moodVisualScale(mood: MoodOption, options: readonly MoodOption[]): string {
