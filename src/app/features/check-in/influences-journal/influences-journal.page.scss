@@ -27,8 +27,11 @@
 }
 
 .selection-summary span {
-  background: rgba(var(--ion-color-tertiary-rgb), 0.13);
-  color: var(--ion-color-tertiary);
+  border: 1px solid var(--app-influence-border);
+  background:
+    var(--app-influence-background),
+    var(--app-control-surface);
+  color: var(--app-influence-text);
 }
 
 .journal-card {

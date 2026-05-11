@@ -12,8 +12,8 @@
   border-radius: 23px;
   background:
     radial-gradient(circle at 30% 22%, var(--app-white-glow), transparent 40%),
-    linear-gradient(145deg, rgba(var(--ion-color-primary-rgb), 0.16), rgba(var(--ion-color-secondary-rgb), 0.14));
-  color: var(--ion-color-primary);
+    linear-gradient(145deg, rgba(var(--ion-color-secondary-rgb), 0.16), rgba(var(--ion-color-tertiary-rgb), 0.12));
+  color: var(--app-secondary-text);
   font-size: 1.6rem;
   font-weight: 850;
   box-shadow: var(--app-control-shadow);

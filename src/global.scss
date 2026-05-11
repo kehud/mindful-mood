@@ -99,7 +99,7 @@ ion-content.wellness-content {
 
 .eyebrow {
   margin: 0 0 9px;
-  color: var(--ion-color-primary);
+  color: var(--app-secondary-text);
   font-size: 0.75rem;
   font-weight: 760;
   letter-spacing: 0;
@@ -140,10 +140,13 @@ ion-content.wellness-content {
 
 .primary-action {
   margin-top: 18px;
-  --background: linear-gradient(135deg, var(--ion-color-primary), var(--ion-color-primary-shade));
-  --background-activated: var(--ion-color-primary-shade);
+  --background: linear-gradient(135deg, var(--ion-color-primary), var(--ion-color-secondary) 72%);
+  --background-activated: linear-gradient(135deg, var(--ion-color-primary-shade), var(--ion-color-secondary-shade) 72%);
+  --color: var(--app-on-accent);
   --border-radius: 17px;
-  --box-shadow: 0 13px 28px rgba(var(--ion-color-primary-rgb), 0.22);
+  --box-shadow:
+    0 13px 28px rgba(var(--ion-color-secondary-rgb), 0.18),
+    0 4px 14px rgba(var(--ion-color-primary-rgb), 0.08);
   min-height: 54px;
   font-weight: 740;
   letter-spacing: 0;
@@ -203,7 +206,7 @@ html[dir="rtl"] ion-icon[name="chevron-back-outline"] {
 
 .step-dots span.active {
   width: 22px;
-  background: var(--ion-color-primary);
+  background: linear-gradient(90deg, var(--ion-color-primary), var(--ion-color-secondary) 70%);
 }
 
 .checkin-shell {
@@ -262,7 +265,8 @@ ion-tab-bar {
   border: 1px solid var(--app-soft-border);
   border-radius: var(--app-radius-lg);
   background:
-    radial-gradient(circle at 50% -6%, var(--app-mint-glow), transparent 45%),
+    radial-gradient(circle at 18% -6%, var(--app-blue-glow), transparent 44%),
+    radial-gradient(circle at 86% -8%, var(--app-peach-glow), transparent 42%),
     var(--app-surface);
   box-shadow: var(--app-card-shadow);
   padding: 20px 16px 22px;
@@ -282,8 +286,11 @@ ion-tab-bar {
   width: 60px;
   height: 60px;
   border-radius: 22px;
-  background: rgba(var(--ion-color-primary-rgb), 0.11);
-  color: var(--ion-color-primary);
+  border: 1px solid var(--app-emotion-border);
+  background:
+    var(--app-emotion-background),
+    var(--app-control-surface);
+  color: var(--app-emotion-text);
   font-size: 1.58rem;
   font-weight: 850;
   box-shadow: inset 0 1px 0 var(--app-inset-highlight);

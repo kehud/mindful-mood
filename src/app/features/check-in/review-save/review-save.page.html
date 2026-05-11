@@ -33,7 +33,7 @@
       </section>
     </ng-container>
 
-    <section class="review-card" *ngIf="emotionOptionsState$ | async as emotionConfig">
+    <section class="review-card emotion-review-card" *ngIf="emotionOptionsState$ | async as emotionConfig">
       <div class="section-heading">
         <h2>{{ 'checkIn.review.emotions' | t }}</h2>
         <span>{{ draft.emotions.length }}</span>
@@ -44,7 +44,7 @@
       <ng-template #noEmotions><p class="empty-copy">{{ 'checkIn.review.noEmotions' | t }}</p></ng-template>
     </section>
 
-    <section class="review-card" *ngIf="influenceOptionsState$ | async as influenceConfig">
+    <section class="review-card influence-review-card" *ngIf="influenceOptionsState$ | async as influenceConfig">
       <div class="section-heading">
         <h2>{{ 'checkIn.review.influences' | t }}</h2>
         <span>{{ draft.influences.length }}</span>

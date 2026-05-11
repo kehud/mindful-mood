@@ -59,7 +59,7 @@ h2 {
   height: 48px;
   border-radius: 18px;
   background: rgba(var(--ion-color-secondary-rgb), 0.13);
-  color: var(--ion-color-secondary);
+  color: var(--app-secondary-text);
   font-weight: 850;
   box-shadow: inset 0 1px 0 var(--app-inset-highlight);
 }
@@ -84,16 +84,22 @@ h2 {
 
 .tag-row span {
   border-radius: 999px;
-  background: rgba(var(--ion-color-primary-rgb), 0.1);
-  color: var(--app-primary-text);
+  border: 1px solid var(--app-emotion-border);
+  background:
+    var(--app-emotion-background),
+    var(--app-control-surface);
+  color: var(--app-emotion-text);
   font-size: 0.86rem;
   font-weight: 650;
   padding: 7px 11px;
 }
 
 .tag-row.influence span {
-  background: rgba(var(--ion-color-tertiary-rgb), 0.12);
-  color: var(--app-tertiary-text);
+  border-color: var(--app-influence-border);
+  background:
+    var(--app-influence-background),
+    var(--app-control-surface);
+  color: var(--app-influence-text);
 }
 
 .journal {

@@ -1,17 +1,17 @@
 import { Injectable, inject } from '@angular/core';
+import { Capacitor } from '@capacitor/core';
 import {
   Auth,
   authState,
 } from '@angular/fire/auth';
 import { FirebaseError } from 'firebase/app';
 import {
-  GoogleAuthProvider,
   User,
   browserLocalPersistence,
   createUserWithEmailAndPassword,
+  indexedDBLocalPersistence,
   setPersistence,
   signInWithEmailAndPassword,
-  signInWithPopup,
   signOut,
   updateProfile,
 } from 'firebase/auth';
@@ -24,7 +24,9 @@ import { AppUser, AuthCredentials } from '../models/user-profile.model';
 })
 export class AuthService {
   private readonly auth = inject(Auth);
-  private readonly persistenceReady = setPersistence(this.auth, browserLocalPersistence);
+  private readonly authPersistence = Capacitor.isNativePlatform() ? indexedDBLocalPersistence : browserLocalPersistence;
+  private readonly persistenceReady = setPersistence(this.auth, this.authPersistence);
+  readonly canUseGoogleSignIn = !Capacitor.isNativePlatform();
 
   readonly currentUser$ = authState(this.auth).pipe(
     map((user) => (user ? this.mapFirebaseUser(user) : null)),
@@ -82,8 +84,14 @@ export class AuthService {
 
   async signInWithGoogle(): Promise<AppUser> {
     console.log('[AuthService] signInWithGoogle called');
+
+    if (!this.canUseGoogleSignIn) {
+      throw new Error('Google sign-in is not available in the native app yet. Please use email and password.');
+    }
+
     try {
       await this.persistenceReady;
+      const { GoogleAuthProvider, signInWithPopup } = await import('firebase/auth');
       const provider = new GoogleAuthProvider();
       provider.setCustomParameters({ prompt: 'select_account' });
 
@@ -102,6 +110,10 @@ export class AuthService {
   }
 
   getErrorMessage(error: unknown): string {
+    if (error instanceof Error && error.message.includes('Google sign-in is not available')) {
+      return error.message;
+    }
+
     if (!(error instanceof FirebaseError)) {
       return 'Something went wrong. Please try again.';
     }

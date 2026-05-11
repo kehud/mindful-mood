@@ -31,9 +31,9 @@
         <span *ngIf="!isLoading">Create account</span>
       </ion-button>
 
-      <div class="auth-divider"><span>or</span></div>
+      <div class="auth-divider" *ngIf="canUseGoogleSignIn"><span>or</span></div>
 
-      <ion-button class="secondary-action google-action" expand="block" fill="outline" type="button" [disabled]="isLoading" (click)="signInWithGoogle()">
+      <ion-button class="secondary-action google-action" expand="block" fill="outline" type="button" [disabled]="isLoading" (click)="signInWithGoogle()" *ngIf="canUseGoogleSignIn">
         <ion-icon slot="start" name="logo-google"></ion-icon>
         Continue with Google
       </ion-button>

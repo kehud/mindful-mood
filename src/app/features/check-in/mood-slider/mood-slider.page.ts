@@ -16,7 +16,7 @@ const FALLBACK_MOOD_OPTION: MoodOption = {
   value: 4,
   label: 'Neutral',
   icon: 'ellipse-outline',
-  color: '#4d8d7c',
+  color: '#B8A6FF',
   order: 4,
 };
 

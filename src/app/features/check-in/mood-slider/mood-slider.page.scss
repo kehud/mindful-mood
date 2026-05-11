@@ -3,7 +3,7 @@
 }
 
 .mood-card {
-  --mood-color: var(--ion-color-primary);
+  --mood-color: var(--ion-color-secondary);
   --mood-faint: color-mix(in srgb, var(--mood-color) 18%, transparent);
   overflow: hidden;
   border: 1px solid var(--app-soft-border);
@@ -155,7 +155,7 @@ ion-range {
   --bar-background-active: var(--mood-color);
   --bar-height: 9px;
   --knob-background: var(--app-mood-knob-background);
-  --knob-box-shadow: 0 11px 25px rgba(43, 71, 82, 0.2), 0 0 0 8px var(--mood-faint);
+  --knob-box-shadow: 0 11px 25px rgba(33, 28, 58, 0.18), 0 0 0 8px var(--mood-faint);
   --knob-size: 34px;
   padding: 0 4px 12px;
 }

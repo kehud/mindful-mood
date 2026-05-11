@@ -21,6 +21,7 @@ export class LoginPage {
 
   isLoading = false;
   errorMessage = '';
+  readonly canUseGoogleSignIn = this.authService.canUseGoogleSignIn;
 
   readonly form = new FormGroup({
     email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),

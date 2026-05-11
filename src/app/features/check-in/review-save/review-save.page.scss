@@ -16,7 +16,8 @@
   align-items: center;
   gap: 16px;
   background:
-    radial-gradient(circle at 0% 0%, var(--app-mint-glow), transparent 48%),
+    radial-gradient(circle at 0% 0%, var(--app-blue-glow), transparent 48%),
+    radial-gradient(circle at 100% 0%, var(--app-peach-glow), transparent 44%),
     var(--app-surface);
 }
 
@@ -27,18 +28,18 @@
   height: 78px;
   border-radius: 26px;
   background: var(--app-mood-ring-background);
-  box-shadow: 0 14px 28px rgba(var(--ion-color-primary-rgb), 0.14);
+  box-shadow: 0 14px 28px rgba(var(--ion-color-secondary-rgb), 0.14);
 }
 
 .mood-ring span {
-  color: var(--ion-color-primary);
+  color: var(--app-secondary-text);
   font-size: 2.35rem;
   font-weight: 850;
 }
 
 .review-kicker {
   margin: 0 0 5px;
-  color: var(--ion-color-primary);
+  color: var(--app-secondary-text);
   font-size: 0.76rem;
   font-weight: 780;
   text-transform: uppercase;
@@ -73,10 +74,21 @@
   min-width: 32px;
   height: 32px;
   border-radius: 12px;
-  background: rgba(var(--ion-color-primary-rgb), 0.1);
-  color: var(--ion-color-primary);
+  border: 1px solid var(--app-emotion-border);
+  background:
+    var(--app-emotion-background),
+    var(--app-control-surface);
+  color: var(--app-emotion-text);
   font-size: 0.9rem;
   font-weight: 800;
+}
+
+.influence-review-card .section-heading span {
+  border-color: var(--app-influence-border);
+  background:
+    var(--app-influence-background),
+    var(--app-control-surface);
+  color: var(--app-influence-text);
 }
 
 .tag-row {
@@ -87,15 +99,21 @@
 
 .tag-row span {
   border-radius: 999px;
-  background: rgba(var(--ion-color-primary-rgb), 0.1);
-  color: var(--app-primary-text);
+  border: 1px solid var(--app-emotion-border);
+  background:
+    var(--app-emotion-background),
+    var(--app-control-surface);
+  color: var(--app-emotion-text);
   font-weight: 650;
   padding: 9px 12px;
 }
 
 .tag-row.influence span {
-  background: rgba(var(--ion-color-tertiary-rgb), 0.12);
-  color: var(--app-tertiary-text);
+  border-color: var(--app-influence-border);
+  background:
+    var(--app-influence-background),
+    var(--app-control-surface);
+  color: var(--app-influence-text);
 }
 
 .empty-copy,
