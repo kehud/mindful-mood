@@ -1,3 +1,19 @@
-<ion-app [attr.lang]="localization.currentLanguage()" [attr.dir]="localization.direction()">
+<ion-app
+  [attr.lang]="localization.currentLanguage()"
+  [attr.dir]="localization.direction()"
+  [class.language-switching]="localization.isSwitchingLanguage()"
+>
   <ion-router-outlet></ion-router-outlet>
+
+  <div
+    class="language-switch-overlay"
+    *ngIf="localization.isSwitchingLanguage()"
+    aria-live="polite"
+    aria-busy="true"
+    role="status"
+  >
+    <div class="language-switch-surface">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+  </div>
 </ion-app>

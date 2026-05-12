@@ -23,7 +23,7 @@
 
     <ng-container *ngIf="influenceOptionsState$ | async as influenceConfig">
       <section class="selection-card">
-        <div class="config-loading" *ngIf="influenceConfig.loading" aria-live="polite">
+        <div class="config-loading" *ngIf="influenceConfig.loading && !influenceConfig.options.length" aria-live="polite">
           <ion-spinner name="crescent"></ion-spinner>
           <span>{{ 'checkIn.influences.loading' | t }}</span>
         </div>

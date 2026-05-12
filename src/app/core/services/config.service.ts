@@ -87,7 +87,7 @@ export class ConfigService {
   ): Observable<ConfigOptionsState<T>> {
     const configRef = collection(this.firestore, collectionName);
     const configQuery = query(configRef, orderBy('order', 'asc'));
-    const fallbackState = this.toState(fallbackOptions, true);
+    const fallbackState = this.toState(fallbackOptions, false);
 
     return collectionData(configQuery).pipe(
       map((items) => items.map(toOption).filter((option): option is T => option !== null)),

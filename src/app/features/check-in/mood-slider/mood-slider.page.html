@@ -23,7 +23,7 @@
 
     <ng-container *ngIf="moodOptionsState$ | async as moodConfig">
       <section class="mood-card" *ngIf="selectedMood(moodConfig.options) as mood" [style.--mood-color]="mood.color">
-        <div class="config-loading" *ngIf="moodConfig.loading" aria-live="polite">
+        <div class="config-loading" *ngIf="moodConfig.loading && !moodConfig.options.length" aria-live="polite">
           <ion-spinner name="crescent"></ion-spinner>
           <span>{{ 'checkIn.mood.loading' | t }}</span>
         </div>

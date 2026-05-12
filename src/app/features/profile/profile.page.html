@@ -50,10 +50,15 @@
           class="theme-segment language-segment"
           mode="ios"
           [attr.aria-label]="'language.current' | t"
+          [disabled]="isLanguageSwitching()"
           [value]="currentLanguage()"
           (ionChange)="setLanguage($event.detail.value)"
         >
-          <ion-segment-button *ngFor="let option of languageOptions" [value]="option.code">
+          <ion-segment-button
+            *ngFor="let option of languageOptions"
+            [disabled]="isLanguageSwitching()"
+            [value]="option.code"
+          >
             <ion-label>{{ option.nativeLabel }}</ion-label>
           </ion-segment-button>
         </ion-segment>

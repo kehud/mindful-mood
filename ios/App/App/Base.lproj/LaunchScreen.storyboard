@@ -12,11 +12,22 @@
         <scene sceneID="EHf-IW-A2E">
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
-                    <imageView key="view" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Splash" id="snD-IY-ifK">
+                    <view key="view" contentMode="scaleToFill" id="snD-IY-ifK">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Splash" translatesAutoresizingMaskIntoConstraints="NO" id="Qzr-bx-bju">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </imageView>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </imageView>
+                        <constraints>
+                            <constraint firstItem="Qzr-bx-bju" firstAttribute="leading" secondItem="snD-IY-ifK" secondAttribute="leading" id="5N0-lk-vQr"/>
+                            <constraint firstItem="Qzr-bx-bju" firstAttribute="top" secondItem="snD-IY-ifK" secondAttribute="top" id="8jR-H6-nfQ"/>
+                            <constraint firstAttribute="trailing" secondItem="Qzr-bx-bju" secondAttribute="trailing" id="Mx4-cj-Ii7"/>
+                            <constraint firstAttribute="bottom" secondItem="Qzr-bx-bju" secondAttribute="bottom" id="zFx-bw-xL6"/>
+                        </constraints>
+                    </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

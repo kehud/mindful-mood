@@ -21,6 +21,7 @@ export interface LocalizedConfigLabel {
 
 const LANGUAGE_STORAGE_KEY = 'mindful-mood-language';
 const DEFAULT_LANGUAGE: AppLanguage = 'en';
+const LANGUAGE_SWITCH_MIN_DURATION_MS = 700;
 
 const LANGUAGE_OPTIONS: readonly AppLanguageOption[] = [
   {
@@ -48,23 +49,32 @@ const LANGUAGE_DIRECTIONS: Record<AppLanguage, AppDirection> = {
 export class LocalizationService {
   private readonly document = inject(DOCUMENT);
   private readonly language = signal<AppLanguage>(this.getInitialLanguage());
+  private readonly switchingLanguage = signal(false);
 
   readonly availableLanguages = LANGUAGE_OPTIONS;
   readonly currentLanguage = this.language.asReadonly();
   readonly direction = computed(() => LANGUAGE_DIRECTIONS[this.currentLanguage()]);
   readonly isRtl = computed(() => this.direction() === 'rtl');
+  readonly isSwitchingLanguage = this.switchingLanguage.asReadonly();
 
   constructor() {
     effect(() => {
       const language = this.currentLanguage();
       const direction = this.direction();
       const root = this.document.documentElement;
+      const body = this.document.body;
 
       root.lang = language;
       root.dir = direction;
       root.classList.toggle('app-rtl', direction === 'rtl');
       root.classList.toggle('app-ltr', direction === 'ltr');
-      this.document.body?.setAttribute('dir', direction);
+
+      if (body) {
+        body.dir = direction;
+        body.classList.toggle('app-rtl', direction === 'rtl');
+        body.classList.toggle('app-ltr', direction === 'ltr');
+      }
+
       this.persistLanguage(language);
     });
   }
@@ -77,8 +87,27 @@ export class LocalizationService {
     this.language.set(language);
   }
 
-  toggleLanguage(): void {
-    this.setLanguage(this.currentLanguage() === 'he' ? 'en' : 'he');
+  async switchLanguage(language: AppLanguage): Promise<void> {
+    if (
+      !this.isSupportedLanguage(language) ||
+      this.isSwitchingLanguage() ||
+      language === this.currentLanguage()
+    ) {
+      return;
+    }
+
+    this.switchingLanguage.set(true);
+
+    try {
+      this.setLanguage(language);
+      await this.delay(LANGUAGE_SWITCH_MIN_DURATION_MS);
+    } finally {
+      this.switchingLanguage.set(false);
+    }
+  }
+
+  async toggleLanguage(): Promise<void> {
+    await this.switchLanguage(this.currentLanguage() === 'he' ? 'en' : 'he');
   }
 
   translate(key: TranslationKey | string, params?: Record<string, string | number>): string {
@@ -152,6 +181,12 @@ export class LocalizationService {
 
   private isSupportedLanguage(language: string | null): language is AppLanguage {
     return language === 'en' || language === 'he';
+  }
+
+  private async delay(durationMs: number): Promise<void> {
+    await new Promise<void>((resolve) => {
+      setTimeout(resolve, durationMs);
+    });
   }
 
   private interpolate(value: string, params?: Record<string, string | number>): string {

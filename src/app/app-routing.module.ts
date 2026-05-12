@@ -52,6 +52,11 @@ const routes: Routes = [
           import('./features/history/history.page').then((m) => m.HistoryPage),
       },
       {
+        path: 'tools',
+        loadComponent: () =>
+          import('./features/tools/tools.page').then((m) => m.ToolsPage),
+      },
+      {
         path: 'insights',
         loadComponent: () =>
           import('./features/insights/insights.page').then((m) => m.InsightsPage),

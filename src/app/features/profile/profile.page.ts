@@ -1,7 +1,6 @@
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
+import { Component, NgZone, inject } from '@angular/core';
+import { IonicModule, NavController } from '@ionic/angular';
 
 import { AuthService } from '../../core/services/auth.service';
 import { AppLanguage, LocalizationService } from '../../core/services/localization.service';
@@ -20,12 +19,14 @@ import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 export class ProfilePage {
   private readonly authService = inject(AuthService);
   protected readonly localization = inject(LocalizationService);
-  private readonly router = inject(Router);
+  private readonly navController = inject(NavController);
+  private readonly ngZone = inject(NgZone);
   private readonly themeService = inject(ThemeService);
 
   readonly user$ = this.authService.currentUser$;
   readonly languageOptions = this.localization.availableLanguages;
   readonly currentLanguage = this.localization.currentLanguage;
+  readonly isLanguageSwitching = this.localization.isSwitchingLanguage;
   readonly themeOptions = this.themeService.themeOptions;
   readonly themePreference$ = this.themeService.preference$;
   readonly resolvedTheme$ = this.themeService.resolvedTheme$;
@@ -38,9 +39,9 @@ export class ProfilePage {
     }
   }
 
-  setLanguage(value: unknown): void {
+  async setLanguage(value: unknown): Promise<void> {
     if (this.isAppLanguage(value)) {
-      this.localization.setLanguage(value);
+      await this.localization.switchLanguage(value);
     }
   }
 
@@ -60,7 +61,9 @@ export class ProfilePage {
 
     try {
       await this.authService.signOut();
-      await this.router.navigateByUrl('/welcome');
+      await this.ngZone.run(() =>
+        this.navController.navigateRoot('/welcome', { animated: true, replaceUrl: true }),
+      );
     } catch (error) {
       this.errorMessage = this.authService.getErrorMessage(error);
     } finally {
