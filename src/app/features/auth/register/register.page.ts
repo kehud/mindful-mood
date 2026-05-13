@@ -5,12 +5,14 @@ import { Router, RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { AuthService } from '../../../core/services/auth.service';
+import { TranslationKey } from '../../../core/services/localization.translations';
 import { WellnessHeaderComponent } from '../../../shared/components/wellness-header/wellness-header.component';
+import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [IonicModule, NgIf, ReactiveFormsModule, RouterLink, WellnessHeaderComponent],
+  imports: [IonicModule, NgIf, ReactiveFormsModule, RouterLink, TranslatePipe, WellnessHeaderComponent],
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
 })
@@ -20,7 +22,7 @@ export class RegisterPage {
   private readonly ngZone = inject(NgZone);
 
   isLoading = false;
-  errorMessage = '';
+  errorMessageKey: TranslationKey | '' = '';
   readonly canUseGoogleSignIn = this.authService.canUseGoogleSignIn;
 
   readonly form = new FormGroup({
@@ -45,7 +47,7 @@ export class RegisterPage {
     if (this.form.invalid) {
       console.log('[RegisterPage] form invalid', this.form.value);
       this.form.markAllAsTouched();
-      this.errorMessage = 'Please enter your name, a valid email, and a password with at least 6 characters.';
+      this.errorMessageKey = 'auth.error.invalidRegisterForm';
       return;
     }
 
@@ -59,7 +61,7 @@ export class RegisterPage {
   }
 
   private async runAuthAction(label: string, action: () => Promise<unknown>): Promise<void> {
-    this.errorMessage = '';
+    this.errorMessageKey = '';
     this.isLoading = true;
 
     try {
@@ -69,7 +71,7 @@ export class RegisterPage {
       await this.navigateHome();
     } catch (error) {
       console.error(`[RegisterPage] auth error: ${label}`, error);
-      this.errorMessage = this.authService.getErrorMessage(error);
+      this.errorMessageKey = this.authService.getErrorTranslationKey(error);
     } finally {
       this.isLoading = false;
     }

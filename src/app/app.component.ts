@@ -2,11 +2,12 @@ import { ApplicationRef, Component, NgZone, inject } from '@angular/core';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { filter, firstValueFrom, of, take, timeout } from 'rxjs';
 
+import { AuthService } from './core/services/auth.service';
 import { LocalizationService } from './core/services/localization.service';
 import { ThemeService } from './core/services/theme.service';
 
-const SPLASH_VISIBLE_MS = 2500;
-const SPLASH_FADE_MS = 300;
+const SPLASH_VISIBLE_MS = 2000;
+const SPLASH_FADE_MS = 375;
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,7 @@ export class AppComponent {
   private readonly appRef = inject(ApplicationRef);
   private readonly ngZone = inject(NgZone);
   private readonly themeService = inject(ThemeService);
+  protected readonly isAuthReady$ = inject(AuthService).authReady$;
   protected readonly localization = inject(LocalizationService);
 
   constructor() {
@@ -29,6 +31,7 @@ export class AppComponent {
   private async hideSplashAfterStartup(): Promise<void> {
     await Promise.all([
       this.delay(SPLASH_VISIBLE_MS),
+      this.waitForInitialAuthState(),
       this.waitForInitialRender(),
     ]);
 
@@ -42,6 +45,16 @@ export class AppComponent {
   private async waitForInitialRender(): Promise<void> {
     await firstValueFrom(
       this.appRef.isStable.pipe(
+        filter(Boolean),
+        take(1),
+        timeout({ first: SPLASH_VISIBLE_MS, with: () => of(true) }),
+      ),
+    );
+  }
+
+  private async waitForInitialAuthState(): Promise<void> {
+    await firstValueFrom(
+      this.isAuthReady$.pipe(
         filter(Boolean),
         take(1),
         timeout({ first: SPLASH_VISIBLE_MS, with: () => of(true) }),

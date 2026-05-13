@@ -2,44 +2,49 @@
   <main class="page-shell auth-shell">
     <ion-button fill="clear" size="small" routerLink="/welcome">
       <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
-      Back
+      {{ 'common.back' | t }}
     </ion-button>
 
     <app-wellness-header
-      eyebrow="Start gently"
-      title="Create account"
-      subtitle="Save each daily check-in and build a private mood history."
+      [eyebrow]="'auth.registerEyebrow' | t"
+      [title]="'auth.register' | t"
+      [subtitle]="'auth.registerSubtitle' | t"
     ></app-wellness-header>
 
     <form class="auth-card soft-panel" [formGroup]="form" (ngSubmit)="submit()">
       <ion-item lines="none">
-        <ion-input label="Name" labelPlacement="stacked" formControlName="displayName"></ion-input>
+        <ion-input [label]="'auth.name' | t" labelPlacement="stacked" formControlName="displayName"></ion-input>
       </ion-item>
 
       <ion-item lines="none">
-        <ion-input label="Email" labelPlacement="stacked" type="email" formControlName="email"></ion-input>
+        <ion-input [label]="'auth.email' | t" labelPlacement="stacked" type="email" formControlName="email"></ion-input>
       </ion-item>
 
       <ion-item lines="none">
-        <ion-input label="Password" labelPlacement="stacked" type="password" formControlName="password"></ion-input>
+        <ion-input
+          [label]="'auth.password' | t"
+          labelPlacement="stacked"
+          type="password"
+          formControlName="password"
+        ></ion-input>
       </ion-item>
 
-      <p class="form-error" *ngIf="errorMessage">{{ errorMessage }}</p>
+      <p class="form-error" *ngIf="errorMessageKey as errorKey">{{ errorKey | t }}</p>
 
       <ion-button class="primary-action" expand="block" type="submit" [disabled]="isLoading" (click)="onRegisterButtonClick()">
         <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
-        <span *ngIf="!isLoading">Create account</span>
+        <span *ngIf="!isLoading">{{ 'auth.register' | t }}</span>
       </ion-button>
 
-      <div class="auth-divider" *ngIf="canUseGoogleSignIn"><span>or</span></div>
+      <div class="auth-divider" *ngIf="canUseGoogleSignIn"><span>{{ 'auth.or' | t }}</span></div>
 
       <ion-button class="secondary-action google-action" expand="block" fill="outline" type="button" [disabled]="isLoading" (click)="signInWithGoogle()" *ngIf="canUseGoogleSignIn">
         <ion-icon slot="start" name="logo-google"></ion-icon>
-        Continue with Google
+        {{ 'auth.continueWithGoogle' | t }}
       </ion-button>
 
       <ion-button class="secondary-action" expand="block" fill="clear" routerLink="/login">
-        I already have one
+        {{ 'auth.alreadyHaveAccount' | t }}
       </ion-button>
     </form>
   </main>

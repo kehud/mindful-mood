@@ -5,12 +5,14 @@ import { Router, RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { AuthService } from '../../../core/services/auth.service';
+import { TranslationKey } from '../../../core/services/localization.translations';
 import { WellnessHeaderComponent } from '../../../shared/components/wellness-header/wellness-header.component';
+import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [IonicModule, NgIf, ReactiveFormsModule, RouterLink, WellnessHeaderComponent],
+  imports: [IonicModule, NgIf, ReactiveFormsModule, RouterLink, TranslatePipe, WellnessHeaderComponent],
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
@@ -20,7 +22,7 @@ export class LoginPage {
   private readonly ngZone = inject(NgZone);
 
   isLoading = false;
-  errorMessage = '';
+  errorMessageKey: TranslationKey | '' = '';
   readonly canUseGoogleSignIn = this.authService.canUseGoogleSignIn;
 
   readonly form = new FormGroup({
@@ -44,7 +46,7 @@ export class LoginPage {
     if (this.form.invalid) {
       console.log('[LoginPage] form invalid', this.form.value);
       this.form.markAllAsTouched();
-      this.errorMessage = 'Please enter a valid email and password.';
+      this.errorMessageKey = 'auth.error.invalidLoginForm';
       return;
     }
 
@@ -57,7 +59,7 @@ export class LoginPage {
   }
 
   private async runAuthAction(label: string, action: () => Promise<unknown>): Promise<void> {
-    this.errorMessage = '';
+    this.errorMessageKey = '';
     this.isLoading = true;
 
     try {
@@ -67,7 +69,7 @@ export class LoginPage {
       await this.navigateHome();
     } catch (error) {
       console.error(`[LoginPage] auth error: ${label}`, error);
-      this.errorMessage = this.authService.getErrorMessage(error);
+      this.errorMessageKey = this.authService.getErrorTranslationKey(error);
     } finally {
       this.isLoading = false;
     }

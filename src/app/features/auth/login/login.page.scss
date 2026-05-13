@@ -2,6 +2,33 @@
   margin: 4px 0 12px -12px;
 }
 
+.login-brand-mark {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto 18px;
+  line-height: 0;
+}
+
+.login-brand-logo {
+  display: block;
+  width: clamp(92px, 24vw, 112px);
+  height: auto;
+  object-fit: contain;
+}
+
+.login-brand-logo-dark {
+  display: none;
+}
+
+:host-context(.ion-palette-dark) .login-brand-logo-light {
+  display: none;
+}
+
+:host-context(.ion-palette-dark) .login-brand-logo-dark {
+  display: block;
+}
+
 .auth-card {
   display: grid;
   gap: 13px;

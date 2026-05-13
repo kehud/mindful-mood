@@ -38,6 +38,8 @@
 
 :root {
   --app-page-max-width: 660px;
+  --app-page-top-offset: 0px;
+  --app-page-wide-top-offset: 12px;
   --app-radius-lg: 26px;
   --app-radius-md: 18px;
   --app-radius-sm: 14px;
@@ -87,8 +89,9 @@ ion-content.wellness-content {
 .page-shell {
   width: min(100%, var(--app-page-max-width));
   margin: 0 auto;
-  padding: calc(22px + env(safe-area-inset-top)) 20px calc(32px + env(safe-area-inset-bottom));
-  animation: page-settle 360ms var(--app-ease) both;
+  padding: calc(var(--app-page-top-offset) + env(safe-area-inset-top)) 20px calc(32px + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  animation: page-settle 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .full-height-shell {
@@ -191,7 +194,7 @@ html[dir="rtl"] ion-icon[name="chevron-back-outline"] {
   display: flex;
   justify-content: center;
   gap: 7px;
-  margin: 8px 0 20px;
+  margin: 4px 0 14px;
 }
 
 .step-dots span {
@@ -220,8 +223,8 @@ html[dir="rtl"] ion-icon[name="chevron-back-outline"] {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 40px;
-  margin-bottom: 2px;
+  min-height: 34px;
+  margin-bottom: 0;
 }
 
 .nav-button {
@@ -317,7 +320,7 @@ ion-tab-bar {
 
 @media (min-width: 768px) {
   .page-shell {
-    padding-top: calc(34px + env(safe-area-inset-top));
+    padding-top: calc(var(--app-page-wide-top-offset) + env(safe-area-inset-top));
   }
 }
 
@@ -332,12 +335,12 @@ ion-tab-bar {
 
 @keyframes page-settle {
   from {
-    opacity: 0;
-    transform: translateY(8px);
+    opacity: 0.82;
+    filter: blur(0.6px);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
+    filter: blur(0);
   }
 }

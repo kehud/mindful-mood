@@ -1,3 +1,30 @@
+.auth-check-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  background: var(--app-wellness-background);
+  pointer-events: all;
+}
+
+.auth-check-surface {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border: 1px solid var(--app-control-border);
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--ion-card-background) 84%, transparent);
+  box-shadow: var(--app-card-shadow);
+}
+
+.auth-check-surface ion-spinner {
+  width: 24px;
+  height: 24px;
+  color: var(--app-secondary-text);
+}
+
 .language-switch-overlay {
   position: fixed;
   inset: 0;

@@ -15,24 +15,42 @@ import {
   signOut,
   updateProfile,
 } from 'firebase/auth';
-import { map, shareReplay } from 'rxjs';
+import { from, map, shareReplay, startWith, switchMap, take } from 'rxjs';
 
 import { AppUser, AuthCredentials } from '../models/user-profile.model';
+import { LocalizationService } from './localization.service';
+import { TranslationKey } from './localization.translations';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private readonly auth = inject(Auth);
+  private readonly localization = inject(LocalizationService);
   private readonly authPersistence = Capacitor.isNativePlatform() ? indexedDBLocalPersistence : browserLocalPersistence;
   private readonly persistenceReady = setPersistence(this.auth, this.authPersistence);
   readonly canUseGoogleSignIn = !Capacitor.isNativePlatform();
 
-  readonly currentUser$ = authState(this.auth).pipe(
-    map((user) => (user ? this.mapFirebaseUser(user) : null)),
-    shareReplay({ bufferSize: 1, refCount: true }),
+  private readonly firebaseUser$ = from(this.persistenceReady).pipe(
+    switchMap(() => authState(this.auth)),
+    shareReplay({ bufferSize: 1, refCount: false }),
   );
-  readonly isAuthenticated$ = this.currentUser$.pipe(map(Boolean));
+
+  readonly authReady$ = this.firebaseUser$.pipe(
+    map(() => true),
+    take(1),
+    startWith(false),
+    shareReplay({ bufferSize: 1, refCount: false }),
+  );
+
+  readonly currentUser$ = this.firebaseUser$.pipe(
+    map((user) => (user ? this.mapFirebaseUser(user) : null)),
+    shareReplay({ bufferSize: 1, refCount: false }),
+  );
+  readonly isAuthenticated$ = this.currentUser$.pipe(
+    map(Boolean),
+    shareReplay({ bufferSize: 1, refCount: false }),
+  );
 
   get currentUserSnapshot(): AppUser | null {
     return this.auth.currentUser ? this.mapFirebaseUser(this.auth.currentUser) : null;
@@ -106,35 +124,40 @@ export class AuthService {
   }
 
   async signOut(): Promise<void> {
+    await this.persistenceReady;
     await signOut(this.auth);
   }
 
   getErrorMessage(error: unknown): string {
+    return this.localization.translate(this.getErrorTranslationKey(error));
+  }
+
+  getErrorTranslationKey(error: unknown): TranslationKey {
     if (error instanceof Error && error.message.includes('Google sign-in is not available')) {
-      return error.message;
+      return 'auth.error.googleNativeUnavailable';
     }
 
     if (!(error instanceof FirebaseError)) {
-      return 'Something went wrong. Please try again.';
+      return 'auth.error.generic';
     }
 
     switch (error.code) {
       case 'auth/email-already-in-use':
-        return 'That email is already registered. Try logging in instead.';
+        return 'auth.error.emailAlreadyInUse';
       case 'auth/invalid-email':
-        return 'Please enter a valid email address.';
+        return 'auth.error.invalidEmail';
       case 'auth/invalid-credential':
       case 'auth/user-not-found':
       case 'auth/wrong-password':
-        return 'The email or password does not look right.';
+        return 'auth.error.invalidCredential';
       case 'auth/popup-closed-by-user':
-        return 'Google sign-in was closed before it finished.';
+        return 'auth.error.popupClosed';
       case 'auth/weak-password':
-        return 'Use a password with at least 6 characters.';
+        return 'auth.error.weakPassword';
       case 'auth/network-request-failed':
-        return 'Network connection failed. Please try again.';
+        return 'auth.error.network';
       default:
-        return error.message || 'Authentication failed. Please try again.';
+        return 'auth.error.authenticationFailed';
     }
   }
 

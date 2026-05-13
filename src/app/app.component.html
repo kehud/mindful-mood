@@ -6,6 +6,18 @@
   <ion-router-outlet></ion-router-outlet>
 
   <div
+    class="auth-check-overlay"
+    *ngIf="(isAuthReady$ | async) === false"
+    aria-live="polite"
+    aria-busy="true"
+    role="status"
+  >
+    <div class="auth-check-surface">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+  </div>
+
+  <div
     class="language-switch-overlay"
     *ngIf="localization.isSwitchingLanguage()"
     aria-live="polite"

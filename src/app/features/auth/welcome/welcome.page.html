@@ -1,13 +1,26 @@
 <ion-content class="wellness-content" fullscreen>
   <main class="page-shell full-height-shell welcome-shell">
     <section class="brand-mark">
-      <span></span>
+      <img
+        class="brand-logo brand-logo-light"
+        src="assets/brand/reflect-logo-light.png"
+        [alt]="'auth.logoAlt' | t"
+        width="1254"
+        height="1254"
+      />
+      <img
+        class="brand-logo brand-logo-dark"
+        src="assets/brand/reflect-logo-dark.png"
+        [alt]="'auth.logoAlt' | t"
+        width="1254"
+        height="1254"
+      />
     </section>
 
     <section class="welcome-copy">
-      <p class="eyebrow">Mindful Mood</p>
-      <h1>Notice your day with a little more kindness.</h1>
-      <p>Track mood, emotions, influences, and reflections in one calm daily ritual.</p>
+      <p class="eyebrow">{{ 'auth.welcome.eyebrow' | t }}</p>
+      <h1>{{ 'auth.welcome.title' | t }}</h1>
+      <p>{{ 'auth.welcome.subtitle' | t }}</p>
     </section>
 
     <section class="mood-preview soft-panel">
@@ -19,17 +32,179 @@
         <span></span>
       </div>
       <div>
-        <strong>Today feels balanced</strong>
-        <p>Sleep, work, and a quiet walk shaped the afternoon.</p>
+        <strong>{{ 'auth.welcome.previewTitle' | t }}</strong>
+        <p>{{ 'auth.welcome.previewSubtitle' | t }}</p>
       </div>
     </section>
 
     <section class="welcome-actions">
-      <ion-button class="primary-action" expand="block" routerLink="/register">Create account</ion-button>
-      <ion-button class="secondary-action" expand="block" fill="clear" routerLink="/login">Log in</ion-button>
+      <ion-button class="primary-action" expand="block" type="button" (click)="openAuthSheet('register')">
+        {{ 'auth.register' | t }}
+      </ion-button>
+      <ion-button class="secondary-action" expand="block" fill="clear" type="button" (click)="openAuthSheet('login')">
+        {{ 'auth.login' | t }}
+      </ion-button>
       <ion-button class="secondary-action" expand="block" fill="outline" routerLink="/tabs/home">
-        Explore preview
+        {{ 'auth.welcome.explorePreview' | t }}
       </ion-button>
     </section>
   </main>
+
+  <ion-modal
+    #authSheetModal
+    class="auth-sheet-modal"
+    [isOpen]="isAuthSheetOpen"
+    [breakpoints]="authSheetBreakpoints"
+    [initialBreakpoint]="authSheetInitialBreakpoint"
+    [backdropDismiss]="!isLoading"
+    [canDismiss]="canDismissAuthSheet"
+    [handle]="false"
+    (didDismiss)="onAuthSheetDidDismiss()"
+  >
+    <ng-template>
+      <ion-content class="auth-sheet-content">
+        <section class="auth-sheet">
+          <div class="sheet-handle" aria-hidden="true"></div>
+
+          <header class="auth-sheet-header">
+            <p class="eyebrow">
+              {{ (authSheetMode === 'login' ? 'auth.loginEyebrow' : 'auth.registerEyebrow') | t }}
+            </p>
+            <h2>{{ (authSheetMode === 'login' ? 'auth.login' : 'auth.register') | t }}</h2>
+            <p>
+              {{ (authSheetMode === 'login' ? 'auth.loginSubtitle' : 'auth.registerSubtitle') | t }}
+            </p>
+          </header>
+
+          <form
+            *ngIf="authSheetMode === 'login'; else registerSheetForm"
+            class="auth-sheet-form"
+            [formGroup]="loginForm"
+            (ngSubmit)="submitAuthSheet()"
+          >
+            <ion-item lines="none">
+              <ion-input
+                [label]="'auth.email' | t"
+                labelPlacement="stacked"
+                type="email"
+                inputmode="email"
+                autocomplete="email"
+                formControlName="email"
+              ></ion-input>
+            </ion-item>
+
+            <ion-item lines="none">
+              <ion-input
+                [label]="'auth.password' | t"
+                labelPlacement="stacked"
+                type="password"
+                autocomplete="current-password"
+                formControlName="password"
+              ></ion-input>
+            </ion-item>
+
+            <p class="form-error" *ngIf="errorMessageKey as errorKey">{{ errorKey | t }}</p>
+
+            <ion-button class="primary-action" expand="block" type="submit" [disabled]="isLoading">
+              <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+              <span *ngIf="!isLoading">{{ 'auth.login' | t }}</span>
+            </ion-button>
+
+            <div class="auth-divider" *ngIf="canUseGoogleSignIn"><span>{{ 'auth.or' | t }}</span></div>
+
+            <ion-button
+              class="secondary-action google-action"
+              expand="block"
+              fill="outline"
+              type="button"
+              [disabled]="isLoading"
+              (click)="signInWithGoogle()"
+              *ngIf="canUseGoogleSignIn"
+            >
+              <ion-icon slot="start" name="logo-google"></ion-icon>
+              {{ 'auth.continueWithGoogle' | t }}
+            </ion-button>
+
+            <ion-button
+              class="secondary-action mode-switch-action"
+              expand="block"
+              fill="clear"
+              type="button"
+              [disabled]="isLoading"
+              (click)="switchAuthSheetMode('register')"
+            >
+              {{ 'auth.register' | t }}
+            </ion-button>
+          </form>
+
+          <ng-template #registerSheetForm>
+            <form class="auth-sheet-form" [formGroup]="registerForm" (ngSubmit)="submitAuthSheet()">
+              <ion-item lines="none">
+                <ion-input
+                  [label]="'auth.name' | t"
+                  labelPlacement="stacked"
+                  autocomplete="name"
+                  formControlName="displayName"
+                ></ion-input>
+              </ion-item>
+
+              <ion-item lines="none">
+                <ion-input
+                  [label]="'auth.email' | t"
+                  labelPlacement="stacked"
+                  type="email"
+                  inputmode="email"
+                  autocomplete="email"
+                  formControlName="email"
+                ></ion-input>
+              </ion-item>
+
+              <ion-item lines="none">
+                <ion-input
+                  [label]="'auth.password' | t"
+                  labelPlacement="stacked"
+                  type="password"
+                  autocomplete="new-password"
+                  formControlName="password"
+                ></ion-input>
+              </ion-item>
+
+              <p class="form-error" *ngIf="errorMessageKey as errorKey">{{ errorKey | t }}</p>
+
+              <ion-button class="primary-action" expand="block" type="submit" [disabled]="isLoading">
+                <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+                <span *ngIf="!isLoading">{{ 'auth.register' | t }}</span>
+              </ion-button>
+
+              <div class="auth-divider" *ngIf="canUseGoogleSignIn"><span>{{ 'auth.or' | t }}</span></div>
+
+              <ion-button
+                class="secondary-action google-action"
+                expand="block"
+                fill="outline"
+                type="button"
+                [disabled]="isLoading"
+                (click)="signInWithGoogle()"
+                *ngIf="canUseGoogleSignIn"
+              >
+                <ion-icon slot="start" name="logo-google"></ion-icon>
+                {{ 'auth.continueWithGoogle' | t }}
+              </ion-button>
+
+              <ion-button
+                class="secondary-action mode-switch-action"
+                expand="block"
+                fill="clear"
+                type="button"
+                [disabled]="isLoading"
+                (click)="switchAuthSheetMode('login')"
+              >
+                {{ 'auth.login' | t }}
+              </ion-button>
+            </form>
+          </ng-template>
+        </section>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>
