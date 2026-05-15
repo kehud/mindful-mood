@@ -186,6 +186,24 @@ ion-button[fill="clear"] {
   --background-activated: var(--app-clear-button-background-activated);
 }
 
+ion-loading.auth-transition-loading {
+  --background: color-mix(in srgb, var(--ion-card-background) 88%, transparent);
+  --backdrop-opacity: 0.18;
+  --border-radius: 20px;
+  --box-shadow: var(--app-card-shadow);
+  --spinner-color: var(--app-secondary-text);
+  color: var(--app-text);
+  backdrop-filter: blur(8px) saturate(125%);
+  -webkit-backdrop-filter: blur(8px) saturate(125%);
+}
+
+ion-loading.auth-transition-loading::part(message) {
+  color: var(--app-muted);
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
 html[dir="rtl"] ion-icon[name="chevron-back-outline"] {
   transform: scaleX(-1);
 }

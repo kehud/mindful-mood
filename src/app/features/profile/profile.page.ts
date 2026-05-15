@@ -1,6 +1,6 @@
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { Component, NgZone, inject } from '@angular/core';
-import { IonicModule, NavController } from '@ionic/angular';
+import { IonicModule, LoadingController, NavController } from '@ionic/angular';
 
 import { AuthService } from '../../core/services/auth.service';
 import { AppLanguage, LocalizationService } from '../../core/services/localization.service';
@@ -19,6 +19,7 @@ import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 export class ProfilePage {
   private readonly authService = inject(AuthService);
   protected readonly localization = inject(LocalizationService);
+  private readonly loadingController = inject(LoadingController);
   private readonly navController = inject(NavController);
   private readonly ngZone = inject(NgZone);
   private readonly themeService = inject(ThemeService);
@@ -58,20 +59,46 @@ export class ProfilePage {
   async signOut(): Promise<void> {
     this.errorMessage = '';
     this.isSigningOut = true;
+    const transition = await this.presentSignOutTransition();
 
     try {
       await this.authService.signOut();
+      await this.delay(160);
       await this.ngZone.run(() =>
-        this.navController.navigateRoot('/welcome', { animated: true, replaceUrl: true }),
+        this.navController.navigateRoot('/welcome', {
+          animated: true,
+          animationDirection: 'back',
+          replaceUrl: true,
+        }),
       );
+      await this.delay(220);
     } catch (error) {
       this.errorMessage = this.authService.getErrorMessage(error);
     } finally {
+      await transition.dismiss();
       this.isSigningOut = false;
     }
   }
 
   private isAppLanguage(value: unknown): value is AppLanguage {
     return value === 'en' || value === 'he';
+  }
+
+  private async presentSignOutTransition(): Promise<HTMLIonLoadingElement> {
+    const loading = await this.loadingController.create({
+      cssClass: 'auth-transition-loading',
+      message: this.localization.translate('profile.signingOut'),
+      spinner: 'crescent',
+      translucent: true,
+    });
+
+    await loading.present();
+    return loading;
+  }
+
+  private async delay(durationMs: number): Promise<void> {
+    await new Promise<void>((resolve) => {
+      setTimeout(resolve, durationMs);
+    });
   }
 }

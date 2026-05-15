@@ -1,11 +1,12 @@
 import { NgIf } from '@angular/common';
-import { Component, NgZone, OnDestroy, ViewChild, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnDestroy, ViewChild, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import { IonModal, IonicModule } from '@ionic/angular';
+import { RouterLink } from '@angular/router';
+import { IonModal, IonicModule, LoadingController, NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
 import { AuthService } from '../../../core/services/auth.service';
+import { LocalizationService } from '../../../core/services/localization.service';
 import { TranslationKey } from '../../../core/services/localization.translations';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 
@@ -20,10 +21,13 @@ type AuthSheetMode = 'login' | 'register';
 })
 export class WelcomePage implements OnDestroy {
   private readonly authService = inject(AuthService);
-  private readonly router = inject(Router);
   private readonly ngZone = inject(NgZone);
+  private readonly changeDetector = inject(ChangeDetectorRef);
+  private readonly loadingController = inject(LoadingController);
+  private readonly localization = inject(LocalizationService);
+  private readonly navController = inject(NavController);
   private readonly authStateSubscription: Subscription = this.authService.isAuthenticated$.subscribe((isAuthenticated) => {
-    if (isAuthenticated && this.isAuthSheetOpen) {
+    if (isAuthenticated && this.isAuthSheetOpen && !this.isLoading) {
       void this.closeAuthSheetAfterSuccess();
     }
   });
@@ -56,9 +60,13 @@ export class WelcomePage implements OnDestroy {
   }
 
   openAuthSheet(mode: AuthSheetMode): void {
-    this.authSheetMode = mode;
-    this.errorMessageKey = '';
-    this.isAuthSheetOpen = true;
+    this.ngZone.run(() => {
+      this.authSheetMode = mode;
+      this.errorMessageKey = '';
+      this.isLoading = false;
+      this.isAuthSheetOpen = true;
+      this.changeDetector.detectChanges();
+    });
   }
 
   onAuthSheetDidDismiss(): void {
@@ -131,9 +139,13 @@ export class WelcomePage implements OnDestroy {
       console.log(`[WelcomePage] auth action started: ${label}`);
       await action();
       console.log(`[WelcomePage] auth success: ${label}`);
-      await this.closeAuthSheetAfterSuccess();
-      await this.navigateHome();
+      await this.completeSuccessfulAuth();
     } catch (error) {
+      if (this.authService.isAuthCancellation(error)) {
+        console.log(`[WelcomePage] auth action cancelled: ${label}`);
+        return;
+      }
+
       console.error(`[WelcomePage] auth error: ${label}`, error);
       this.errorMessageKey = this.authService.getErrorTranslationKey(error);
     } finally {
@@ -156,7 +168,12 @@ export class WelcomePage implements OnDestroy {
   }
 
   private async navigateHome(): Promise<void> {
-    await this.ngZone.run(() => this.router.navigateByUrl('/tabs/home', { replaceUrl: true }));
+    await this.ngZone.run(() =>
+      this.navController.navigateRoot('/tabs/home', {
+        animated: true,
+        animationDirection: 'forward',
+      }),
+    );
   }
 
   private async closeAuthSheetAfterSuccess(): Promise<void> {
@@ -169,5 +186,36 @@ export class WelcomePage implements OnDestroy {
     } catch {
       // The isOpen binding may already have dismissed the overlay.
     }
+  }
+
+  private async completeSuccessfulAuth(): Promise<void> {
+    const transition = await this.presentAuthTransition();
+
+    try {
+      await this.closeAuthSheetAfterSuccess();
+      await this.delay(180);
+      await this.navigateHome();
+      await this.delay(260);
+    } finally {
+      await transition.dismiss();
+    }
+  }
+
+  private async presentAuthTransition(): Promise<HTMLIonLoadingElement> {
+    const loading = await this.loadingController.create({
+      cssClass: 'auth-transition-loading',
+      message: this.localization.translate('auth.signingIn'),
+      spinner: 'crescent',
+      translucent: true,
+    });
+
+    await loading.present();
+    return loading;
+  }
+
+  private async delay(durationMs: number): Promise<void> {
+    await new Promise<void>((resolve) => {
+      setTimeout(resolve, durationMs);
+    });
   }
 }

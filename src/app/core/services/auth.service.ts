@@ -1,4 +1,5 @@
 import { Injectable, inject } from '@angular/core';
+import { GoogleSignIn } from '@capawesome/capacitor-google-sign-in';
 import { Capacitor } from '@capacitor/core';
 import {
   Auth,
@@ -6,20 +7,24 @@ import {
 } from '@angular/fire/auth';
 import { FirebaseError } from 'firebase/app';
 import {
+  GoogleAuthProvider,
   User,
-  browserLocalPersistence,
   createUserWithEmailAndPassword,
-  indexedDBLocalPersistence,
-  setPersistence,
+  signInWithCredential,
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
 } from 'firebase/auth';
-import { from, map, shareReplay, startWith, switchMap, take } from 'rxjs';
+import { map, shareReplay, startWith, take } from 'rxjs';
 
+import { environment } from '../../../environments/environment';
 import { AppUser, AuthCredentials } from '../models/user-profile.model';
 import { LocalizationService } from './localization.service';
 import { TranslationKey } from './localization.translations';
+
+const GOOGLE_SIGN_IN_UNAVAILABLE_ERROR = 'Google sign-in is only available in the installed mobile app.';
+const GOOGLE_SIGN_IN_NOT_CONFIGURED_ERROR = 'Google sign-in is not configured yet.';
+const GOOGLE_SIGN_IN_MISSING_TOKEN_ERROR = 'Google sign-in did not return an ID token.';
 
 @Injectable({
   providedIn: 'root',
@@ -27,12 +32,12 @@ import { TranslationKey } from './localization.translations';
 export class AuthService {
   private readonly auth = inject(Auth);
   private readonly localization = inject(LocalizationService);
-  private readonly authPersistence = Capacitor.isNativePlatform() ? indexedDBLocalPersistence : browserLocalPersistence;
-  private readonly persistenceReady = setPersistence(this.auth, this.authPersistence);
-  readonly canUseGoogleSignIn = !Capacitor.isNativePlatform();
+  private readonly googleSignInClientId = environment.googleSignIn.webClientId.trim();
+  private googleSignInReady?: Promise<void>;
 
-  private readonly firebaseUser$ = from(this.persistenceReady).pipe(
-    switchMap(() => authState(this.auth)),
+  readonly canUseGoogleSignIn = Capacitor.isNativePlatform();
+
+  private readonly firebaseUser$ = authState(this.auth).pipe(
     shareReplay({ bufferSize: 1, refCount: false }),
   );
 
@@ -68,7 +73,6 @@ export class AuthService {
   async signIn(credentials: AuthCredentials): Promise<AppUser> {
     console.log('[AuthService] signIn called');
     try {
-      await this.persistenceReady;
       console.log('[AuthService] Firebase signInWithEmailAndPassword called');
       const credential = await signInWithEmailAndPassword(this.auth, credentials.email, credentials.password);
       console.log('[AuthService] auth success: email login', credential.user.uid);
@@ -82,7 +86,6 @@ export class AuthService {
   async register(credentials: AuthCredentials, displayName: string): Promise<AppUser> {
     console.log('[AuthService] register called');
     try {
-      await this.persistenceReady;
       console.log('[AuthService] Firebase createUserWithEmailAndPassword called');
       const credential = await createUserWithEmailAndPassword(this.auth, credentials.email, credentials.password);
       const trimmedName = displayName.trim();
@@ -104,27 +107,45 @@ export class AuthService {
     console.log('[AuthService] signInWithGoogle called');
 
     if (!this.canUseGoogleSignIn) {
-      throw new Error('Google sign-in is not available in the native app yet. Please use email and password.');
+      throw new Error(GOOGLE_SIGN_IN_UNAVAILABLE_ERROR);
     }
 
     try {
-      await this.persistenceReady;
-      const { GoogleAuthProvider, signInWithPopup } = await import('firebase/auth');
-      const provider = new GoogleAuthProvider();
-      provider.setCustomParameters({ prompt: 'select_account' });
+      await this.initializeNativeGoogleSignIn();
 
-      console.log('[AuthService] Firebase signInWithPopup called');
-      const credential = await signInWithPopup(this.auth, provider);
-      console.log('[AuthService] auth success: Google login', credential.user.uid);
-      return this.mapFirebaseUser(credential.user);
+      console.log('[AuthService] native GoogleSignIn.signIn called');
+      const googleResult = await GoogleSignIn.signIn();
+
+      if (!googleResult.idToken) {
+        throw new Error(GOOGLE_SIGN_IN_MISSING_TOKEN_ERROR);
+      }
+
+      const credential = GoogleAuthProvider.credential(googleResult.idToken);
+      const userCredential = await signInWithCredential(this.auth, credential);
+
+      console.log('[AuthService] auth success: Google login', userCredential.user.uid);
+      return this.mapFirebaseUser(userCredential.user);
     } catch (error) {
-      console.error('[AuthService] auth error: Google login', error);
+      if (this.isAuthCancellation(error)) {
+        console.log('[AuthService] auth cancelled: Google login');
+      } else {
+        console.error('[AuthService] auth error: Google login', error);
+      }
+
       throw error;
     }
   }
 
   async signOut(): Promise<void> {
-    await this.persistenceReady;
+    if (Capacitor.isNativePlatform() && this.googleSignInClientId) {
+      try {
+        await this.initializeNativeGoogleSignIn();
+        await GoogleSignIn.signOut();
+      } catch (error) {
+        console.warn('[AuthService] native Google sign-out could not complete', error);
+      }
+    }
+
     await signOut(this.auth);
   }
 
@@ -133,8 +154,20 @@ export class AuthService {
   }
 
   getErrorTranslationKey(error: unknown): TranslationKey {
-    if (error instanceof Error && error.message.includes('Google sign-in is not available')) {
+    if (this.isAuthCancellation(error)) {
+      return 'auth.error.googleCancelled';
+    }
+
+    if (error instanceof Error && error.message.includes(GOOGLE_SIGN_IN_UNAVAILABLE_ERROR)) {
       return 'auth.error.googleNativeUnavailable';
+    }
+
+    if (error instanceof Error && error.message.includes(GOOGLE_SIGN_IN_NOT_CONFIGURED_ERROR)) {
+      return 'auth.error.googleNotConfigured';
+    }
+
+    if (error instanceof Error && error.message.includes(GOOGLE_SIGN_IN_MISSING_TOKEN_ERROR)) {
+      return 'auth.error.googleMissingToken';
     }
 
     if (!(error instanceof FirebaseError)) {
@@ -142,6 +175,8 @@ export class AuthService {
     }
 
     switch (error.code) {
+      case 'auth/account-exists-with-different-credential':
+        return 'auth.error.accountExistsWithDifferentCredential';
       case 'auth/email-already-in-use':
         return 'auth.error.emailAlreadyInUse';
       case 'auth/invalid-email':
@@ -152,6 +187,8 @@ export class AuthService {
         return 'auth.error.invalidCredential';
       case 'auth/popup-closed-by-user':
         return 'auth.error.popupClosed';
+      case 'auth/operation-not-allowed':
+        return 'auth.error.providerNotEnabled';
       case 'auth/weak-password':
         return 'auth.error.weakPassword';
       case 'auth/network-request-failed':
@@ -159,6 +196,38 @@ export class AuthService {
       default:
         return 'auth.error.authenticationFailed';
     }
+  }
+
+  isAuthCancellation(error: unknown): boolean {
+    const code = this.readErrorCode(error).toLowerCase();
+    const message = error instanceof Error ? error.message.toLowerCase() : '';
+
+    return code.includes('cancel') ||
+      code.includes('user-cancel') ||
+      message.includes('cancel') ||
+      message.includes('dismiss');
+  }
+
+  private async initializeNativeGoogleSignIn(): Promise<void> {
+    if (!this.googleSignInClientId) {
+      throw new Error(GOOGLE_SIGN_IN_NOT_CONFIGURED_ERROR);
+    }
+
+    this.googleSignInReady ??= GoogleSignIn.initialize({
+      clientId: this.googleSignInClientId,
+    });
+
+    await this.googleSignInReady;
+  }
+
+  private readErrorCode(error: unknown): string {
+    if (typeof error === 'object' && error !== null && 'code' in error) {
+      const code = error.code;
+
+      return typeof code === 'string' ? code : '';
+    }
+
+    return '';
   }
 
   private mapFirebaseUser(user: User): AppUser {

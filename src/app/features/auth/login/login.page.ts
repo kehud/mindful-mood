@@ -1,10 +1,11 @@
 import { NgIf } from '@angular/common';
 import { Component, NgZone, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
+import { RouterLink } from '@angular/router';
+import { IonicModule, LoadingController, NavController } from '@ionic/angular';
 
 import { AuthService } from '../../../core/services/auth.service';
+import { LocalizationService } from '../../../core/services/localization.service';
 import { TranslationKey } from '../../../core/services/localization.translations';
 import { WellnessHeaderComponent } from '../../../shared/components/wellness-header/wellness-header.component';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
@@ -18,8 +19,10 @@ import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 })
 export class LoginPage {
   private readonly authService = inject(AuthService);
-  private readonly router = inject(Router);
   private readonly ngZone = inject(NgZone);
+  private readonly loadingController = inject(LoadingController);
+  private readonly localization = inject(LocalizationService);
+  private readonly navController = inject(NavController);
 
   isLoading = false;
   errorMessageKey: TranslationKey | '' = '';
@@ -66,8 +69,13 @@ export class LoginPage {
       console.log(`[LoginPage] auth action started: ${label}`);
       await action();
       console.log(`[LoginPage] auth success: ${label}`);
-      await this.navigateHome();
+      await this.completeSuccessfulAuth();
     } catch (error) {
+      if (this.authService.isAuthCancellation(error)) {
+        console.log(`[LoginPage] auth action cancelled: ${label}`);
+        return;
+      }
+
       console.error(`[LoginPage] auth error: ${label}`, error);
       this.errorMessageKey = this.authService.getErrorTranslationKey(error);
     } finally {
@@ -77,7 +85,42 @@ export class LoginPage {
 
   private async navigateHome(): Promise<void> {
     console.log('[LoginPage] navigating to tabs home');
-    await this.ngZone.run(() => this.router.navigateByUrl('/tabs/home', { replaceUrl: true }));
+    await this.ngZone.run(() =>
+      this.navController.navigateRoot('/tabs/home', {
+        animated: true,
+        animationDirection: 'forward',
+      }),
+    );
     console.log('[LoginPage] navigation complete');
+  }
+
+  private async completeSuccessfulAuth(): Promise<void> {
+    const transition = await this.presentAuthTransition();
+
+    try {
+      await this.delay(180);
+      await this.navigateHome();
+      await this.delay(260);
+    } finally {
+      await transition.dismiss();
+    }
+  }
+
+  private async presentAuthTransition(): Promise<HTMLIonLoadingElement> {
+    const loading = await this.loadingController.create({
+      cssClass: 'auth-transition-loading',
+      message: this.localization.translate('auth.signingIn'),
+      spinner: 'crescent',
+      translucent: true,
+    });
+
+    await loading.present();
+    return loading;
+  }
+
+  private async delay(durationMs: number): Promise<void> {
+    await new Promise<void>((resolve) => {
+      setTimeout(resolve, durationMs);
+    });
   }
 }

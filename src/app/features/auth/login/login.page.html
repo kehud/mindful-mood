@@ -44,7 +44,7 @@
 
       <p class="form-error" *ngIf="errorMessageKey as errorKey">{{ errorKey | t }}</p>
 
-      <ion-button class="primary-action" expand="block" type="submit" [disabled]="isLoading" (click)="onLoginButtonClick()">
+      <ion-button class="primary-action" expand="block" type="button" [disabled]="isLoading" (click)="onLoginButtonClick()">
         <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
         <span *ngIf="!isLoading">{{ 'auth.login' | t }}</span>
       </ion-button>
