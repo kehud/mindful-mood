@@ -1,47 +1,52 @@
-<ion-content class="wellness-content" fullscreen>
-  <main class="page-shell aura-page">
-    <app-wellness-header
-      [eyebrow]="'home.eyebrow' | t"
-      [title]="'home.title' | t"
-      [subtitle]="'home.subtitle' | t"
-    ></app-wellness-header>
+<ion-content class="home-content" fullscreen>
+  <main class="home-shell">
+    <header class="home-topbar">
+      <div class="home-greeting">
+        <svg class="home-greeting-mark" viewBox="0 0 54 34" aria-hidden="true">
+          <path d="M4 23.5c6.4-6.2 12.7 5.9 19.1-.2 3.8-3.6 6.4-3.7 9-1.9" />
+          <path d="M15.3 16.4c5 5.8 13.7 5.8 18.8 0" />
+          <circle cx="10" cy="7.2" r="1.8" />
+          <circle cx="25.8" cy="4.2" r="1.8" />
+          <circle cx="39.7" cy="9.7" r="1.8" />
+        </svg>
 
-    <section class="hero-card soft-panel">
-      <div>
-        <span class="mood-badge">{{ 'home.dailyMood' | t }}</span>
-        <h2>{{ 'home.heroTitle' | t }}</h2>
+        <p>
+          <span>{{ greetingTranslationKey | t }}</span>
+          <span class="home-name">
+            <span>{{ nameLead((currentUser$ | async)?.displayName) }}</span>
+            <span class="home-name__accent">{{ nameRest((currentUser$ | async)?.displayName) }}</span>
+          </span>
+        </p>
       </div>
 
-      <div class="hero-aura-wrap">
-        <div class="hero-aura soft-aura soft-aura--breathing" aria-hidden="true"></div>
-        <ion-button class="aura-checkin-action" fill="clear" routerLink="/check-in/mood">
+      <ion-icon class="home-heart" name="heart-outline" aria-hidden="true"></ion-icon>
+    </header>
+
+    <section class="home-hero" aria-labelledby="home-heading">
+      <h1 id="home-heading">{{ 'home.title' | t }}</h1>
+      <p>{{ 'home.subtitle' | t }}</p>
+
+      <div class="home-aura-cta">
+        <span class="home-aura-layer home-aura-layer--one" aria-hidden="true"></span>
+        <span class="home-aura-layer home-aura-layer--two" aria-hidden="true"></span>
+        <span class="home-aura-layer home-aura-layer--three" aria-hidden="true"></span>
+        <span class="home-aura-layer home-aura-layer--four" aria-hidden="true"></span>
+        <span class="home-aura-layer home-aura-layer--five" aria-hidden="true"></span>
+        <span class="home-aura-layer home-aura-layer--six" aria-hidden="true"></span>
+
+        <ion-button class="home-checkin-action" fill="clear" routerLink="/check-in/mood">
           <span>{{ 'home.startCheckIn' | t }}</span>
           <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
         </ion-button>
       </div>
     </section>
 
-    <h2 class="section-title">{{ 'home.recentNote' | t }}</h2>
-    <app-wellness-card *ngIf="lastEntry$ | async as entry; else emptyRecent" tone="mint">
-      <div class="split-row">
-        <ng-container *ngIf="moodOptionsState$ | async as moodConfig">
-          <div>
-            <p class="entry-date">{{ entry.createdAt | date: 'MMM d': undefined : currentLanguage() }}</p>
-            <h3>{{ entry.moodLevel | moodLabel: moodConfig.options }}</h3>
-          </div>
-        </ng-container>
-        <span class="score">{{ entry.moodLevel }}</span>
-      </div>
-      <p class="note">{{ entry.journalNote }}</p>
-    </app-wellness-card>
-
-    <ng-template #emptyRecent>
-      <app-wellness-card tone="mint" [title]="'home.noCheckIns' | t" [subtitle]="'home.noCheckInsSubtitle' | t"></app-wellness-card>
-    </ng-template>
-
-    <h2 class="section-title">{{ 'home.oftenTracked' | t }}</h2>
-    <div class="influence-row" *ngIf="influenceOptionsState$ | async as influenceConfig">
-      <span *ngFor="let item of quickInfluences">{{ item | configLabel: influenceConfig.options }}</span>
-    </div>
+    <a class="reflection-card" routerLink="/tabs/history">
+      <span>
+        <strong>{{ 'home.reflectionTitle' | t }}</strong>
+        <span>{{ 'home.reflectionSubtitle' | t }}</span>
+      </span>
+      <ion-icon name="chevron-forward-outline" aria-hidden="true"></ion-icon>
+    </a>
   </main>
 </ion-content>

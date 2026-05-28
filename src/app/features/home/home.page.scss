@@ -1,179 +1,455 @@
-.hero-card {
-  position: relative;
-  display: grid;
-  justify-items: center;
-  gap: 18px;
-  min-height: 430px;
-  padding: 22px 18px 24px;
-  background:
-    radial-gradient(circle at 16% -8%, rgba(var(--ion-color-tertiary-rgb), 0.16), transparent 42%),
-    radial-gradient(circle at 84% 16%, rgba(var(--ion-color-primary-rgb), 0.22), transparent 48%),
-    linear-gradient(180deg, var(--app-inset-highlight), transparent 74%),
-    var(--app-surface-strong);
-  overflow: hidden;
-  text-align: center;
-  box-shadow: var(--app-card-shadow-strong);
+ion-content.home-content {
+  --background:
+    radial-gradient(circle at 5% 10%, rgba(138, 216, 211, 0.23), transparent 38%),
+    radial-gradient(circle at 96% 5%, rgba(247, 198, 173, 0.31), transparent 40%),
+    radial-gradient(circle at 50% 75%, rgba(73, 197, 187, 0.16), transparent 44%),
+    linear-gradient(180deg, #fbfcf6 0%, #f0f8f3 48%, #fbf4e7 100%);
 }
 
-.hero-card::after {
+ion-content.home-content::part(scroll) {
+  overflow-y: hidden;
+}
+
+.home-shell {
+  height: 100%;
+  min-height: 100%;
+  width: min(100%, 430px);
+  margin: 0 auto;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding:
+    calc(12px + env(safe-area-inset-top))
+    28px
+    calc(14px + env(safe-area-inset-bottom));
+  color: #17243a;
+}
+
+.home-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 38px;
+}
+
+.home-greeting {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 11px;
+}
+
+.home-greeting-mark {
+  flex: 0 0 auto;
+  width: 35px;
+  height: 23px;
+  color: #2daed1;
+  overflow: visible;
+}
+
+.home-greeting-mark path,
+.home-greeting-mark circle {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.55;
+}
+
+.home-greeting-mark circle {
+  fill: currentColor;
+  stroke: none;
+}
+
+.home-greeting p {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.32em;
+  margin: 0;
+  color: #1c2a40;
+  font-size: clamp(0.84rem, 3.85vw, 1.04rem);
+  font-weight: 370;
+  letter-spacing: 0;
+  line-height: 1.18;
+}
+
+.home-name {
+  display: inline-flex;
+  white-space: nowrap;
+}
+
+.home-name__accent {
+  color: #bf45b4;
+}
+
+.home-heart {
+  flex: 0 0 auto;
+  color: #142741;
+  font-size: 1.45rem;
+  --ionicon-stroke-width: 22px;
+}
+
+.home-hero {
+  margin-top: clamp(30px, 4.7vh, 42px);
+  text-align: center;
+}
+
+.home-hero h1 {
+  max-width: 255px;
+  margin: 0 auto;
+  color: #17243a;
+  font-size: clamp(1.64rem, 7.05vw, 2.04rem);
+  font-weight: 560;
+  letter-spacing: 0;
+  line-height: 1.14;
+}
+
+.home-hero > p {
+  max-width: 220px;
+  margin: clamp(16px, 2.25vh, 20px) auto 0;
+  color: rgba(23, 36, 58, 0.72);
+  font-size: clamp(0.84rem, 3.65vw, 0.98rem);
+  font-weight: 360;
+  letter-spacing: 0;
+  line-height: 1.46;
+}
+
+.home-aura-cta {
+  position: relative;
+  display: grid;
+  width: min(110vw, 47dvh, 470px);
+  max-width: none;
+  left: 50%;
+  transform: translateX(-50%);
+  aspect-ratio: 1;
+  margin: clamp(12px, 2.1vh, 20px) auto 0;
+  place-items: center;
+}
+
+.home-aura-cta::before,
+.home-aura-cta::after {
   content: "";
   position: absolute;
-  inset-inline: 16%;
-  bottom: -14%;
-  height: 160px;
   border-radius: 999px;
-  background: radial-gradient(circle, rgba(var(--ion-color-primary-rgb), 0.16), transparent 68%);
-  filter: blur(28px);
   pointer-events: none;
 }
 
-.hero-aura-wrap {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: min(82vw, 330px);
-  aspect-ratio: 1;
-  margin: 2px auto 0;
+.home-aura-cta::before {
+  inset: -8%;
+  background:
+    radial-gradient(ellipse at 48% 52%, rgba(34, 190, 184, 0.28), rgba(132, 198, 135, 0.17) 56%, transparent 80%);
+  filter: blur(36px);
 }
 
-.hero-aura {
-  --soft-aura-color: var(--aura-mist);
-  --soft-aura-opacity: 0.74;
+.home-aura-cta::after {
+  inset: 30%;
+  background:
+    radial-gradient(circle at 44% 38%, rgba(85, 215, 200, 0.5), rgba(55, 190, 170, 0.36) 68%, transparent 76%);
+  box-shadow:
+    inset 0 1px 30px rgba(255, 255, 255, 0.16),
+    0 24px 88px rgba(23, 180, 172, 0.24);
+}
+
+.home-aura-layer {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  margin: 0;
+  left: 50%;
+  top: 50%;
+  width: var(--aura-width);
+  height: var(--aura-height);
+  border-radius: var(--aura-radius);
+  background:
+    radial-gradient(ellipse at 36% 32%, rgba(255, 255, 255, 0.12), transparent 24%),
+    linear-gradient(135deg, rgba(30, 190, 186, var(--aura-teal)), rgba(126, 202, 132, var(--aura-sage)));
+  opacity: var(--aura-opacity);
+  transform: translate(-50%, -50%) rotate(var(--aura-rotate)) translate(var(--aura-x), var(--aura-y));
 }
 
-.aura-checkin-action {
+.home-aura-layer--one {
+  --aura-width: 88%;
+  --aura-height: 57%;
+  --aura-radius: 44% 56% 49% 51% / 52% 44% 56% 48%;
+  --aura-opacity: 0.4;
+  --aura-teal: 0.52;
+  --aura-sage: 0.28;
+  --aura-rotate: -8deg;
+  --aura-x: -3%;
+  --aura-y: 0%;
+}
+
+.home-aura-layer--two {
+  --aura-width: 68%;
+  --aura-height: 91%;
+  --aura-radius: 61% 39% 53% 47% / 47% 61% 39% 53%;
+  --aura-opacity: 0.29;
+  --aura-teal: 0.42;
+  --aura-sage: 0.26;
+  --aura-rotate: 28deg;
+  --aura-x: 2%;
+  --aura-y: -2%;
+}
+
+.home-aura-layer--three {
+  --aura-width: 96%;
+  --aura-height: 60%;
+  --aura-radius: 53% 47% 59% 41% / 58% 43% 57% 42%;
+  --aura-opacity: 0.31;
+  --aura-teal: 0.42;
+  --aura-sage: 0.24;
+  --aura-rotate: 75deg;
+  --aura-x: 1%;
+  --aura-y: 1%;
+}
+
+.home-aura-layer--four {
+  --aura-width: 72%;
+  --aura-height: 86%;
+  --aura-radius: 39% 61% 45% 55% / 58% 42% 58% 42%;
+  --aura-opacity: 0.32;
+  --aura-teal: 0.46;
+  --aura-sage: 0.26;
+  --aura-rotate: 126deg;
+  --aura-x: -1%;
+  --aura-y: 2%;
+}
+
+.home-aura-layer--five {
+  --aura-width: 88%;
+  --aura-height: 64%;
+  --aura-radius: 47% 53% 42% 58% / 53% 44% 56% 47%;
+  --aura-opacity: 0.37;
+  --aura-teal: 0.5;
+  --aura-sage: 0.28;
+  --aura-rotate: 169deg;
+  --aura-x: 1%;
+  --aura-y: -1%;
+}
+
+.home-aura-layer--six {
+  --aura-width: 62%;
+  --aura-height: 80%;
+  --aura-radius: 56% 44% 58% 42% / 46% 60% 40% 54%;
+  --aura-opacity: 0.27;
+  --aura-teal: 0.4;
+  --aura-sage: 0.23;
+  --aura-rotate: 225deg;
+  --aura-x: 0%;
+  --aura-y: 0%;
+}
+
+.home-checkin-action {
   position: relative;
-  z-index: 2;
+  z-index: 1;
+  width: clamp(156px, 40vw, 184px);
+  height: clamp(156px, 40vw, 184px);
+  min-width: clamp(156px, 40vw, 184px);
+  min-height: clamp(156px, 40vw, 184px);
   margin: 0;
-  --background: rgba(18, 28, 42, 0.12);
-  --background-activated: rgba(18, 28, 42, 0.18);
+  --background:
+    radial-gradient(circle at 34% 24%, rgba(255, 255, 255, 0.16), transparent 34%),
+    rgba(55, 196, 181, 0.42);
+  --background-activated: rgba(55, 196, 181, 0.5);
   --border-radius: 999px;
-  --box-shadow: none;
-  --color: var(--app-text);
-  width: 122px;
-  height: 122px;
-  min-width: 122px;
-  min-height: 122px;
-  font-size: 0.9rem;
-  font-weight: 760;
-  backdrop-filter: blur(14px) saturate(130%);
-  -webkit-backdrop-filter: blur(14px) saturate(130%);
+  --box-shadow: 0 14px 52px rgba(34, 173, 164, 0.18);
+  --color: #ffffff;
+  color: #ffffff;
+  font-size: clamp(1.04rem, 4.5vw, 1.24rem);
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
-.aura-checkin-action::part(native) {
+.home-checkin-action::part(native) {
   display: grid;
-  gap: 8px;
-  border: 1px solid color-mix(in srgb, var(--app-inset-highlight) 55%, transparent);
+  align-content: center;
+  gap: 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 999px;
   padding: 0;
+  text-transform: none;
+  backdrop-filter: blur(10px) saturate(106%);
+  -webkit-backdrop-filter: blur(10px) saturate(106%);
 }
 
-.aura-checkin-action ion-icon {
-  font-size: 1.2rem;
+.home-checkin-action span {
+  display: block;
+  transform: translateY(-15px);
 }
 
-.mood-badge {
-  display: inline-flex;
-  align-items: center;
-  border-radius: 999px;
-  border: 1px solid var(--app-control-border);
-  background:
-    linear-gradient(180deg, var(--app-inset-highlight), transparent 72%),
-    var(--app-input-surface);
-  color: var(--app-muted-strong);
-  font-size: 0.76rem;
-  font-weight: 760;
-  padding: 7px 11px;
-  backdrop-filter: var(--aura-glass-blur);
-  -webkit-backdrop-filter: var(--aura-glass-blur);
-}
-
-.hero-card h2 {
-  max-width: 360px;
-  margin: 16px 0 0;
-  color: var(--app-text);
-  font-size: clamp(1.6rem, 7vw, 2rem);
-  font-weight: 820;
-  line-height: 1.08;
-}
-
-.entry-date,
-.note {
-  color: var(--app-muted);
-}
-
-.entry-date {
-  margin: 0 0 4px;
-  font-size: 0.85rem;
-  font-weight: 650;
-}
-
-h3 {
+.home-checkin-action ion-icon {
+  position: absolute;
+  top: 100%;
+  left: 50%;
   margin: 0;
-  color: var(--app-text);
-  font-size: 1.12rem;
-  font-weight: 780;
+  font-size: clamp(1.46rem, 6.05vw, 1.78rem);
+  opacity: 0.92;
+  --ionicon-stroke-width: 20px;
+  transform: translateX(-50%);
 }
 
-.score {
+.reflection-card {
   display: grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 19px;
-  border: 1px solid var(--app-control-border);
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 78px;
+  margin-top: clamp(24px, 4vh, 36px);
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  border-radius: 18px;
   background:
-    radial-gradient(circle at 38% 24%, rgba(var(--ion-color-primary-rgb), 0.2), transparent 50%),
-    var(--app-control-surface);
-  color: var(--app-secondary-text);
-  font-weight: 800;
+    linear-gradient(180deg, rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0.48)),
+    rgba(255, 255, 255, 0.54);
   box-shadow:
-    inset 0 1px 0 var(--app-inset-highlight),
-    var(--app-control-shadow);
+    0 14px 36px rgba(60, 78, 92, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  color: #17243a;
+  padding: 15px 15px 15px 20px;
+  text-decoration: none;
+  backdrop-filter: blur(26px) saturate(125%);
+  -webkit-backdrop-filter: blur(26px) saturate(125%);
 }
 
-.note {
-  margin: 15px 0 0;
+.reflection-card > span {
+  display: grid;
+  gap: 8px;
+}
+
+.reflection-card strong {
+  color: #17243a;
+  font-size: clamp(0.86rem, 3.8vw, 1rem);
+  font-weight: 520;
+  letter-spacing: 0;
+  line-height: 1.18;
+}
+
+.reflection-card span span {
+  max-width: 266px;
+  color: rgba(23, 36, 58, 0.7);
+  font-size: clamp(0.76rem, 3.4vw, 0.88rem);
+  font-weight: 340;
+  letter-spacing: 0;
   line-height: 1.5;
 }
 
-.influence-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 9px;
+.reflection-card ion-icon {
+  color: #17243a;
+  font-size: 1.48rem;
+  --ionicon-stroke-width: 18px;
 }
 
-.influence-row span {
-  border-radius: 999px;
-  border: 1px solid var(--app-influence-border);
+:host-context(.ion-palette-dark) ion-content.home-content {
+  --background:
+    radial-gradient(circle at 50% 36%, rgba(35, 63, 160, 0.34), transparent 37%),
+    radial-gradient(circle at 2% 55%, rgba(14, 111, 147, 0.17), transparent 36%),
+    radial-gradient(circle at 95% 6%, rgba(29, 70, 149, 0.18), transparent 32%),
+    linear-gradient(180deg, #061121 0%, #020a18 50%, #06101f 100%);
+}
+
+:host-context(.ion-palette-dark) .home-shell {
+  color: #fbfbff;
+}
+
+:host-context(.ion-palette-dark) .home-greeting p,
+:host-context(.ion-palette-dark) .home-hero h1,
+:host-context(.ion-palette-dark) .reflection-card strong,
+:host-context(.ion-palette-dark) .reflection-card ion-icon {
+  color: #f8f8ff;
+}
+
+:host-context(.ion-palette-dark) .home-greeting-mark {
+  color: #56d4f4;
+}
+
+:host-context(.ion-palette-dark) .home-name__accent {
+  color: #d65bcb;
+}
+
+:host-context(.ion-palette-dark) .home-heart {
+  color: #ff9838;
+}
+
+:host-context(.ion-palette-dark) .home-hero > p {
+  color: rgba(248, 248, 255, 0.74);
+}
+
+:host-context(.ion-palette-dark) .home-aura-cta::before {
   background:
-    linear-gradient(180deg, var(--app-inset-highlight), transparent 72%),
-    var(--app-influence-background),
-    var(--app-control-surface-strong);
-  color: var(--app-influence-text);
-  box-shadow: var(--app-control-shadow);
-  font-weight: 660;
-  padding: 9px 13px;
-  backdrop-filter: blur(14px) saturate(125%);
-  -webkit-backdrop-filter: blur(14px) saturate(125%);
+    radial-gradient(ellipse at 48% 52%, rgba(58, 83, 255, 0.25), rgba(38, 46, 150, 0.21) 56%, transparent 78%);
+  filter: blur(32px);
 }
 
-@media (min-width: 560px) {
-  .hero-card {
-    min-height: 440px;
+:host-context(.ion-palette-dark) .home-aura-cta::after {
+  background:
+    radial-gradient(circle at 44% 38%, rgba(88, 96, 255, 0.54), rgba(39, 32, 158, 0.37) 68%, transparent 74%);
+  box-shadow:
+    inset 0 1px 30px rgba(255, 255, 255, 0.09),
+    0 25px 92px rgba(43, 80, 255, 0.28);
+}
+
+:host-context(.ion-palette-dark) .home-aura-layer {
+  background:
+    radial-gradient(ellipse at 36% 32%, rgba(255, 255, 255, 0.08), transparent 24%),
+    linear-gradient(135deg, rgba(77, 103, 255, var(--aura-teal)), rgba(37, 32, 164, var(--aura-sage)));
+}
+
+:host-context(.ion-palette-dark) .home-checkin-action {
+  --background:
+    radial-gradient(circle at 34% 24%, rgba(255, 255, 255, 0.16), transparent 34%),
+    rgba(53, 54, 211, 0.36);
+  --background-activated: rgba(65, 69, 228, 0.44);
+  --box-shadow: 0 15px 56px rgba(47, 71, 235, 0.22);
+}
+
+:host-context(.ion-palette-dark) .reflection-card {
+  border-color: rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(180deg, rgba(26, 39, 65, 0.76), rgba(12, 22, 42, 0.62)),
+    rgba(8, 18, 36, 0.68);
+  box-shadow:
+    0 14px 42px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+:host-context(.ion-palette-dark) .reflection-card span span {
+  color: rgba(248, 248, 255, 0.66);
+}
+
+:host-context([dir="rtl"]) .home-checkin-action ion-icon,
+:host-context([dir="rtl"]) .reflection-card ion-icon {
+  transform: scaleX(-1);
+}
+
+:host-context([dir="rtl"]) .home-checkin-action ion-icon {
+  transform: translateX(-50%) scaleX(-1);
+}
+
+@media (max-width: 380px) {
+  .home-shell {
+    padding-inline: 20px;
+    padding-top: calc(10px + env(safe-area-inset-top));
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
   }
 
-  .hero-aura-wrap {
-    width: min(68vw, 330px);
+  .home-greeting {
+    gap: 12px;
+  }
+
+  .home-greeting-mark {
+    width: 33px;
+  }
+
+  .home-aura-cta {
+    width: min(89vw, 35.5dvh, 332px);
+  }
+
+  .reflection-card {
+    padding-inline: 18px 13px;
   }
 }
 
-:host-context(.ion-palette-dark) .aura-checkin-action {
-  --background: rgba(255, 255, 255, 0.08);
-  --background-activated: rgba(255, 255, 255, 0.12);
-  --color: #ffffff;
+@media (min-width: 700px) {
+  .home-shell {
+    padding-top: calc(42px + env(safe-area-inset-top));
+  }
 }

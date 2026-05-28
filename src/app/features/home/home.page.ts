@@ -1,45 +1,50 @@
-import { AsyncPipe, DatePipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import { map } from 'rxjs';
 
-import { ConfigService } from '../../core/services/config.service';
-import { LocalizationService } from '../../core/services/localization.service';
-import { MoodEntryService } from '../../core/services/mood-entry.service';
-import { WellnessCardComponent } from '../../shared/components/wellness-card/wellness-card.component';
-import { WellnessHeaderComponent } from '../../shared/components/wellness-header/wellness-header.component';
-import { ConfigLabelPipe } from '../../shared/pipes/config-label.pipe';
-import { MoodLabelPipe } from '../../shared/pipes/mood-label.pipe';
+import { AuthService } from '../../core/services/auth.service';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [
-    AsyncPipe,
-    ConfigLabelPipe,
-    DatePipe,
-    IonicModule,
-    MoodLabelPipe,
-    NgFor,
-    NgIf,
-    RouterLink,
-    TranslatePipe,
-    WellnessCardComponent,
-    WellnessHeaderComponent,
-  ],
+  imports: [AsyncPipe, IonicModule, RouterLink, TranslatePipe],
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage {
-  private readonly configService = inject(ConfigService);
-  protected readonly localization = inject(LocalizationService);
-  private readonly moodEntryService = inject(MoodEntryService);
+  private readonly authService = inject(AuthService);
 
-  readonly moodOptionsState$ = this.configService.moodOptionsState$;
-  readonly influenceOptionsState$ = this.configService.influenceOptionsState$;
-  readonly currentLanguage = this.localization.currentLanguage;
-  readonly lastEntry$ = this.moodEntryService.entries$.pipe(map((entries) => entries[0] ?? null));
-  readonly quickInfluences = ['Sleep', 'Work', 'Fitness'];
+  readonly currentUser$ = this.authService.currentUser$;
+
+  get greetingTranslationKey(): string {
+    const hour = new Date().getHours();
+
+    if (hour >= 5 && hour < 12) {
+      return 'home.greeting.morning';
+    }
+
+    if (hour >= 12 && hour < 17) {
+      return 'home.greeting.afternoon';
+    }
+
+    if (hour >= 17 && hour < 21) {
+      return 'home.greeting.evening';
+    }
+
+    return 'home.greeting.night';
+  }
+
+  nameLead(displayName: string | null | undefined): string {
+    return this.normalizedName(displayName).slice(0, 1);
+  }
+
+  nameRest(displayName: string | null | undefined): string {
+    return this.normalizedName(displayName).slice(1);
+  }
+
+  private normalizedName(displayName: string | null | undefined): string {
+    return displayName?.trim() ?? '';
+  }
 }
