@@ -1,36 +1,336 @@
+:host {
+  display: block;
+}
+
+.reflect-flow-shell {
+  --checkin-bg:
+    radial-gradient(circle at 50% 18%, color-mix(in srgb, var(--mood-accent) 10%, transparent), transparent 34%),
+    radial-gradient(circle at 50% 82%, color-mix(in srgb, var(--mood-accent) 12%, transparent), transparent 36%),
+    linear-gradient(180deg, var(--mood-bg-top) 0%, var(--mood-bg-mid) 54%, var(--mood-bg-bottom) 100%);
+  --checkin-bottom-background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--mood-bg-bottom) 88%, transparent) 72%);
+  padding: calc(18px + env(safe-area-inset-top)) 24px calc(16px + env(safe-area-inset-bottom));
+}
+
+:host-context(.ion-palette-dark) .reflect-flow-shell {
+  --checkin-bg:
+    radial-gradient(circle at 50% 18%, rgba(var(--mood-accent-rgb), 0.12), transparent 35%),
+    radial-gradient(circle at 50% 82%, rgba(var(--mood-accent-rgb), 0.11), transparent 38%),
+    linear-gradient(180deg, var(--mood-bg-top) 0%, var(--mood-bg-mid) 52%, var(--mood-bg-bottom) 100%);
+  --checkin-bottom-background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--mood-bg-bottom) 94%, transparent) 70%);
+}
+
+.reflect-flow-shell::before {
+  display: none;
+}
+
+.reflect-flow-shell::after {
+  display: none;
+}
+
+.reflect-flow-shell > * {
+  width: min(100%, 388px);
+}
+
+.reflect-flow-shell .checkin-nav {
+  grid-template-columns: 42px 1fr 42px;
+  min-height: 42px;
+  margin-bottom: clamp(34px, 5.6vh, 60px);
+}
+
+.reflect-flow-shell .nav-button {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  min-height: 42px;
+  --color: var(--mood-ink);
+}
+
+.reflect-flow-shell .nav-button::part(native) {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.reflect-flow-shell .nav-button ion-icon {
+  --ionicon-stroke-width: 34px;
+  font-size: 1.25rem;
+}
+
+.reflect-flow-shell .flow-progress {
+  justify-self: center;
+  gap: 0;
+  direction: ltr;
+  width: max-content;
+  max-width: calc(100% - 16px);
+  padding-inline: 2px;
+  min-height: 16px;
+  overflow: visible;
+  transform-origin: center;
+}
+
+:host-context([dir="rtl"]) .reflect-flow-shell .flow-progress {
+  transform: scaleX(-1);
+}
+
+.reflect-flow-shell .flow-progress span {
+  position: relative;
+  width: clamp(30px, 8.4vw, 36px);
+  height: 2px;
+  background: color-mix(in srgb, var(--mood-ink) 14%, transparent);
+  box-shadow: none;
+}
+
+.reflect-flow-shell .flow-progress span::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 9px;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--mood-ink) 16%, transparent);
+  transform: translate(-1px, -50%);
+}
+
+.reflect-flow-shell .flow-progress span.active {
+  background: linear-gradient(
+    90deg,
+    rgba(var(--mood-accent-rgb), 0.52),
+    rgba(var(--mood-accent-rgb), 0.24)
+  );
+  box-shadow: 0 0 7px rgba(var(--mood-accent-rgb), 0.1);
+}
+
+.reflect-flow-shell .flow-progress span.active:first-child {
+  background: linear-gradient(
+    90deg,
+    rgba(var(--mood-accent-rgb), 0.72),
+    rgba(var(--mood-accent-rgb), 0.44)
+  );
+}
+
+.reflect-flow-shell .flow-progress span.active::before {
+  background: var(--mood-accent);
+  box-shadow: 0 2px 7px rgba(var(--mood-accent-rgb), 0.18);
+}
+
+.reflect-flow-shell .flow-progress span:last-child {
+  width: 9px;
+  background: transparent;
+}
+
+.selected-mood-summary {
+  gap: 10px;
+  margin: 0 auto clamp(34px, 5.8vh, 54px);
+}
+
+.selected-mood-summary h1 {
+  font-size: clamp(1.1rem, 4.4vw, 1.3rem);
+  font-weight: 460;
+  line-height: 1.15;
+}
+
+.selection-pane {
+  padding-top: 0;
+}
+
+.selection-toolbar {
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-bottom: clamp(22px, 3.6vh, 32px);
+  border-bottom: 0;
+  padding-bottom: 0;
+  text-align: center;
+}
+
+.selection-toolbar .selection-title {
+  max-width: 352px;
+  margin-inline: auto;
+  color: color-mix(in srgb, var(--mood-ink) 94%, transparent);
+  font-size: clamp(1.34rem, 5.55vw, 1.74rem);
+  font-weight: 540;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.selection-toolbar .selection-subtitle {
+  max-width: 328px;
+  margin: 0 auto;
+  color: color-mix(in srgb, var(--mood-muted) 88%, transparent);
+  font-size: clamp(0.92rem, 3.55vw, 1.06rem);
+  font-weight: 440;
+  line-height: 1.32;
+}
+
+:host .selection-pane app-chip-selector {
+  display: block;
+  width: calc(100% + 12px);
+  margin-inline: -6px;
+}
+
+:host ::ng-deep app-chip-selector .chip-selector {
+  column-gap: 13px;
+  row-gap: 16px;
+}
+
+:host ::ng-deep app-chip-option .chip {
+  gap: 13px;
+  min-height: 60px;
+  border-radius: 999px;
+  padding-inline: 20px;
+  border-color: rgba(255, 255, 255, 0.64);
+  background: transparent;
+  background-image: none;
+  color: color-mix(in srgb, var(--mood-chip-text) 96%, transparent);
+  font-size: 1.17rem;
+  font-weight: 570;
+  line-height: 1.1;
+  box-shadow: 0 8px 20px rgba(20, 22, 32, 0.045);
+  backdrop-filter: blur(18px) saturate(112%);
+  -webkit-backdrop-filter: blur(18px) saturate(112%);
+}
+
+:host ::ng-deep app-chip-option .chip ion-icon {
+  flex: 0 0 auto;
+  color: var(--mood-accent);
+  font-size: 1.86rem;
+  --ionicon-stroke-width: 26px;
+  opacity: 0.92;
+}
+
+:host ::ng-deep app-chip-option .chip::after {
+  display: none;
+  content: none;
+}
+
+:host ::ng-deep app-chip-option .chip span {
+  line-height: 1.1;
+}
+
+:host ::ng-deep app-chip-option .chip.selected {
+  border-color: var(--mood-chip-selected-border);
+  background-color: transparent;
+  background-image:
+    radial-gradient(circle at 30% 16%, rgba(255, 255, 255, 0.22), transparent 42%),
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--mood-accent) 54%, #ffffff),
+      color-mix(in srgb, var(--mood-accent) 82%, #ffffff)
+    );
+  color: #ffffff;
+  font-weight: 590;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--mood-accent) 24%, transparent),
+    0 10px 24px rgba(var(--mood-accent-rgb), 0.16);
+  transform: none;
+}
+
+:host ::ng-deep app-chip-option .chip.selected ion-icon,
+:host ::ng-deep app-chip-option .chip.selected span {
+  color: #ffffff;
+}
+
+:host ::ng-deep app-chip-option .chip.selected ion-icon {
+  opacity: 0.94;
+}
+
+.show-more-row {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  margin-top: clamp(12px, 2.2vh, 18px);
+  text-align: start;
+}
+
+.show-more-row ion-button {
+  margin: 0;
+  min-height: 38px;
+  --color: var(--mood-muted);
+  --padding-start: 12px;
+  --padding-end: 12px;
+  font-size: 0.92rem;
+  font-weight: 580;
+  text-transform: none;
+}
+
+:host-context([dir="rtl"]) .show-more-row {
+  justify-content: flex-end;
+}
+
+.reflect-flow-shell .bottom-action {
+  margin-top: auto;
+  padding-top: clamp(20px, 3.2vh, 30px);
+  padding-bottom: 0;
+  background: transparent;
+}
+
+.reflect-flow-shell .primary-action {
+  --background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--mood-accent) 54%, #ffffff),
+    color-mix(in srgb, var(--mood-accent) 82%, #ffffff)
+  );
+  --background-activated: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--mood-accent) 70%, #111827),
+    color-mix(in srgb, var(--mood-accent) 92%, #111827)
+  );
+  --border-radius: 30px;
+  --box-shadow: 0 10px 24px rgba(var(--mood-accent-rgb), 0.16);
+  min-height: 66px;
+  font-size: clamp(1.14rem, 4.7vw, 1.3rem);
+  font-weight: 560;
+  letter-spacing: 0;
+}
+
+:host-context(.ion-palette-dark) ::ng-deep app-chip-option .chip {
+  border-color: rgba(255, 255, 255, 0.055);
+  background: transparent;
+  background-image: none;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+}
+
+:host-context(.ion-palette-dark) ::ng-deep app-chip-option .chip.selected {
+  border-color: var(--mood-chip-selected-border);
+  background-color: transparent;
+  background-image:
+    radial-gradient(circle at 30% 16%, rgba(255, 255, 255, 0.16), transparent 42%),
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--mood-accent) 54%, #ffffff),
+      color-mix(in srgb, var(--mood-accent) 80%, #ffffff)
+    );
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--mood-accent) 24%, transparent),
+    0 10px 24px rgba(var(--mood-accent-rgb), 0.2);
+}
+
+:host-context(.ion-palette-dark) .reflect-flow-shell .primary-action {
+  --background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--mood-accent) 54%, #ffffff),
+    color-mix(in srgb, var(--mood-accent) 80%, #ffffff)
+  );
+  --box-shadow: 0 10px 24px rgba(var(--mood-accent-rgb), 0.2);
+}
+
 .config-loading {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-bottom: 12px;
-  color: var(--app-muted);
+  margin-bottom: 16px;
+  color: var(--mood-muted);
   font-size: 0.82rem;
-  font-weight: 680;
+  font-weight: 560;
 }
 
 .config-loading ion-spinner {
   width: 18px;
   height: 18px;
-}
-
-.emotion-list-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  margin: 0 2px 13px;
-}
-
-.emotion-list-header p {
-  margin: 0;
-  color: var(--app-text);
-  font-size: 0.95rem;
-  font-weight: 760;
-}
-
-.emotion-list-header ion-button {
-  margin: 0;
-  --color: var(--app-secondary-text);
-  font-weight: 700;
 }

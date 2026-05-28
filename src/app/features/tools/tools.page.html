@@ -1,9 +1,43 @@
 <ion-content class="wellness-content" fullscreen>
-  <main class="page-shell">
+  <main class="page-shell aura-page">
     <app-wellness-header
       [eyebrow]="'tools.eyebrow' | t"
       [title]="'tools.title' | t"
       [subtitle]="'tools.subtitle' | t"
     ></app-wellness-header>
+
+    <section class="tools-grid" [attr.aria-label]="'tools.title' | t">
+      <article class="tool-tile featured">
+        <ion-icon name="radio-button-on-outline" aria-hidden="true"></ion-icon>
+        <div>
+          <h2>{{ 'tools.breathe' | t }}</h2>
+          <p>{{ 'tools.breatheSubtitle' | t }}</p>
+        </div>
+      </article>
+
+      <article class="tool-tile featured">
+        <ion-icon name="pencil-outline" aria-hidden="true"></ion-icon>
+        <div>
+          <h2>{{ 'tools.reflect' | t }}</h2>
+          <p>{{ 'tools.reflectSubtitle' | t }}</p>
+        </div>
+      </article>
+
+      <article class="tool-tile">
+        <ion-icon name="leaf-outline" aria-hidden="true"></ion-icon>
+        <div>
+          <h2>{{ 'tools.ground' | t }}</h2>
+          <p>{{ 'tools.groundSubtitle' | t }}</p>
+        </div>
+      </article>
+
+      <article class="tool-tile">
+        <ion-icon name="moon-outline" aria-hidden="true"></ion-icon>
+        <div>
+          <h2>{{ 'tools.sleep' | t }}</h2>
+          <p>{{ 'tools.sleepSubtitle' | t }}</p>
+        </div>
+      </article>
+    </section>
   </main>
 </ion-content>

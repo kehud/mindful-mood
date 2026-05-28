@@ -1,5 +1,7 @@
 <ion-content class="wellness-content" fullscreen>
   <main class="page-shell full-height-shell welcome-shell">
+    <div class="login-soft-aura soft-aura soft-aura--breathing" aria-hidden="true"></div>
+
     <section class="brand-mark">
       <img
         class="brand-logo brand-logo-light"
@@ -23,30 +25,22 @@
       <p>{{ 'auth.welcome.subtitle' | t }}</p>
     </section>
 
-    <section class="mood-preview soft-panel">
-      <div class="preview-scale">
-        <span></span>
-        <span></span>
-        <span class="active"></span>
-        <span></span>
-        <span></span>
-      </div>
-      <div>
-        <strong>{{ 'auth.welcome.previewTitle' | t }}</strong>
-        <p>{{ 'auth.welcome.previewSubtitle' | t }}</p>
-      </div>
-    </section>
-
     <section class="welcome-actions">
-      <ion-button class="primary-action" expand="block" type="button" (click)="openAuthSheet('register')">
-        {{ 'auth.register' | t }}
+      <ion-button class="google-entry-action" expand="block" fill="clear" type="button" (click)="openAuthSheet('login')">
+        <ion-icon slot="start" name="logo-google"></ion-icon>
+        {{ 'auth.continueWithGoogle' | t }}
       </ion-button>
-      <ion-button class="secondary-action" expand="block" fill="clear" type="button" (click)="openAuthSheet('login')">
+
+      <div class="auth-divider"><span>{{ 'auth.or' | t }}</span></div>
+
+      <ion-button class="email-entry-action" expand="block" fill="clear" type="button" (click)="openAuthSheet('login')">
         {{ 'auth.login' | t }}
       </ion-button>
-      <ion-button class="secondary-action" expand="block" fill="outline" routerLink="/tabs/home">
-        {{ 'auth.welcome.explorePreview' | t }}
-      </ion-button>
+
+      <div class="auth-entry-copy">
+        <ion-button fill="clear" type="button" (click)="openAuthSheet('register')">{{ 'auth.register' | t }}</ion-button>
+        <ion-button fill="clear" routerLink="/tabs/home">{{ 'auth.welcome.explorePreview' | t }}</ion-button>
+      </div>
     </section>
   </main>
 

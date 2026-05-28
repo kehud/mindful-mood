@@ -1,55 +1,52 @@
-<ion-content class="wellness-content" fullscreen>
-  <main class="page-shell checkin-shell">
-    <nav class="checkin-nav">
-      <ion-button class="nav-button" fill="clear" size="small" routerLink="/tabs/home">
-        <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
-        {{ 'common.back' | t }}
-      </ion-button>
-      <span>{{ 'checkIn.progress' | t: { current: 1, total: 4 } }}</span>
-    </nav>
+<ion-content class="checkin-immersive-content" fullscreen>
+  <ng-container *ngIf="moodOptionsState$ | async as moodConfig">
+    <main
+      class="page-shell checkin-shell reflect-flow-shell mood-theme mood-screen"
+      *ngIf="selectedMood(moodConfig.options) as mood"
+      [ngClass]="moodThemeClass(mood.value)"
+    >
+      <nav class="checkin-nav">
+        <ion-button class="nav-button" fill="clear" routerLink="/tabs/home" [attr.aria-label]="'common.back' | t">
+          <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+        </ion-button>
+        <div class="flow-progress" [attr.aria-label]="'checkIn.progress' | t: { current: 1, total: 3 }">
+          <span class="active"></span>
+          <span></span>
+          <span></span>
+        </div>
+        <ion-button class="nav-button" fill="clear" routerLink="/tabs/home" [attr.aria-label]="'common.cancel' | t">
+          <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+        </ion-button>
+      </nav>
 
-    <div class="step-dots" aria-hidden="true">
-      <span class="active"></span>
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
+      <section class="question-block mood-question">
+        <h1>{{ 'checkIn.mood.heading' | t }}</h1>
+        <p>{{ 'checkIn.mood.subtitle' | t }}</p>
+      </section>
 
-    <section class="question-block">
-      <p class="eyebrow">{{ 'checkIn.dailyEyebrow' | t }}</p>
-      <h1>{{ 'checkIn.mood.heading' | t }}</h1>
-      <p>{{ 'checkIn.mood.subtitle' | t }}</p>
-    </section>
+      <div class="config-loading" *ngIf="moodConfig.loading && !moodConfig.options.length" aria-live="polite">
+        <ion-spinner name="crescent"></ion-spinner>
+        <span>{{ 'checkIn.mood.loading' | t }}</span>
+      </div>
 
-    <ng-container *ngIf="moodOptionsState$ | async as moodConfig">
-      <section class="mood-card" *ngIf="selectedMood(moodConfig.options) as mood" [style.--mood-color]="mood.color">
-        <div class="config-loading" *ngIf="moodConfig.loading && !moodConfig.options.length" aria-live="polite">
-          <ion-spinner name="crescent"></ion-spinner>
-          <span>{{ 'checkIn.mood.loading' | t }}</span>
+      <section class="mood-stage" [attr.aria-label]="'checkIn.mood.selected' | t: { mood: (mood | configLabel) }">
+        <div class="mood-aura mood-bloom mood-bloom--large" [ngClass]="moodBloomClass(mood.value)" aria-hidden="true">
+          <span class="aura-layer aura-layer--1"></span>
+          <span class="aura-layer aura-layer--2"></span>
+          <span class="aura-layer aura-layer--3"></span>
+          <span class="aura-layer aura-layer--4"></span>
+          <span class="aura-layer aura-layer--5"></span>
+          <span class="aura-layer aura-layer--6"></span>
+          <span class="aura-core"></span>
+          <span class="aura-spark aura-spark--1"></span>
+          <span class="aura-spark aura-spark--2"></span>
         </div>
 
-        <section class="mood-display" [attr.aria-label]="'checkIn.mood.selected' | t: { mood: (mood | configLabel) }">
-          <div
-            class="mood-visual"
-            [ngClass]="moodVisualTone(mood, moodConfig.options)"
-            [style.--mood-scale]="moodVisualScale(mood, moodConfig.options)"
-            [style.--mood-tilt]="moodVisualTilt(mood, moodConfig.options)"
-            [style.--mood-lift]="moodVisualLift(mood, moodConfig.options)"
-          >
-            <span class="mood-halo" aria-hidden="true"></span>
-            <span class="mood-shape mood-shape--main">
-              <ion-icon [name]="mood.icon" aria-hidden="true"></ion-icon>
-            </span>
-          </div>
-          <div class="mood-copy">
-            <span class="mood-tone">{{ moodToneLabel(mood, moodConfig.options) }}</span>
-            <h2>{{ mood | configLabel }}</h2>
-            <p>{{ moodSupportText(mood, moodConfig.options) }}</p>
-          </div>
-        </section>
+        <h2 aria-live="polite">{{ mood | configLabel }}</h2>
 
-        <section class="mood-control">
+        <div class="mood-range-wrap">
           <ion-range
+            class="mood-range"
             [attr.aria-label]="'checkIn.mood.aria' | t"
             [attr.aria-valuetext]="mood | configLabel"
             mode="ios"
@@ -63,35 +60,21 @@
             (ionChange)="snapMoodLevel(moodConfig.options)"
           ></ion-range>
 
-          <div class="mood-scale" [attr.aria-label]="'checkIn.mood.scale' | t">
-            <button
-              *ngFor="let option of moodConfig.options; trackBy: trackMoodOption"
-              type="button"
-              [class.selected]="mood.value === option.value"
-              [style.--mood-color]="option.color"
-              [attr.aria-pressed]="mood.value === option.value"
-              [attr.aria-label]="option | configLabel"
-              (click)="selectMood(option.value)"
-            >
-              <span class="scale-shape">
-                <ion-icon [name]="option.icon" aria-hidden="true"></ion-icon>
-              </span>
-            </button>
+          <div class="range-labels" [attr.aria-label]="'checkIn.mood.scale' | t">
+            <span>{{ moodRangeLabel(moodConfig.options, 'start') }}</span>
+            <span>{{ moodRangeLabel(moodConfig.options, 'end') }}</span>
           </div>
-        </section>
 
-        <div class="range-labels">
-          <span>{{ moodRangeLabel(moodConfig.options, 'start') }}</span>
-          <span>{{ moodRangeLabel(moodConfig.options, 'middle') }}</span>
-          <span>{{ moodRangeLabel(moodConfig.options, 'end') }}</span>
+          <div class="mood-spectrum" aria-hidden="true"></div>
         </div>
       </section>
 
       <footer class="bottom-action">
         <ion-button class="primary-action" expand="block" (click)="next(moodConfig.options)">
-          {{ 'common.continue' | t }}
+          <span>{{ 'common.continue' | t }}</span>
+          <ion-icon slot="end" name="arrow-forward-outline" aria-hidden="true"></ion-icon>
         </ion-button>
       </footer>
-    </ng-container>
-  </main>
+    </main>
+  </ng-container>
 </ion-content>

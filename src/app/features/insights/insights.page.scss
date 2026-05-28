@@ -23,7 +23,7 @@
 .metric-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
+  gap: 13px;
 }
 
 .metric-label,
@@ -39,9 +39,9 @@
 }
 
 h2 {
-  margin: 9px 0 2px;
+  margin: 8px 0 2px;
   color: var(--app-text);
-  font-size: 2.55rem;
+  font-size: clamp(2.05rem, 9vw, 2.46rem);
   font-weight: 840;
   line-height: 1;
 }
@@ -60,11 +60,16 @@ h2 {
 .average-row span {
   flex: 0 0 auto;
   border-radius: 18px;
-  background: rgba(var(--ion-color-secondary-rgb), 0.12);
+  border: 1px solid var(--app-control-border);
+  background:
+    radial-gradient(circle at 34% 22%, rgba(var(--ion-color-primary-rgb), 0.2), transparent 54%),
+    var(--app-control-surface);
   color: var(--app-secondary-text);
   font-weight: 760;
   padding: 12px 14px;
-  box-shadow: inset 0 1px 0 var(--app-inset-highlight);
+  box-shadow:
+    inset 0 1px 0 var(--app-inset-highlight),
+    var(--app-control-shadow);
 }
 
 .trend-chart {
@@ -87,7 +92,10 @@ h2 {
   position: relative;
   align-self: stretch;
   border-radius: 999px;
-  background: var(--app-control-surface);
+  border: 1px solid color-mix(in srgb, var(--app-control-border) 70%, transparent);
+  background:
+    linear-gradient(180deg, var(--app-inset-highlight), transparent 76%),
+    var(--app-control-surface);
   overflow: hidden;
 }
 
@@ -96,7 +104,10 @@ h2 {
   inset: auto 0 0;
   min-height: 8px;
   border-radius: 999px;
-  background: linear-gradient(180deg, rgba(var(--ion-color-tertiary-rgb), 0.82), var(--ion-color-secondary));
+  background:
+    radial-gradient(circle at 50% 4%, rgba(255, 255, 255, 0.58), transparent 32%),
+    linear-gradient(180deg, var(--aura-peach), var(--aura-mist) 55%, var(--aura-indigo));
+  box-shadow: 0 0 16px rgba(var(--ion-color-primary-rgb), 0.18);
 }
 
 .trend-item strong,
@@ -118,16 +129,21 @@ h2 {
   border-radius: 18px;
   border: 1px solid var(--app-emotion-border);
   background:
+    linear-gradient(180deg, var(--app-inset-highlight), transparent 72%),
     var(--app-emotion-background),
     var(--app-control-surface);
   color: var(--app-emotion-text);
   font-weight: 700;
   padding: 11px 13px;
+  box-shadow: inset 0 1px 0 var(--app-inset-highlight);
+  backdrop-filter: blur(12px) saturate(122%);
+  -webkit-backdrop-filter: blur(12px) saturate(122%);
 }
 
 .rank-list.influence div {
   border-color: var(--app-influence-border);
   background:
+    linear-gradient(180deg, var(--app-inset-highlight), transparent 72%),
     var(--app-influence-background),
     var(--app-control-surface);
   color: var(--app-influence-text);
@@ -139,7 +155,8 @@ h2 {
   min-width: 28px;
   height: 28px;
   border-radius: 10px;
-  background: rgba(var(--ion-color-secondary-rgb), 0.1);
+  border: 1px solid var(--app-control-border);
+  background: var(--app-control-surface-strong);
 }
 
 .rank-list.influence strong {

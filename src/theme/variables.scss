@@ -1,26 +1,26 @@
 :root {
   color-scheme: light;
 
-  --ion-color-primary: #8EDFD3;
-  --ion-color-primary-rgb: 142, 223, 211;
+  --ion-color-primary: #78C9CB;
+  --ion-color-primary-rgb: 120, 201, 203;
   --ion-color-primary-contrast: #0F1220;
   --ion-color-primary-contrast-rgb: 15, 18, 32;
-  --ion-color-primary-shade: #83ced8;
-  --ion-color-primary-tint: #bcefea;
+  --ion-color-primary-shade: #66aeb2;
+  --ion-color-primary-tint: #a8dddd;
 
-  --ion-color-secondary: #B8A6FF;
-  --ion-color-secondary-rgb: 184, 166, 255;
+  --ion-color-secondary: #7254B8;
+  --ion-color-secondary-rgb: 114, 84, 184;
   --ion-color-secondary-contrast: #0F1220;
   --ion-color-secondary-contrast-rgb: 15, 18, 32;
-  --ion-color-secondary-shade: #a293e0;
-  --ion-color-secondary-tint: #c0afff;
+  --ion-color-secondary-shade: #6349a0;
+  --ion-color-secondary-tint: #967ad0;
 
-  --ion-color-tertiary: #F4C7D9;
-  --ion-color-tertiary-rgb: 244, 199, 217;
+  --ion-color-tertiary: #F07F69;
+  --ion-color-tertiary-rgb: 240, 127, 105;
   --ion-color-tertiary-contrast: #0F1220;
   --ion-color-tertiary-contrast-rgb: 15, 18, 32;
-  --ion-color-tertiary-shade: #d7afbf;
-  --ion-color-tertiary-tint: #f5cddd;
+  --ion-color-tertiary-shade: #d36f5d;
+  --ion-color-tertiary-tint: #f39a88;
 
   --ion-color-success: #B8A6FF;
   --ion-color-success-rgb: 184, 166, 255;
@@ -50,8 +50,8 @@
   --ion-color-medium-shade: #5a6b72;
   --ion-color-medium-tint: #75878f;
 
-  --ion-color-light: #FAF7FF;
-  --ion-color-light-rgb: 250, 247, 255;
+  --ion-color-light: #F7FAF7;
+  --ion-color-light-rgb: 247, 250, 247;
   --ion-color-light-contrast: #0F1220;
   --ion-color-light-contrast-rgb: 15, 18, 32;
   --ion-color-light-shade: #dcdae0;
@@ -64,8 +64,8 @@
   --ion-color-dark-shade: #0d101c;
   --ion-color-dark-tint: #272a36;
 
-  --ion-background-color: #FAF7FF;
-  --ion-background-color-rgb: 250, 247, 255;
+  --ion-background-color: #F7FAF7;
+  --ion-background-color-rgb: 247, 250, 247;
   --ion-text-color: #0F1220;
   --ion-text-color-rgb: 15, 18, 32;
   --ion-item-background: rgba(255, 255, 255, 0.66);
@@ -73,46 +73,47 @@
   --ion-tab-bar-background: rgba(255, 255, 255, 0.86);
   --ion-toolbar-background: rgba(255, 255, 255, 0.9);
 
-  --app-page-background: #FAF7FF;
+  --app-page-background: #F7FAF7;
   --app-wellness-background:
-    radial-gradient(circle at 50% -12%, rgba(var(--ion-color-secondary-rgb), 0.18), transparent 34%),
-    radial-gradient(circle at 0% 42%, rgba(var(--ion-color-tertiary-rgb), 0.2), transparent 35%),
-    linear-gradient(180deg, #fffaff 0%, #FAF7FF 48%, #f6fbff 100%);
-  --app-card-shadow: 0 18px 44px rgba(33, 28, 58, 0.09);
-  --app-card-shadow-strong: 0 22px 56px rgba(33, 28, 58, 0.12);
+    radial-gradient(circle at 6% -8%, rgba(120, 201, 203, 0.28), transparent 38%),
+    radial-gradient(circle at 102% 0%, rgba(240, 127, 105, 0.22), transparent 34%),
+    radial-gradient(circle at 26% 82%, rgba(114, 84, 184, 0.16), transparent 34%),
+    linear-gradient(180deg, #fcfdf8 0%, #f7faf4 44%, #eef7f4 100%);
+  --app-card-shadow: 0 18px 48px rgba(28, 43, 50, 0.1);
+  --app-card-shadow-strong: 0 28px 70px rgba(28, 43, 50, 0.15);
   --app-tab-shadow: 0 -14px 34px rgba(40, 33, 74, 0.07);
   --app-control-shadow: 0 8px 20px rgba(40, 33, 74, 0.05);
-  --app-soft-border: rgba(54, 47, 86, 0.1);
-  --app-control-border: rgba(54, 47, 86, 0.08);
-  --app-strong-border: rgba(54, 47, 86, 0.11);
-  --app-divider: rgba(54, 47, 86, 0.12);
-  --app-surface: rgba(255, 255, 255, 0.82);
-  --app-surface-strong: rgba(255, 255, 255, 0.92);
-  --app-control-surface: rgba(255, 255, 255, 0.54);
+  --app-soft-border: rgba(40, 58, 67, 0.1);
+  --app-control-border: rgba(40, 58, 67, 0.09);
+  --app-strong-border: rgba(40, 58, 67, 0.13);
+  --app-divider: rgba(40, 58, 67, 0.1);
+  --app-surface: rgba(255, 255, 255, 0.56);
+  --app-surface-strong: rgba(255, 255, 255, 0.7);
+  --app-control-surface: rgba(255, 255, 255, 0.5);
   --app-control-surface-strong: rgba(255, 255, 255, 0.68);
-  --app-input-surface: rgba(255, 255, 255, 0.66);
-  --app-pill-surface: rgba(255, 255, 255, 0.64);
-  --app-text: #0F1220;
-  --app-text-strong: #171827;
-  --app-muted: #67657a;
-  --app-muted-strong: #55536a;
-  --app-subtle: #817f94;
-  --app-chip-text: #49465e;
+  --app-input-surface: rgba(255, 255, 255, 0.64);
+  --app-pill-surface: rgba(255, 255, 255, 0.58);
+  --app-text: #111722;
+  --app-text-strong: #0f1520;
+  --app-muted: #63707a;
+  --app-muted-strong: #4e5c67;
+  --app-subtle: #7f8b93;
+  --app-chip-text: #40515b;
   --app-primary-text: color-mix(in srgb, var(--ion-color-secondary) 56%, var(--ion-color-dark));
   --app-secondary-text: color-mix(in srgb, var(--ion-color-secondary) 56%, var(--ion-color-dark));
   --app-tertiary-text: color-mix(in srgb, var(--ion-color-tertiary) 48%, var(--ion-color-dark));
-  --app-emotion-background: linear-gradient(145deg, rgba(var(--ion-color-secondary-rgb), 0.13), rgba(var(--ion-color-secondary-rgb), 0.06));
-  --app-emotion-background-strong: linear-gradient(145deg, rgba(var(--ion-color-secondary-rgb), 0.22), rgba(var(--ion-color-secondary-rgb), 0.1));
-  --app-emotion-border: rgba(var(--ion-color-secondary-rgb), 0.14);
+  --app-emotion-background: linear-gradient(145deg, rgba(var(--ion-color-secondary-rgb), 0.12), rgba(255, 255, 255, 0.2));
+  --app-emotion-background-strong: linear-gradient(145deg, rgba(var(--ion-color-secondary-rgb), 0.24), rgba(255, 255, 255, 0.32));
+  --app-emotion-border: rgba(var(--ion-color-secondary-rgb), 0.16);
   --app-emotion-border-strong: rgba(var(--ion-color-secondary-rgb), 0.42);
   --app-emotion-text: var(--app-secondary-text);
   --app-emotion-shadow: 0 12px 24px rgba(var(--ion-color-secondary-rgb), 0.12);
-  --app-influence-background: linear-gradient(145deg, rgba(var(--ion-color-tertiary-rgb), 0.15), rgba(var(--ion-color-tertiary-rgb), 0.07));
-  --app-influence-background-strong: linear-gradient(145deg, rgba(var(--ion-color-tertiary-rgb), 0.24), rgba(var(--ion-color-tertiary-rgb), 0.1));
+  --app-influence-background: linear-gradient(145deg, rgba(var(--ion-color-primary-rgb), 0.13), rgba(255, 255, 255, 0.22));
+  --app-influence-background-strong: linear-gradient(145deg, rgba(var(--ion-color-primary-rgb), 0.24), rgba(255, 255, 255, 0.34));
   --app-influence-border: rgba(var(--ion-color-tertiary-rgb), 0.18);
   --app-influence-border-strong: rgba(var(--ion-color-tertiary-rgb), 0.44);
-  --app-influence-text: var(--app-tertiary-text);
-  --app-influence-shadow: 0 12px 24px rgba(var(--ion-color-tertiary-rgb), 0.12);
+  --app-influence-text: var(--app-primary-text);
+  --app-influence-shadow: 0 12px 24px rgba(var(--ion-color-primary-rgb), 0.12);
   --app-on-accent: #0F1220;
   --app-danger-soft: rgba(var(--ion-color-danger-rgb), 0.1);
   --app-danger-border: rgba(var(--ion-color-danger-rgb), 0.22);
@@ -125,10 +126,10 @@
   --app-clear-button-color: #5e5b70;
   --app-clear-button-background-activated: rgba(var(--ion-color-secondary-rgb), 0.1);
   --app-step-dot: rgba(54, 47, 86, 0.16);
-  --app-bottom-action-background: linear-gradient(180deg, rgba(250, 247, 255, 0), rgba(250, 247, 255, 0.96) 56%);
-  --app-aqua-glow: rgba(var(--ion-color-primary-rgb), 0.1);
-  --app-peach-glow: rgba(var(--ion-color-tertiary-rgb), 0.28);
-  --app-blue-glow: rgba(var(--ion-color-secondary-rgb), 0.22);
+  --app-bottom-action-background: linear-gradient(180deg, rgba(247, 250, 247, 0), rgba(247, 250, 247, 0.94) 58%);
+  --app-aqua-glow: rgba(var(--ion-color-primary-rgb), 0.16);
+  --app-peach-glow: rgba(var(--ion-color-tertiary-rgb), 0.18);
+  --app-blue-glow: rgba(var(--ion-color-secondary-rgb), 0.14);
   --app-white-glow: rgba(255, 255, 255, 0.86);
   --app-brand-mark-background:
     radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.9), transparent 34%),
@@ -152,22 +153,22 @@
 :root.ion-palette-dark {
   color-scheme: dark;
 
-  --ion-color-primary: #8EDFD3;
-  --ion-color-primary-rgb: 142, 223, 211;
+  --ion-color-primary: #78C9CB;
+  --ion-color-primary-rgb: 120, 201, 203;
   --ion-color-primary-contrast: #0F1220;
   --ion-color-primary-contrast-rgb: 15, 18, 32;
   --ion-color-primary-shade: #83ced8;
   --ion-color-primary-tint: #bcefea;
 
-  --ion-color-secondary: #B8A6FF;
-  --ion-color-secondary-rgb: 184, 166, 255;
+  --ion-color-secondary: #8C63D8;
+  --ion-color-secondary-rgb: 140, 99, 216;
   --ion-color-secondary-contrast: #0F1220;
   --ion-color-secondary-contrast-rgb: 15, 18, 32;
   --ion-color-secondary-shade: #a293e0;
   --ion-color-secondary-tint: #c0afff;
 
-  --ion-color-tertiary: #F4C7D9;
-  --ion-color-tertiary-rgb: 244, 199, 217;
+  --ion-color-tertiary: #EE806C;
+  --ion-color-tertiary-rgb: 238, 128, 108;
   --ion-color-tertiary-contrast: #0F1220;
   --ion-color-tertiary-contrast-rgb: 15, 18, 32;
   --ion-color-tertiary-shade: #d7afbf;
@@ -215,40 +216,42 @@
   --ion-color-dark-shade: #dcdae0;
   --ion-color-dark-tint: #fbf8ff;
 
-  --ion-background-color: #0F1220;
-  --ion-background-color-rgb: 15, 18, 32;
+  --ion-background-color: #0A121A;
+  --ion-background-color-rgb: 10, 18, 26;
   --ion-text-color: #FAF7FF;
   --ion-text-color-rgb: 250, 247, 255;
-  --ion-item-background: rgba(25, 29, 45, 0.88);
-  --ion-card-background: rgba(25, 29, 45, 0.86);
-  --ion-tab-bar-background: rgba(15, 18, 32, 0.92);
-  --ion-toolbar-background: rgba(15, 18, 32, 0.94);
+  --ion-item-background: rgba(20, 27, 38, 0.88);
+  --ion-card-background: rgba(20, 27, 38, 0.84);
+  --ion-tab-bar-background: rgba(10, 18, 26, 0.9);
+  --ion-toolbar-background: rgba(10, 18, 26, 0.94);
 
-  --app-page-background: #0F1220;
+  --app-page-background: #0A121A;
   --app-wellness-background:
-    radial-gradient(circle at 50% -12%, rgba(var(--ion-color-secondary-rgb), 0.18), transparent 34%),
-    radial-gradient(circle at 0% 42%, rgba(var(--ion-color-tertiary-rgb), 0.12), transparent 35%),
-    linear-gradient(180deg, #15172a 0%, #0F1220 48%, #121827 100%);
-  --app-card-shadow: 0 18px 44px rgba(0, 0, 0, 0.34);
-  --app-card-shadow-strong: 0 24px 60px rgba(0, 0, 0, 0.42);
+    radial-gradient(circle at 6% -10%, rgba(120, 201, 203, 0.18), transparent 34%),
+    radial-gradient(circle at 96% 4%, rgba(238, 128, 108, 0.13), transparent 32%),
+    radial-gradient(circle at 14% 64%, rgba(140, 99, 216, 0.24), transparent 40%),
+    radial-gradient(circle at 72% 84%, rgba(33, 72, 118, 0.22), transparent 36%),
+    linear-gradient(180deg, #0d1420 0%, #07111b 52%, #050b12 100%);
+  --app-card-shadow: 0 20px 54px rgba(0, 0, 0, 0.42);
+  --app-card-shadow-strong: 0 30px 76px rgba(0, 0, 0, 0.54);
   --app-tab-shadow: 0 -14px 36px rgba(0, 0, 0, 0.36);
   --app-control-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
-  --app-soft-border: rgba(231, 224, 255, 0.12);
-  --app-control-border: rgba(231, 224, 255, 0.1);
-  --app-strong-border: rgba(231, 224, 255, 0.14);
-  --app-divider: rgba(231, 224, 255, 0.14);
-  --app-surface: rgba(25, 29, 45, 0.82);
-  --app-surface-strong: rgba(31, 35, 54, 0.94);
-  --app-control-surface: rgba(250, 247, 255, 0.08);
-  --app-control-surface-strong: rgba(250, 247, 255, 0.12);
-  --app-input-surface: rgba(250, 247, 255, 0.08);
+  --app-soft-border: rgba(231, 244, 255, 0.13);
+  --app-control-border: rgba(231, 244, 255, 0.12);
+  --app-strong-border: rgba(231, 244, 255, 0.17);
+  --app-divider: rgba(231, 244, 255, 0.12);
+  --app-surface: rgba(18, 25, 38, 0.66);
+  --app-surface-strong: rgba(19, 28, 43, 0.8);
+  --app-control-surface: rgba(248, 252, 255, 0.075);
+  --app-control-surface-strong: rgba(248, 252, 255, 0.12);
+  --app-input-surface: rgba(248, 252, 255, 0.09);
   --app-pill-surface: rgba(250, 247, 255, 0.1);
-  --app-text: #FAF7FF;
+  --app-text: #F6FAFF;
   --app-text-strong: #ffffff;
-  --app-muted: #bbb5d0;
-  --app-muted-strong: #d0cae3;
-  --app-subtle: #a49eb8;
-  --app-chip-text: #e4ddf2;
+  --app-muted: #B5C0C9;
+  --app-muted-strong: #CFD8E0;
+  --app-subtle: #8FA0AD;
+  --app-chip-text: #DCE8EF;
   --app-primary-text: color-mix(in srgb, var(--ion-color-secondary) 78%, var(--ion-color-dark));
   --app-secondary-text: color-mix(in srgb, var(--ion-color-secondary) 78%, var(--ion-color-dark));
   --app-tertiary-text: color-mix(in srgb, var(--ion-color-tertiary) 82%, var(--ion-color-dark));
@@ -276,7 +279,7 @@
   --app-clear-button-color: #d1cbe0;
   --app-clear-button-background-activated: rgba(var(--ion-color-secondary-rgb), 0.14);
   --app-step-dot: rgba(231, 224, 255, 0.18);
-  --app-bottom-action-background: linear-gradient(180deg, rgba(15, 18, 32, 0), rgba(15, 18, 32, 0.96) 56%);
+  --app-bottom-action-background: linear-gradient(180deg, rgba(10, 18, 26, 0), rgba(10, 18, 26, 0.96) 58%);
   --app-aqua-glow: rgba(var(--ion-color-primary-rgb), 0.1);
   --app-peach-glow: rgba(var(--ion-color-tertiary-rgb), 0.12);
   --app-blue-glow: rgba(var(--ion-color-secondary-rgb), 0.15);

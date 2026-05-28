@@ -1,5 +1,5 @@
 <ion-content class="wellness-content" fullscreen>
-  <main class="page-shell">
+  <main class="page-shell aura-page">
     <app-wellness-header
       [eyebrow]="'home.eyebrow' | t"
       [title]="'home.title' | t"
@@ -11,7 +11,14 @@
         <span class="mood-badge">{{ 'home.dailyMood' | t }}</span>
         <h2>{{ 'home.heroTitle' | t }}</h2>
       </div>
-      <ion-button class="primary-action" expand="block" routerLink="/check-in/mood">{{ 'home.startCheckIn' | t }}</ion-button>
+
+      <div class="hero-aura-wrap">
+        <div class="hero-aura soft-aura soft-aura--breathing" aria-hidden="true"></div>
+        <ion-button class="aura-checkin-action" fill="clear" routerLink="/check-in/mood">
+          <span>{{ 'home.startCheckIn' | t }}</span>
+          <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
+        </ion-button>
+      </div>
     </section>
 
     <h2 class="section-title">{{ 'home.recentNote' | t }}</h2>

@@ -37,13 +37,22 @@
 /* @import "@ionic/angular/css/palettes/dark.system.css"; */
 
 :root {
-  --app-page-max-width: 660px;
+  --app-page-max-width: 430px;
   --app-page-top-offset: 0px;
   --app-page-wide-top-offset: 12px;
   --app-radius-lg: 26px;
   --app-radius-md: 18px;
   --app-radius-sm: 14px;
   --app-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --aura-plum: #5b3a8e;
+  --aura-indigo: #4452b5;
+  --aura-periwinkle: #6f8dc8;
+  --aura-mist: #78c9cb;
+  --aura-sage: #8aa378;
+  --aura-honey: #d89a4a;
+  --aura-peach: #ee806c;
+  --aura-glass-blur: blur(24px) saturate(145%);
+  --aura-breathe-duration: 7.6s;
   --ion-font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
 }
 
@@ -55,9 +64,17 @@ html[dir="ltr"] {
   direction: ltr;
 }
 
+html,
+body,
+ion-app {
+  overscroll-behavior: none;
+}
+
 body {
   background: var(--app-page-background);
   color: var(--app-text);
+  overflow: hidden;
+  overscroll-behavior-y: none;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -86,12 +103,105 @@ ion-content.wellness-content {
   --background: var(--app-wellness-background);
 }
 
+ion-content.checkin-immersive-content {
+  --background: transparent;
+}
+
+ion-content::part(scroll) {
+  overscroll-behavior-y: none;
+  -webkit-overflow-scrolling: touch;
+}
+
 .page-shell {
   width: min(100%, var(--app-page-max-width));
   margin: 0 auto;
   padding: calc(var(--app-page-top-offset) + env(safe-area-inset-top)) 20px calc(32px + env(safe-area-inset-bottom));
   box-sizing: border-box;
-  animation: page-settle 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: page-settle 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.aura-page {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.aura-page::before,
+.aura-page::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 999px;
+  filter: blur(34px);
+}
+
+.aura-page::before {
+  top: -12%;
+  left: -14%;
+  width: min(62vw, 360px);
+  aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(var(--ion-color-primary-rgb), 0.16), transparent 68%);
+}
+
+.aura-page::after {
+  right: -16%;
+  bottom: 10%;
+  width: min(58vw, 320px);
+  aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(var(--ion-color-tertiary-rgb), 0.13), transparent 70%);
+}
+
+.soft-aura {
+  --soft-aura-color: var(--ion-color-primary);
+  --soft-aura-opacity: 0.62;
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: 45% 55% 48% 52%;
+  background:
+    radial-gradient(circle at 42% 34%, rgba(255, 255, 255, 0.42), transparent 22%),
+    radial-gradient(circle at 54% 58%, color-mix(in srgb, var(--soft-aura-color) 62%, transparent), transparent 58%),
+    color-mix(in srgb, var(--soft-aura-color) 18%, transparent);
+  box-shadow:
+    0 28px 76px color-mix(in srgb, var(--soft-aura-color) 24%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  filter: blur(0.1px) saturate(1.1);
+  opacity: var(--soft-aura-opacity);
+}
+
+.soft-aura::before,
+.soft-aura::after {
+  content: "";
+  position: absolute;
+  inset: -2%;
+  border-radius: 52% 48% 45% 55%;
+  background:
+    radial-gradient(circle at 40% 34%, rgba(255, 255, 255, 0.18), transparent 24%),
+    color-mix(in srgb, var(--soft-aura-color) 24%, transparent);
+  box-shadow: 0 28px 70px color-mix(in srgb, var(--soft-aura-color) 24%, transparent);
+  transform: rotate(-12deg);
+}
+
+.soft-aura::after {
+  inset: 13%;
+  border-radius: 42% 58% 57% 43%;
+  background:
+    radial-gradient(circle at 48% 40%, rgba(255, 255, 255, 0.22), transparent 28%),
+    color-mix(in srgb, var(--soft-aura-color) 34%, rgba(255, 255, 255, 0.08));
+  transform: rotate(22deg);
+}
+
+.soft-aura--breathing {
+  animation: soft-aura-breathe var(--aura-breathe-duration) ease-in-out infinite;
+}
+
+:root.ion-palette-dark .soft-aura {
+  box-shadow:
+    0 30px 90px color-mix(in srgb, var(--soft-aura-color) 32%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .full-height-shell {
@@ -119,10 +229,13 @@ ion-content.wellness-content {
 
 .soft-panel {
   border: 1px solid var(--app-soft-border);
-  border-radius: var(--app-radius-lg);
-  background: var(--app-surface);
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, var(--app-inset-highlight), transparent 72%),
+    var(--app-surface);
   box-shadow: var(--app-card-shadow);
-  backdrop-filter: blur(20px);
+  backdrop-filter: var(--aura-glass-blur);
+  -webkit-backdrop-filter: var(--aura-glass-blur);
 }
 
 .stack {
@@ -143,20 +256,20 @@ ion-content.wellness-content {
 
 .primary-action {
   margin-top: 18px;
-  --background: linear-gradient(135deg, var(--ion-color-primary), var(--ion-color-secondary) 72%);
-  --background-activated: linear-gradient(135deg, var(--ion-color-primary-shade), var(--ion-color-secondary-shade) 72%);
-  --color: var(--app-on-accent);
-  --border-radius: 17px;
+  --background: linear-gradient(135deg, color-mix(in srgb, var(--ion-color-secondary) 88%, #ffffff), color-mix(in srgb, var(--ion-color-primary) 76%, var(--ion-color-secondary)) 100%);
+  --background-activated: linear-gradient(135deg, var(--ion-color-secondary-shade), var(--ion-color-primary-shade) 100%);
+  --color: #ffffff;
+  --border-radius: 18px;
   --box-shadow:
-    0 13px 28px rgba(var(--ion-color-secondary-rgb), 0.18),
-    0 4px 14px rgba(var(--ion-color-primary-rgb), 0.08);
+    0 14px 30px rgba(var(--ion-color-secondary-rgb), 0.2),
+    0 4px 14px rgba(var(--ion-color-primary-rgb), 0.1);
   min-height: 54px;
   font-weight: 740;
   letter-spacing: 0;
 }
 
 .secondary-action {
-  --border-radius: 17px;
+  --border-radius: 18px;
   --box-shadow: none;
   min-height: 48px;
   font-weight: 700;
@@ -175,7 +288,7 @@ ion-button.ion-activated::part(native) {
 }
 
 ion-button[fill="outline"] {
-  --border-color: var(--app-soft-border);
+  --border-color: var(--app-control-border);
   --color: var(--app-outline-button-color);
   --background: var(--app-outline-button-background);
   --background-activated: var(--app-outline-button-background-activated);
@@ -235,6 +348,632 @@ html[dir="rtl"] ion-icon[name="chevron-back-outline"] {
   display: flex;
   flex-direction: column;
   padding-bottom: calc(20px + env(safe-area-inset-bottom));
+}
+
+.mood-theme {
+  --checkin-bg:
+    radial-gradient(circle at 50% 18%, color-mix(in srgb, var(--mood-accent) 18%, transparent), transparent 32%),
+    radial-gradient(circle at 50% 88%, color-mix(in srgb, var(--mood-accent) 13%, transparent), transparent 32%),
+    linear-gradient(180deg, var(--mood-bg-top) 0%, var(--mood-bg-mid) 52%, var(--mood-bg-bottom) 100%);
+  --checkin-bottom-background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--mood-bg-bottom) 90%, transparent) 62%);
+  --mood-accent: #35a8bd;
+  --mood-accent-rgb: 53, 168, 189;
+  --mood-bg-top: #f4faf9;
+  --mood-bg-mid: #eaf5f3;
+  --mood-bg-bottom: #dceeed;
+  --mood-ink: #233039;
+  --mood-muted: rgba(35, 48, 57, 0.68);
+  --mood-subtle: rgba(35, 48, 57, 0.52);
+  --mood-nav-surface: rgba(255, 255, 255, 0.52);
+  --mood-nav-border: rgba(255, 255, 255, 0.66);
+  --mood-range-track: rgba(76, 91, 101, 0.13);
+  --mood-range-fill: color-mix(in srgb, var(--mood-accent) 58%, rgba(255, 255, 255, 0.74));
+  --mood-knob: #ffffff;
+  --mood-button-background: color-mix(in srgb, var(--mood-accent) 88%, #ffffff);
+  --mood-button-background-activated: color-mix(in srgb, var(--mood-accent) 88%, #111827);
+  --mood-button-text: #ffffff;
+  --mood-button-shadow: 0 14px 30px rgba(var(--mood-accent-rgb), 0.16);
+  --mood-bloom-fill:
+    radial-gradient(circle at 44% 42%, rgba(255, 255, 255, 0.84), transparent 22%),
+    radial-gradient(circle at 50% 52%, color-mix(in srgb, var(--mood-accent) 32%, #ffffff), transparent 48%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.66), color-mix(in srgb, var(--mood-accent) 18%, rgba(255, 255, 255, 0.5)));
+  --mood-bloom-core:
+    radial-gradient(circle at 42% 34%, rgba(255, 255, 255, 0.74), transparent 24%),
+    radial-gradient(circle, color-mix(in srgb, var(--mood-accent) 52%, #ffffff), color-mix(in srgb, var(--mood-accent) 18%, #ffffff) 68%, transparent 69%);
+  --mood-bloom-edge: rgba(255, 255, 255, 0.2);
+  --mood-bloom-line: color-mix(in srgb, var(--mood-accent) 18%, rgba(255, 255, 255, 0.34));
+  --mood-chip-background: rgba(255, 255, 255, 0.54);
+  --mood-chip-border: rgba(255, 255, 255, 0.7);
+  --mood-chip-text: var(--mood-ink);
+  --mood-chip-selected-background: color-mix(in srgb, var(--mood-accent) 20%, rgba(255, 255, 255, 0.72));
+  --mood-chip-selected-border: color-mix(in srgb, var(--mood-accent) 48%, rgba(255, 255, 255, 0.72));
+  --mood-chip-shadow: 0 10px 22px rgba(var(--mood-accent-rgb), 0.12);
+  --mood-divider: color-mix(in srgb, var(--mood-ink) 10%, transparent);
+}
+
+.mood-theme--1 {
+  --mood-accent: #5b3a8e;
+  --mood-accent-rgb: 91, 58, 142;
+  --mood-bg-top: #f1eefb;
+  --mood-bg-mid: #e3e1f4;
+  --mood-bg-bottom: #d5d1eb;
+  --mood-ink: #262641;
+  --mood-button-text: #ffffff;
+}
+
+.mood-theme--2 {
+  --mood-accent: #4452b5;
+  --mood-accent-rgb: 68, 82, 181;
+  --mood-bg-top: #f1f6ff;
+  --mood-bg-mid: #e2ecfa;
+  --mood-bg-bottom: #d2e1f3;
+  --mood-ink: #213047;
+  --mood-button-text: #ffffff;
+}
+
+.mood-theme--3 {
+  --mood-accent: #6f8dc8;
+  --mood-accent-rgb: 111, 141, 200;
+  --mood-bg-top: #f2f8ff;
+  --mood-bg-mid: #e3effa;
+  --mood-bg-bottom: #d4e7f5;
+  --mood-ink: #243244;
+  --mood-button-text: #ffffff;
+}
+
+.mood-theme--4 {
+  --mood-accent: #78c9cb;
+  --mood-accent-rgb: 120, 201, 203;
+  --mood-bg-top: #f6fbfa;
+  --mood-bg-mid: #ebf5f4;
+  --mood-bg-bottom: #dceeed;
+  --mood-ink: #25333a;
+  --mood-button-text: #ffffff;
+}
+
+.mood-theme--5 {
+  --mood-accent: #8aa378;
+  --mood-accent-rgb: 138, 163, 120;
+  --mood-bg-top: #f4fbf0;
+  --mood-bg-mid: #e4f1de;
+  --mood-bg-bottom: #d3e8cf;
+  --mood-ink: #243726;
+  --mood-button-text: #ffffff;
+}
+
+.mood-theme--6 {
+  --mood-accent: #d89a4a;
+  --mood-accent-rgb: 216, 154, 74;
+  --mood-bg-top: #fff9e4;
+  --mood-bg-mid: #f8edbd;
+  --mood-bg-bottom: #ebdf9f;
+  --mood-ink: #453712;
+  --mood-button-text: #ffffff;
+}
+
+.mood-theme--7 {
+  --mood-accent: #ee806c;
+  --mood-accent-rgb: 238, 128, 108;
+  --mood-bg-top: #fff3e4;
+  --mood-bg-mid: #ffddb8;
+  --mood-bg-bottom: #ffc786;
+  --mood-ink: #4a2d14;
+  --mood-button-text: #ffffff;
+}
+
+:root.ion-palette-dark .mood-theme {
+  --checkin-bg:
+    radial-gradient(circle at 50% 22%, color-mix(in srgb, var(--mood-accent) 28%, transparent), transparent 32%),
+    radial-gradient(circle at 50% 90%, color-mix(in srgb, var(--mood-accent) 18%, transparent), transparent 34%),
+    linear-gradient(180deg, var(--mood-bg-top) 0%, var(--mood-bg-mid) 52%, var(--mood-bg-bottom) 100%);
+  --checkin-bottom-background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--mood-bg-bottom) 96%, transparent) 56%);
+  --mood-bg-top: #30383a;
+  --mood-bg-mid: #222c2e;
+  --mood-bg-bottom: #121718;
+  --mood-ink: #f6f1ff;
+  --mood-muted: rgba(246, 241, 255, 0.72);
+  --mood-subtle: rgba(246, 241, 255, 0.56);
+  --mood-nav-surface: rgba(255, 255, 255, 0.08);
+  --mood-nav-border: rgba(255, 255, 255, 0.13);
+  --mood-range-track: rgba(255, 255, 255, 0.14);
+  --mood-range-fill: color-mix(in srgb, var(--mood-accent) 28%, rgba(255, 255, 255, 0.18));
+  --mood-knob: #ffffff;
+  --mood-button-text: #ffffff;
+  --mood-button-shadow: 0 14px 30px rgba(var(--mood-accent-rgb), 0.2);
+  --mood-bloom-fill:
+    radial-gradient(circle at 44% 42%, rgba(255, 255, 255, 0.18), transparent 23%),
+    radial-gradient(circle at 50% 52%, color-mix(in srgb, var(--mood-accent) 42%, transparent), transparent 48%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.18), color-mix(in srgb, var(--mood-accent) 22%, transparent));
+  --mood-bloom-core:
+    radial-gradient(circle at 42% 34%, rgba(255, 255, 255, 0.26), transparent 24%),
+    radial-gradient(circle, color-mix(in srgb, var(--mood-accent) 62%, #ffffff), color-mix(in srgb, var(--mood-accent) 26%, transparent) 68%, transparent 69%);
+  --mood-bloom-edge: rgba(255, 255, 255, 0.11);
+  --mood-bloom-line: color-mix(in srgb, var(--mood-accent) 24%, rgba(255, 255, 255, 0.18));
+  --mood-chip-background: rgba(255, 255, 255, 0.1);
+  --mood-chip-border: rgba(255, 255, 255, 0.1);
+  --mood-chip-text: rgba(255, 255, 255, 0.88);
+  --mood-chip-selected-background: color-mix(in srgb, var(--mood-accent) 24%, rgba(255, 255, 255, 0.12));
+  --mood-chip-selected-border: color-mix(in srgb, var(--mood-accent) 42%, rgba(255, 255, 255, 0.2));
+  --mood-chip-shadow: 0 12px 26px rgba(var(--mood-accent-rgb), 0.16);
+  --mood-divider: rgba(255, 255, 255, 0.1);
+}
+
+:root.ion-palette-dark .mood-theme--1 {
+  --mood-accent: #7544a8;
+  --mood-accent-rgb: 117, 68, 168;
+  --mood-bg-top: #2a2438;
+  --mood-bg-mid: #211c2f;
+  --mood-bg-bottom: #11101a;
+}
+
+:root.ion-palette-dark .mood-theme--2 {
+  --mood-accent: #4556c7;
+  --mood-accent-rgb: 69, 86, 199;
+  --mood-bg-top: #2b3447;
+  --mood-bg-mid: #20293d;
+  --mood-bg-bottom: #101724;
+}
+
+:root.ion-palette-dark .mood-theme--3 {
+  --mood-accent: #6f8dc8;
+  --mood-accent-rgb: 111, 141, 200;
+  --mood-bg-top: #2d3a4c;
+  --mood-bg-mid: #223043;
+  --mood-bg-bottom: #111a27;
+}
+
+:root.ion-palette-dark .mood-theme--4 {
+  --mood-accent: #78c9cb;
+  --mood-accent-rgb: 120, 201, 203;
+  --mood-bg-top: #303a3a;
+  --mood-bg-mid: #232f30;
+  --mood-bg-bottom: #111819;
+}
+
+:root.ion-palette-dark .mood-theme--5 {
+  --mood-accent: #6d8f66;
+  --mood-accent-rgb: 109, 143, 102;
+  --mood-bg-top: #2c3b27;
+  --mood-bg-mid: #22341f;
+  --mood-bg-bottom: #11190f;
+}
+
+:root.ion-palette-dark .mood-theme--6 {
+  --mood-accent: #c48b4c;
+  --mood-accent-rgb: 196, 139, 76;
+  --mood-bg-top: #473d2b;
+  --mood-bg-mid: #352d20;
+  --mood-bg-bottom: #19130b;
+}
+
+:root.ion-palette-dark .mood-theme--7 {
+  --mood-accent: #ee806c;
+  --mood-accent-rgb: 238, 128, 108;
+  --mood-bg-top: #56381f;
+  --mood-bg-mid: #3f2917;
+  --mood-bg-bottom: #1c1008;
+}
+
+.reflect-flow-shell {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  max-width: none;
+  min-height: 100%;
+  overflow: hidden;
+  padding: calc(8px + env(safe-area-inset-top)) 22px calc(14px + env(safe-area-inset-bottom));
+  background: var(--checkin-bg);
+  color: var(--mood-ink);
+  animation: reflect-flow-enter 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  transition:
+    background 900ms ease,
+    color 620ms ease;
+}
+
+.reflect-flow-shell::before,
+.reflect-flow-shell::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 999px;
+  transition:
+    background 900ms ease,
+    opacity 900ms ease,
+    filter 900ms ease;
+}
+
+.reflect-flow-shell::before {
+  inset: 6% 4% auto;
+  height: min(42vh, 360px);
+  background: radial-gradient(circle, rgba(var(--mood-accent-rgb), 0.12), transparent 68%);
+  filter: blur(28px);
+  opacity: 0.86;
+}
+
+.reflect-flow-shell::after {
+  left: 8%;
+  right: 8%;
+  bottom: -16%;
+  height: min(34vh, 300px);
+  background: radial-gradient(circle, color-mix(in srgb, var(--mood-accent) 12%, transparent), transparent 70%);
+  filter: blur(34px);
+}
+
+.reflect-flow-shell > * {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 520px);
+  margin-inline: auto;
+}
+
+.reflect-flow-shell .checkin-nav {
+  display: grid;
+  grid-template-columns: 46px 1fr 46px;
+  align-items: center;
+  min-height: 48px;
+  margin-bottom: clamp(12px, 2.4vh, 20px);
+}
+
+.reflect-flow-shell .nav-button {
+  width: 46px;
+  height: 46px;
+  margin: 0;
+  overflow: hidden;
+  contain: paint;
+  border-radius: 999px;
+  background: transparent;
+  --background: transparent;
+  --background-activated: transparent;
+  --background-focused: transparent;
+  --background-hover: transparent;
+  --box-shadow: none;
+  --border-radius: 999px;
+  --color: var(--mood-ink);
+  --padding-bottom: 0;
+  --padding-end: 0;
+  --padding-start: 0;
+  --padding-top: 0;
+  --ripple-color: color-mix(in srgb, var(--mood-accent) 24%, transparent);
+}
+
+.reflect-flow-shell .nav-button::part(native) {
+  border-radius: 999px;
+  border: 1px solid var(--mood-nav-border);
+  background: var(--mood-nav-surface);
+  box-shadow: 0 12px 24px rgba(30, 25, 54, 0.08);
+  padding: 0;
+  overflow: hidden;
+  backdrop-filter: blur(18px) saturate(122%);
+  -webkit-backdrop-filter: blur(18px) saturate(122%);
+  transition:
+    background 720ms ease,
+    border-color 720ms ease,
+    box-shadow 240ms ease,
+    transform 180ms var(--app-ease);
+}
+
+.reflect-flow-shell .nav-button ion-icon {
+  font-size: 1.46rem;
+  transition: color 620ms ease;
+}
+
+.reflect-flow-shell .checkin-nav-title {
+  color: var(--mood-ink);
+  font-size: clamp(1.06rem, 4.3vw, 1.22rem);
+  font-weight: 790;
+  text-align: center;
+  transition: color 620ms ease;
+}
+
+.flow-progress {
+  display: inline-grid;
+  grid-auto-flow: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+}
+
+.flow-progress span {
+  width: 30px;
+  height: 3px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--mood-ink) 18%, transparent);
+  transition:
+    background 780ms ease,
+    box-shadow 780ms ease,
+    transform 220ms var(--app-ease);
+}
+
+.flow-progress span.active {
+  background: var(--mood-accent);
+  box-shadow: 0 0 16px rgba(var(--mood-accent-rgb), 0.34);
+}
+
+.reflect-flow-shell .question-block {
+  max-width: 330px;
+  margin: 0 auto clamp(16px, 3vh, 24px);
+  text-align: center;
+}
+
+.reflect-flow-shell .question-block h1 {
+  color: var(--mood-ink);
+  font-size: clamp(1.42rem, 6.2vw, 1.82rem);
+  font-weight: 820;
+  line-height: 1.16;
+  transition: color 620ms ease;
+}
+
+.reflect-flow-shell .question-block p:last-child {
+  color: var(--mood-muted);
+}
+
+.reflect-flow-shell .bottom-action {
+  position: sticky;
+  bottom: 0;
+  margin-top: auto;
+  padding-top: 14px;
+  padding-bottom: calc(8px + env(safe-area-inset-bottom));
+  background: var(--checkin-bottom-background);
+  transition: background 900ms ease;
+}
+
+.reflect-flow-shell .primary-action {
+  margin: 0;
+  --background: var(--mood-button-background);
+  --background-activated: var(--mood-button-background-activated);
+  --border-radius: 18px;
+  --box-shadow: var(--mood-button-shadow);
+  --color: var(--mood-button-text);
+  min-height: 54px;
+  font-size: 0.96rem;
+  font-weight: 760;
+}
+
+.reflect-flow-shell .primary-action::part(native) {
+  transition:
+    background 820ms ease,
+    color 620ms ease,
+    box-shadow 820ms ease,
+    transform 180ms var(--app-ease),
+    opacity 180ms ease;
+}
+
+.selected-mood-summary {
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  margin: 0 auto clamp(18px, 3.2vh, 28px);
+  text-align: center;
+  animation: reflect-step-content-enter 360ms 60ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.selected-mood-summary h1 {
+  margin: 0;
+  color: var(--mood-ink);
+  font-size: clamp(1.08rem, 4.8vw, 1.36rem);
+  font-weight: 820;
+  letter-spacing: 0;
+  transition: color 620ms ease;
+}
+
+.mini-mood-bloom {
+  --mini-radius-outer: 48% 52% 45% 55%;
+  --mini-radius-middle: 52% 48% 56% 44%;
+  --mini-radius-core: 46% 54% 45% 55%;
+  --mini-outer-rotation: 12deg;
+  --mini-middle-rotation: -14deg;
+  --mini-scale: 1;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 92px;
+  aspect-ratio: 1;
+  transform: scale(var(--mini-scale));
+}
+
+.mini-mood-bloom .bloom-layer {
+  position: absolute;
+  border: 0;
+  background: var(--mood-bloom-fill);
+  box-shadow:
+    0 18px 44px rgba(var(--mood-accent-rgb), 0.16),
+    inset 0 1px 1px rgba(255, 255, 255, 0.18);
+  filter: blur(0.2px);
+}
+
+.mini-mood-bloom .bloom-layer--outer {
+  inset: 0;
+  border-radius: var(--mini-radius-outer);
+  transform: rotate(var(--mini-outer-rotation));
+  opacity: 0.38;
+}
+
+.mini-mood-bloom .bloom-layer--middle {
+  inset: 13%;
+  border-radius: var(--mini-radius-middle);
+  transform: rotate(var(--mini-middle-rotation));
+  opacity: 0.5;
+}
+
+.mini-mood-bloom .bloom-layer--core {
+  inset: 28%;
+  border-radius: var(--mini-radius-core);
+  background: var(--mood-bloom-core);
+  opacity: 0.78;
+}
+
+.mini-mood-bloom .bloom-center {
+  width: 10px;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 16px rgba(var(--mood-accent-rgb), 0.36);
+}
+
+.mini-mood-bloom.mood-bloom--level-1 {
+  --mini-radius-outer: 40% 60% 42% 58%;
+  --mini-radius-middle: 46% 54% 40% 60%;
+  --mini-radius-core: 43% 57% 40% 60%;
+  --mini-outer-rotation: 18deg;
+  --mini-middle-rotation: -18deg;
+  --mini-scale: 1.05;
+}
+
+.mini-mood-bloom.mood-bloom--level-2 {
+  --mini-radius-outer: 44% 56% 50% 50%;
+  --mini-radius-middle: 52% 48% 46% 54%;
+  --mini-radius-core: 48% 52% 44% 56%;
+  --mini-outer-rotation: -12deg;
+  --mini-middle-rotation: 19deg;
+}
+
+.mini-mood-bloom.mood-bloom--level-3 {
+  --mini-radius-outer: 48% 52% 56% 44%;
+  --mini-radius-middle: 44% 56% 53% 47%;
+  --mini-radius-core: 50% 50% 43% 57%;
+  --mini-outer-rotation: 8deg;
+  --mini-middle-rotation: -22deg;
+}
+
+.mini-mood-bloom.mood-bloom--level-4 {
+  --mini-radius-outer: 50%;
+  --mini-radius-middle: 50%;
+  --mini-radius-core: 50%;
+  --mini-outer-rotation: 0deg;
+  --mini-middle-rotation: 0deg;
+  --mini-scale: 0.96;
+}
+
+.mini-mood-bloom.mood-bloom--level-5 {
+  --mini-radius-outer: 43% 57% 52% 48%;
+  --mini-radius-middle: 50% 50% 44% 56%;
+  --mini-radius-core: 46% 54% 50% 50%;
+  --mini-outer-rotation: 14deg;
+  --mini-middle-rotation: -14deg;
+}
+
+.mini-mood-bloom.mood-bloom--level-6 {
+  --mini-radius-outer: 38% 62% 42% 58%;
+  --mini-radius-middle: 44% 56% 36% 64%;
+  --mini-radius-core: 40% 60% 42% 58%;
+  --mini-outer-rotation: 20deg;
+  --mini-middle-rotation: -18deg;
+  --mini-scale: 1.04;
+}
+
+.mini-mood-bloom.mood-bloom--level-7 {
+  --mini-radius-outer: 36% 64% 36% 64%;
+  --mini-radius-middle: 42% 58% 34% 66%;
+  --mini-radius-core: 38% 62% 38% 62%;
+  --mini-outer-rotation: 28deg;
+  --mini-middle-rotation: -25deg;
+  --mini-scale: 1.06;
+}
+
+.flow-question {
+  margin: 0 0 20px;
+  color: var(--mood-ink);
+  font-size: clamp(1.18rem, 5vw, 1.36rem);
+  font-weight: 760;
+  line-height: 1.22;
+}
+
+.selection-pane {
+  padding-top: 2px;
+  animation: reflect-step-content-enter 360ms 90ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.selection-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid var(--mood-divider);
+  padding-bottom: 14px;
+}
+
+.selection-toolbar p {
+  margin: 0;
+  color: var(--mood-ink);
+  font-size: clamp(1rem, 4.2vw, 1.18rem);
+  font-weight: 760;
+  line-height: 1.25;
+  transition: color 620ms ease;
+}
+
+.selection-toolbar ion-button {
+  margin: 0;
+  --color: var(--mood-muted);
+  font-weight: 720;
+}
+
+.save-error {
+  margin: 0 0 10px;
+  border: 1px solid var(--app-danger-border);
+  border-radius: 16px;
+  background: var(--app-danger-soft);
+  color: var(--ion-color-danger);
+  font-size: 0.9rem;
+  font-weight: 650;
+  line-height: 1.35;
+  padding: 12px 14px;
+}
+
+.success-feedback {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  width: auto;
+  max-width: none;
+  margin: 0;
+  padding: 24px;
+  pointer-events: none;
+  background: transparent;
+  animation: success-toast-in 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.success-feedback__panel {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  border: 1px solid var(--mood-nav-border);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(var(--mood-accent-rgb), 0.18), transparent 52%),
+    color-mix(in srgb, var(--mood-nav-surface) 86%, rgba(255, 255, 255, 0.2));
+  box-shadow: 0 22px 54px rgba(0, 0, 0, 0.16);
+  color: var(--mood-ink);
+  padding: 14px 18px 14px 15px;
+  backdrop-filter: blur(22px) saturate(125%);
+  -webkit-backdrop-filter: blur(22px) saturate(125%);
+}
+
+.success-feedback__icon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: var(--mood-button-background);
+  color: var(--mood-button-text);
+  box-shadow: 0 8px 18px rgba(var(--mood-accent-rgb), 0.18);
+}
+
+.success-feedback__icon ion-icon {
+  font-size: 1.12rem;
+}
+
+.success-feedback__panel p {
+  margin: 0;
+  font-size: 0.96rem;
+  font-weight: 760;
 }
 
 .checkin-nav {
@@ -344,10 +1083,66 @@ ion-tab-bar {
 
 @media (prefers-reduced-motion: reduce) {
   .page-shell,
+  .reflect-flow-shell,
+  .reflect-flow-shell::before,
+  .reflect-flow-shell::after,
+  .soft-aura,
+  .selected-mood-summary,
+  .selection-pane,
+  .success-feedback,
   ion-button::part(native),
   .step-dots span {
     animation: none;
     transition: none;
+  }
+}
+
+@keyframes soft-aura-breathe {
+  0%,
+  100% {
+    transform: scale(0.985) rotate(-1deg);
+    filter: saturate(1.02);
+  }
+
+  50% {
+    transform: scale(1.025) rotate(1deg);
+    filter: saturate(1.12);
+  }
+}
+
+@keyframes reflect-flow-enter {
+  from {
+    opacity: 0.86;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes reflect-step-content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes success-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 

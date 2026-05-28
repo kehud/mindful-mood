@@ -6,6 +6,7 @@ import { ChipOptionComponent } from '../chip-option/chip-option.component';
 export interface ChipSelectorOption {
   readonly value: string;
   readonly label: string;
+  readonly icon?: string;
 }
 
 @Component({
@@ -29,6 +30,10 @@ export class ChipSelectorComponent {
 
   optionLabel(option: string | ChipSelectorOption): string {
     return typeof option === 'string' ? option : option.label;
+  }
+
+  optionIcon(option: string | ChipSelectorOption): string {
+    return typeof option === 'string' ? '' : option.icon ?? '';
   }
 
   isSelected(option: string | ChipSelectorOption): boolean {

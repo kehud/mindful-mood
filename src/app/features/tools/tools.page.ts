@@ -9,5 +9,6 @@ import { TranslatePipe } from '../../shared/pipes/translate.pipe';
   standalone: true,
   imports: [IonicModule, TranslatePipe, WellnessHeaderComponent],
   templateUrl: './tools.page.html',
+  styleUrls: ['./tools.page.scss'],
 })
 export class ToolsPage {}

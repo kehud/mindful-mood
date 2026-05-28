@@ -1,49 +1,29 @@
-<ion-content class="wellness-content" fullscreen>
-  <main class="page-shell checkin-shell">
+<ion-content class="checkin-immersive-content" fullscreen>
+  <main class="page-shell checkin-shell reflect-flow-shell mood-theme" [ngClass]="moodThemeClass(selectedMoodValue)">
     <nav class="checkin-nav">
-      <ion-button class="nav-button" fill="clear" size="small" routerLink="/check-in/mood">
-        <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
-        {{ 'common.back' | t }}
+      <ion-button class="nav-button" fill="clear" routerLink="/check-in/mood" [attr.aria-label]="'common.back' | t">
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
       </ion-button>
-      <span>{{ 'checkIn.progress' | t: { current: 2, total: 4 } }}</span>
+      <div class="flow-progress" [attr.aria-label]="'checkIn.progress' | t: { current: 2, total: 3 }">
+        <span class="active"></span>
+        <span class="active"></span>
+        <span></span>
+      </div>
+      <ion-button class="nav-button" fill="clear" routerLink="/tabs/home" [attr.aria-label]="'common.cancel' | t">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
     </nav>
 
-    <div class="step-dots" aria-hidden="true">
-      <span></span>
-      <span class="active"></span>
-      <span></span>
-      <span></span>
-    </div>
-
-    <section class="question-block">
-      <p class="eyebrow">{{ 'checkIn.emotions.eyebrow' | t }}</p>
-      <h1>{{ 'checkIn.emotions.heading' | t }}</h1>
-      <p>{{ 'checkIn.emotions.subtitle' | t }}</p>
-    </section>
-
     <ng-container *ngIf="emotionOptionsState$ | async as emotionConfig">
-      <section class="selection-card">
+      <section class="selection-pane">
         <div class="config-loading" *ngIf="emotionConfig.loading && !emotionConfig.options.length" aria-live="polite">
           <ion-spinner name="crescent"></ion-spinner>
           <span>{{ 'checkIn.emotions.loading' | t }}</span>
         </div>
 
-        <div class="selection-summary">
-          <span>{{ selectedEmotions.length }}</span>
-          <p>{{ selectedEmotions.length === 1 ? ('checkIn.emotions.oneSelected' | t) : ('checkIn.emotions.manySelected' | t) }}</p>
-        </div>
-
-        <div class="emotion-list-header">
-          <p>{{ showAllEmotions || !suggestedEmotionOptions(emotionConfig.options).length ? ('checkIn.emotions.all' | t) : ('checkIn.emotions.suggested' | t) }}</p>
-          <ion-button
-            *ngIf="shouldShowAllButton(emotionConfig.options)"
-            fill="clear"
-            size="small"
-            type="button"
-            (click)="showAll()"
-          >
-            {{ 'checkIn.emotions.showAll' | t }}
-          </ion-button>
+        <div class="selection-toolbar">
+          <p class="selection-title">{{ 'checkIn.emotions.heading' | t }}</p>
+          <p class="selection-subtitle">{{ 'checkIn.emotions.subtitle' | t }}</p>
         </div>
 
         <app-chip-selector
@@ -54,10 +34,16 @@
           [selectedValues]="selectedEmotions"
           (selectedValuesChange)="selectedEmotions = $event"
         ></app-chip-selector>
+
+        <div class="show-more-row" *ngIf="shouldShowAllButton(emotionConfig.options)">
+          <ion-button fill="clear" size="small" type="button" (click)="toggleShowAll()">
+            {{ showAllToggleLabel(showAllEmotions) }}
+          </ion-button>
+        </div>
       </section>
 
       <footer class="bottom-action">
-        <ion-button class="primary-action" expand="block" (click)="next()">{{ 'common.continue' | t }}</ion-button>
+        <ion-button class="primary-action" expand="block" (click)="next()">{{ 'common.next' | t }}</ion-button>
       </footer>
     </ng-container>
   </main>

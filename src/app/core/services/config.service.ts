@@ -11,13 +11,13 @@ import {
 } from '../models/config-option.model';
 
 export const DEFAULT_MOOD_OPTIONS: readonly MoodOption[] = [
-  { value: 1, label: 'Very unpleasant', translations: { en: 'Very unpleasant', he: 'מאוד לא נעים' }, icon: 'rainy-outline', color: '#B8A6FF', order: 1 },
-  { value: 2, label: 'Unpleasant', translations: { en: 'Unpleasant', he: 'לא נעים' }, icon: 'cloud-outline', color: '#B8A6FF', order: 2 },
-  { value: 3, label: 'Slightly unpleasant', translations: { en: 'Slightly unpleasant', he: 'קצת לא נעים' }, icon: 'partly-sunny-outline', color: '#8EDFD3', order: 3 },
-  { value: 4, label: 'Neutral', translations: { en: 'Neutral', he: 'ניטרלי' }, icon: 'ellipse-outline', color: '#B8A6FF', order: 4 },
-  { value: 5, label: 'Slightly pleasant', translations: { en: 'Slightly pleasant', he: 'קצת נעים' }, icon: 'leaf-outline', color: '#8EDFD3', order: 5 },
-  { value: 6, label: 'Pleasant', translations: { en: 'Pleasant', he: 'נעים' }, icon: 'sunny-outline', color: '#F4C7D9', order: 6 },
-  { value: 7, label: 'Very pleasant', translations: { en: 'Very pleasant', he: 'מאוד נעים' }, icon: 'heart-outline', color: '#F4C7D9', order: 7 },
+  { value: 1, label: 'Very unpleasant', translations: { en: 'Very unpleasant', he: 'מאוד לא נעים' }, icon: 'rainy-outline', color: '#5B3A8E', order: 1 },
+  { value: 2, label: 'Unpleasant', translations: { en: 'Unpleasant', he: 'לא נעים' }, icon: 'cloud-outline', color: '#4452B5', order: 2 },
+  { value: 3, label: 'Slightly unpleasant', translations: { en: 'Slightly unpleasant', he: 'קצת לא נעים' }, icon: 'partly-sunny-outline', color: '#6F8DC8', order: 3 },
+  { value: 4, label: 'Neutral', translations: { en: 'Neutral', he: 'ניטרלי' }, icon: 'ellipse-outline', color: '#78C9CB', order: 4 },
+  { value: 5, label: 'Slightly pleasant', translations: { en: 'Slightly pleasant', he: 'קצת נעים' }, icon: 'leaf-outline', color: '#8AA378', order: 5 },
+  { value: 6, label: 'Pleasant', translations: { en: 'Pleasant', he: 'נעים' }, icon: 'sunny-outline', color: '#D89A4A', order: 6 },
+  { value: 7, label: 'Very pleasant', translations: { en: 'Very pleasant', he: 'מאוד נעים' }, icon: 'heart-outline', color: '#EE806C', order: 7 },
 ];
 
 export const DEFAULT_EMOTION_OPTIONS: readonly EmotionOption[] = [

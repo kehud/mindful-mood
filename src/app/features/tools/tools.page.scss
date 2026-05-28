@@ -1,0 +1,75 @@
+.tool-tile h2 {
+  margin: 0;
+  color: var(--app-text);
+  font-weight: 800;
+  line-height: 1.16;
+}
+
+.tool-tile p {
+  margin: 5px 0 0;
+  color: var(--app-muted);
+  line-height: 1.42;
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.tool-tile {
+  position: relative;
+  display: grid;
+  align-content: space-between;
+  gap: 18px;
+  min-height: 128px;
+  border: 1px solid var(--app-soft-border);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 12% -10%, rgba(var(--ion-color-primary-rgb), 0.12), transparent 46%),
+    linear-gradient(180deg, var(--app-inset-highlight), transparent 72%),
+    var(--app-surface);
+  box-shadow: var(--app-card-shadow);
+  padding: 15px;
+  overflow: hidden;
+  backdrop-filter: var(--aura-glass-blur);
+  -webkit-backdrop-filter: var(--aura-glass-blur);
+}
+
+.tool-tile.featured {
+  background:
+    radial-gradient(circle at 20% -6%, rgba(var(--ion-color-secondary-rgb), 0.16), transparent 48%),
+    linear-gradient(180deg, var(--app-inset-highlight), transparent 72%),
+    var(--app-surface);
+}
+
+.tool-tile ion-icon {
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 34% 24%, rgba(255, 255, 255, 0.4), transparent 38%),
+    linear-gradient(145deg, rgba(var(--ion-color-primary-rgb), 0.18), rgba(var(--ion-color-secondary-rgb), 0.14));
+  box-shadow:
+    inset 0 1px 0 var(--app-inset-highlight),
+    0 12px 24px rgba(var(--ion-color-primary-rgb), 0.1);
+  color: var(--app-secondary-text);
+  font-size: 1.3rem;
+  padding: 10px;
+}
+
+.tool-tile h2 {
+  font-size: 1rem;
+}
+
+.tool-tile p {
+  font-size: 0.9rem;
+}
+
+@media (max-width: 360px) {
+  .tools-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -6,3 +6,15 @@
   align-items: center;
   direction: inherit;
 }
+
+:host-context(.reflect-flow-shell) .chip-selector {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  justify-content: stretch;
+  align-items: stretch;
+  gap: 10px;
+}
+
+:host-context(.reflect-flow-shell) app-chip-option {
+  min-width: 0;
+}

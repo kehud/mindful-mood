@@ -98,8 +98,8 @@ const routes: Routes = [
       },
       {
         path: 'review',
-        loadComponent: () =>
-          import('./features/check-in/review-save/review-save.page').then((m) => m.ReviewSavePage),
+        redirectTo: 'influences',
+        pathMatch: 'full',
       },
       {
         path: '',

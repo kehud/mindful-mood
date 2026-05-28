@@ -1,61 +1,94 @@
-<ion-content class="wellness-content" fullscreen>
-  <main class="page-shell checkin-shell">
+<ion-content class="checkin-immersive-content" fullscreen>
+  <main class="page-shell checkin-shell reflect-flow-shell mood-theme" [ngClass]="moodThemeClass(selectedMoodValue)">
     <nav class="checkin-nav">
-      <ion-button class="nav-button" fill="clear" size="small" routerLink="/check-in/emotions">
-        <ion-icon slot="start" name="chevron-back-outline"></ion-icon>
-        {{ 'common.back' | t }}
+      <ion-button class="nav-button" fill="clear" routerLink="/check-in/emotions" [attr.aria-label]="'common.back' | t">
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
       </ion-button>
-      <span>{{ 'checkIn.progress' | t: { current: 3, total: 4 } }}</span>
+      <div class="flow-progress" [attr.aria-label]="'checkIn.progress' | t: { current: 3, total: 3 }">
+        <span class="active"></span>
+        <span class="active"></span>
+        <span class="active"></span>
+      </div>
+      <ion-button class="nav-button" fill="clear" routerLink="/tabs/home" [attr.aria-label]="'common.cancel' | t">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
     </nav>
 
-    <div class="step-dots" aria-hidden="true">
-      <span></span>
-      <span></span>
-      <span class="active"></span>
-      <span></span>
-    </div>
-
-    <section class="question-block">
-      <p class="eyebrow">{{ 'checkIn.influences.eyebrow' | t }}</p>
-      <h1>{{ 'checkIn.influences.heading' | t }}</h1>
-      <p>{{ 'checkIn.influences.subtitle' | t }}</p>
-    </section>
-
     <ng-container *ngIf="influenceOptionsState$ | async as influenceConfig">
-      <section class="selection-card">
+      <section class="selection-pane">
         <div class="config-loading" *ngIf="influenceConfig.loading && !influenceConfig.options.length" aria-live="polite">
           <ion-spinner name="crescent"></ion-spinner>
           <span>{{ 'checkIn.influences.loading' | t }}</span>
         </div>
 
-        <div class="selection-summary">
-          <span>{{ selectedInfluences.length }}</span>
-          <p>{{ selectedInfluences.length === 1 ? ('checkIn.influences.oneSelected' | t) : ('checkIn.influences.manySelected' | t) }}</p>
+        <div class="selection-toolbar">
+          <p class="selection-title">{{ 'checkIn.influences.heading' | t }}</p>
+          <p class="selection-subtitle">{{ 'checkIn.influences.subtitle' | t }}</p>
         </div>
 
         <app-chip-selector
           [ariaLabel]="'checkIn.influences.aria' | t"
           tone="peach"
-          [options]="optionItems(influenceConfig.options, currentLanguage())"
+          [options]="optionItems(influenceConfig.options.length > 10 ? influenceConfig.options.slice(0, 10) : influenceConfig.options, currentLanguage())"
           [selectedValues]="selectedInfluences"
           (selectedValuesChange)="selectedInfluences = $event"
         ></app-chip-selector>
+
+        <details class="show-more-disclosure" *ngIf="influenceConfig.options.length > 10" [open]="showAllInfluences">
+          <summary (click)="toggleShowAllInfluences($event)">{{ showAllToggleLabel(showAllInfluences) }}</summary>
+          <app-chip-selector
+            *ngIf="showAllInfluences"
+            [ariaLabel]="'checkIn.influences.aria' | t"
+            tone="peach"
+            [options]="optionItems(influenceConfig.options.slice(10), currentLanguage())"
+            [selectedValues]="selectedInfluences"
+            (selectedValuesChange)="selectedInfluences = $event"
+          ></app-chip-selector>
+        </details>
       </section>
     </ng-container>
 
-    <section class="journal-card">
-      <label for="journal-note">{{ 'checkIn.journal.label' | t }}</label>
-      <ion-textarea
-        id="journal-note"
-        autoGrow="true"
-        rows="6"
-        [placeholder]="'checkIn.journal.label' | t"
-        [(ngModel)]="journalNote"
-      ></ion-textarea>
-    </section>
-
     <footer class="bottom-action">
-      <ion-button class="primary-action" expand="block" (click)="next()">{{ 'common.review' | t }}</ion-button>
+      <p class="save-error" *ngIf="errorMessage">{{ errorMessage }}</p>
+      <ion-button class="primary-action" expand="block" [disabled]="isSaving" (click)="save()">
+        <ion-spinner *ngIf="isSaving" name="crescent"></ion-spinner>
+        <span *ngIf="!isSaving">{{ 'common.done' | t }}</span>
+      </ion-button>
     </footer>
+
   </main>
+
+  <div
+    class="success-feedback"
+    [class.success-feedback--leaving]="isSuccessLeaving"
+    *ngIf="showSuccess"
+    role="status"
+    aria-live="polite"
+  >
+    <div class="success-feedback__content">
+      <div class="success-feedback__aura" aria-hidden="true">
+        <span class="success-feedback__petal success-feedback__petal--one"></span>
+        <span class="success-feedback__petal success-feedback__petal--two"></span>
+        <span class="success-feedback__petal success-feedback__petal--three"></span>
+        <span class="success-feedback__petal success-feedback__petal--four"></span>
+        <span class="success-feedback__petal success-feedback__petal--five"></span>
+        <span class="success-feedback__petal success-feedback__petal--six"></span>
+        <span class="success-feedback__petal success-feedback__petal--seven"></span>
+        <span class="success-feedback__petal success-feedback__petal--eight"></span>
+        <span class="success-feedback__core">
+          <ion-icon name="checkmark-outline"></ion-icon>
+        </span>
+      </div>
+
+      <div class="success-feedback__copy">
+        <h1>{{ 'checkIn.save.success' | t }}</h1>
+        <p>{{ 'checkIn.save.subtitle' | t }}</p>
+        <ion-icon
+          class="success-feedback__heart"
+          name="heart-outline"
+          aria-hidden="true"
+        ></ion-icon>
+      </div>
+    </div>
+  </div>
 </ion-content>

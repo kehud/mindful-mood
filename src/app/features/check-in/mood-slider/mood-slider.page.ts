@@ -1,4 +1,4 @@
-import { AsyncPipe, NgClass, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -11,35 +11,20 @@ import { LocalizationService } from '../../../core/services/localization.service
 import { MoodEntryService } from '../../../core/services/mood-entry.service';
 import { ConfigLabelPipe } from '../../../shared/pipes/config-label.pipe';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
+import { moodBloomClassForLevel, moodThemeClassForLevel } from '../check-in-mood-theme';
 
 const FALLBACK_MOOD_OPTION: MoodOption = {
   value: 4,
   label: 'Neutral',
   icon: 'ellipse-outline',
-  color: '#B8A6FF',
+  color: '#78C9CB',
   order: 4,
-};
-
-const MOOD_TONES = ['very-low', 'low', 'middle', 'high', 'very-high'] as const;
-const MOOD_TONE_LABEL_KEYS: Record<(typeof MOOD_TONES)[number], string> = {
-  'very-low': 'checkIn.mood.tone.veryLow',
-  low: 'checkIn.mood.tone.low',
-  middle: 'checkIn.mood.tone.middle',
-  high: 'checkIn.mood.tone.high',
-  'very-high': 'checkIn.mood.tone.veryHigh',
-};
-const MOOD_SUPPORT_KEYS: Record<(typeof MOOD_TONES)[number], string> = {
-  'very-low': 'checkIn.mood.support.veryLow',
-  low: 'checkIn.mood.support.low',
-  middle: 'checkIn.mood.support.middle',
-  high: 'checkIn.mood.support.high',
-  'very-high': 'checkIn.mood.support.veryHigh',
 };
 
 @Component({
   selector: 'app-mood-slider',
   standalone: true,
-  imports: [AsyncPipe, ConfigLabelPipe, FormsModule, IonicModule, NgClass, NgFor, NgIf, RouterLink, TranslatePipe],
+  imports: [AsyncPipe, ConfigLabelPipe, FormsModule, IonicModule, NgClass, NgIf, RouterLink, TranslatePipe],
   templateUrl: './mood-slider.page.html',
   styleUrls: ['./mood-slider.page.scss'],
 })
@@ -54,10 +39,6 @@ export class MoodSliderPage {
 
   selectedMood(options: readonly MoodOption[]): MoodOption {
     return this.findClosestMoodOption(Number(this.moodLevel), options);
-  }
-
-  selectMood(level: MoodLevel): void {
-    this.updateMoodLevel(level);
   }
 
   snapMoodLevel(options: readonly MoodOption[]): void {
@@ -92,32 +73,12 @@ export class MoodSliderPage {
     return this.localization.configLabel(options[Math.floor(options.length / 2)]);
   }
 
-  moodVisualTone(mood: MoodOption, options: readonly MoodOption[]): string {
-    return `mood-visual--${this.moodTone(mood, options)}`;
+  moodThemeClass(level: MoodLevel): string {
+    return moodThemeClassForLevel(level);
   }
 
-  moodToneLabel(mood: MoodOption, options: readonly MoodOption[]): string {
-    return this.localization.translate(MOOD_TONE_LABEL_KEYS[this.moodTone(mood, options)]);
-  }
-
-  moodSupportText(mood: MoodOption, options: readonly MoodOption[]): string {
-    return this.localization.translate(MOOD_SUPPORT_KEYS[this.moodTone(mood, options)]);
-  }
-
-  moodVisualScale(mood: MoodOption, options: readonly MoodOption[]): string {
-    return (0.94 + this.moodProgress(mood, options) * 0.12).toFixed(2);
-  }
-
-  moodVisualTilt(mood: MoodOption, options: readonly MoodOption[]): string {
-    return `${(-7 + this.moodProgress(mood, options) * 14).toFixed(1)}deg`;
-  }
-
-  moodVisualLift(mood: MoodOption, options: readonly MoodOption[]): string {
-    return `${(10 - this.moodProgress(mood, options) * 18).toFixed(1)}px`;
-  }
-
-  trackMoodOption(_index: number, option: MoodOption): number {
-    return option.value;
+  moodBloomClass(level: MoodLevel): string {
+    return moodBloomClassForLevel(level);
   }
 
   async next(options: readonly MoodOption[]): Promise<void> {
@@ -138,26 +99,6 @@ export class MoodSliderPage {
     const value = event.detail.value;
 
     return typeof value === 'number' ? value : value.lower;
-  }
-
-  private moodTone(mood: MoodOption, options: readonly MoodOption[]): (typeof MOOD_TONES)[number] {
-    const toneIndex = Math.min(
-      MOOD_TONES.length - 1,
-      Math.max(0, Math.round(this.moodProgress(mood, options) * (MOOD_TONES.length - 1))),
-    );
-
-    return MOOD_TONES[toneIndex];
-  }
-
-  private moodProgress(mood: MoodOption, options: readonly MoodOption[]): number {
-    const min = this.moodRangeMin(options);
-    const max = this.moodRangeMax(options);
-
-    if (min === max) {
-      return 0.5;
-    }
-
-    return Math.min(1, Math.max(0, (mood.value - min) / (max - min)));
   }
 
   private findClosestMoodOption(value: number, options: readonly MoodOption[]): MoodOption {

@@ -1,23 +1,38 @@
+:host {
+  display: inline-flex;
+  min-width: 0;
+}
+
 .chip {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   direction: inherit;
   min-height: 44px;
+  width: 100%;
   border: 1px solid var(--app-strong-border);
   border-radius: 999px;
-  background: var(--app-control-surface-strong);
+  background:
+    linear-gradient(180deg, var(--app-inset-highlight), transparent 80%),
+    var(--app-control-surface-strong);
   color: var(--app-chip-text);
   font: inherit;
   font-weight: 660;
   padding: 0 15px;
   box-shadow: var(--app-control-shadow);
+  backdrop-filter: blur(12px) saturate(122%);
+  -webkit-backdrop-filter: blur(12px) saturate(122%);
   transition:
     background 180ms ease,
     border-color 180ms ease,
     box-shadow 180ms ease,
     color 180ms ease,
     transform 180ms var(--app-ease);
+}
+
+.chip span {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .chip:focus-visible {
@@ -32,18 +47,24 @@
 .chip.selected {
   border-color: var(--app-emotion-border-strong);
   background:
+    linear-gradient(180deg, var(--app-inset-highlight), transparent 78%),
     var(--app-emotion-background-strong),
     var(--app-control-surface-strong);
-  box-shadow: var(--app-emotion-shadow);
+  box-shadow:
+    inset 0 0 0 1px var(--app-emotion-border),
+    var(--app-emotion-shadow);
   color: var(--app-emotion-text);
 }
 
 .chip.selected.blue {
   border-color: var(--app-emotion-border-strong);
   background:
+    linear-gradient(180deg, var(--app-inset-highlight), transparent 78%),
     var(--app-emotion-background-strong),
     var(--app-control-surface-strong);
-  box-shadow: var(--app-emotion-shadow);
+  box-shadow:
+    inset 0 0 0 1px var(--app-emotion-border),
+    var(--app-emotion-shadow);
   color: var(--app-emotion-text);
 }
 
@@ -54,6 +75,7 @@ ion-icon {
 :host-context(.emotion-chip-selector) .chip {
   border-color: var(--app-emotion-border);
   background:
+    linear-gradient(180deg, var(--app-inset-highlight), transparent 78%),
     var(--app-emotion-background),
     var(--app-control-surface);
   color: var(--app-emotion-text);
@@ -62,6 +84,7 @@ ion-icon {
 :host-context(.emotion-chip-selector) .chip.selected {
   border-color: var(--app-emotion-border-strong);
   background:
+    linear-gradient(180deg, var(--app-inset-highlight), transparent 78%),
     var(--app-emotion-background-strong),
     var(--app-control-surface-strong);
   box-shadow:
@@ -75,6 +98,7 @@ ion-icon {
 .chip.peach {
   border-color: var(--app-influence-border);
   background:
+    linear-gradient(180deg, var(--app-inset-highlight), transparent 78%),
     var(--app-influence-background),
     var(--app-control-surface);
   color: var(--app-influence-text);
@@ -83,6 +107,7 @@ ion-icon {
 .chip.selected.peach {
   border-color: var(--app-influence-border-strong);
   background:
+    linear-gradient(180deg, var(--app-inset-highlight), transparent 78%),
     var(--app-influence-background-strong),
     var(--app-control-surface-strong);
   box-shadow:
@@ -91,4 +116,63 @@ ion-icon {
   color: var(--app-influence-text);
   font-weight: 740;
   transform: translateY(-1px);
+}
+
+:host-context(.reflect-flow-shell) .chip,
+:host-context(.reflect-flow-shell) .chip.peach,
+:host-context(.reflect-flow-shell) .chip.blue,
+:host-context(.reflect-flow-shell) .chip.selected,
+:host-context(.reflect-flow-shell) .chip.selected.peach,
+:host-context(.reflect-flow-shell) .chip.selected.blue {
+  min-height: 60px;
+  gap: 13px;
+  position: relative;
+  overflow: hidden;
+  justify-content: flex-start;
+  border-color: color-mix(in srgb, var(--mood-chip-border) 42%, transparent);
+  background: transparent;
+  background-image: none;
+  box-shadow: 0 8px 20px rgba(20, 22, 32, 0.045);
+  color: var(--mood-chip-text);
+  font-size: 1.15rem;
+  font-weight: 560;
+  padding-inline: 20px;
+}
+
+:host-context(.reflect-flow-shell) ion-icon {
+  font-size: 1.82rem;
+  --ionicon-stroke-width: 26px;
+}
+
+:host-context(.reflect-flow-shell) .chip::after {
+  display: none;
+  content: none;
+}
+
+:host-context(.reflect-flow-shell) .chip.selected,
+:host-context(.reflect-flow-shell) .chip.selected.peach,
+:host-context(.reflect-flow-shell) .chip.selected.blue {
+  border-color: var(--mood-chip-selected-border);
+  background-color: transparent;
+  background-image:
+    radial-gradient(circle at 28% 18%, rgba(255, 255, 255, 0.32), transparent 42%),
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--mood-accent) 62%, #ffffff),
+      color-mix(in srgb, var(--mood-accent) 92%, #ffffff)
+    );
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--mood-accent) 24%, transparent),
+    0 12px 28px rgba(var(--mood-accent-rgb), 0.18);
+  color: #ffffff;
+  font-weight: 590;
+}
+
+:host-context(.reflect-flow-shell) .chip.selected ion-icon,
+:host-context(.reflect-flow-shell) .chip.selected.peach ion-icon,
+:host-context(.reflect-flow-shell) .chip.selected.blue ion-icon,
+:host-context(.reflect-flow-shell) .chip.selected span,
+:host-context(.reflect-flow-shell) .chip.selected.peach span,
+:host-context(.reflect-flow-shell) .chip.selected.blue span {
+  color: #ffffff;
 }

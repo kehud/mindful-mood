@@ -2,12 +2,12 @@ ion-tab-bar {
   --tab-glass-background: color-mix(in srgb, var(--ion-tab-bar-background) 82%, transparent);
   --tab-glass-border: color-mix(in srgb, var(--app-control-border) 72%, transparent);
   --tab-glass-highlight: color-mix(in srgb, var(--app-inset-highlight) 34%, transparent);
-  --tab-selected-color: #7657e8;
-  --tab-selected-glow: rgba(var(--ion-color-secondary-rgb), 0.4);
-  --tab-glass-shadow: 0 -7px 20px rgba(40, 33, 74, 0.052);
+  --tab-selected-color: var(--aura-mist);
+  --tab-selected-glow: rgba(var(--ion-color-primary-rgb), 0.36);
+  --tab-glass-shadow: 0 -8px 24px rgba(40, 74, 82, 0.07);
   --background: var(--tab-glass-background);
   --border: 0.55px solid var(--tab-glass-border);
-  height: 42px;
+  height: 48px;
   padding-top: 0;
   padding-right: max(4px, env(safe-area-inset-right));
   padding-bottom: env(safe-area-inset-bottom);
@@ -35,13 +35,13 @@ ion-tab-button {
   --ripple-color: rgba(var(--ion-color-secondary-rgb), 0.16);
   flex: 1 1 0;
   max-width: none;
-  min-height: 36px;
+  min-height: 42px;
   min-width: 0;
   border-radius: 0;
-  font-size: 0.66rem;
-  font-weight: 560;
+  font-size: 0.67rem;
+  font-weight: 620;
   line-height: 1;
-  transform: translateY(6px);
+  transform: translateY(4px);
   transition:
     color 180ms ease,
     opacity 180ms ease,
@@ -56,7 +56,7 @@ ion-tab-button.tab-selected {
 }
 
 ion-tab-button.ion-activated {
-  transform: translateY(6px) scale(0.98);
+  transform: translateY(4px) scale(0.98);
 }
 
 .tab-icon-outline,
@@ -68,7 +68,7 @@ ion-tab-button.ion-activated {
   min-width: 24px;
   flex-shrink: 0;
   margin-top: 0;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   font-size: 24px;
   line-height: 1;
   opacity: 0.58;
@@ -114,7 +114,7 @@ ion-tab-button.tab-selected ion-label {
   --tab-glass-background: color-mix(in srgb, var(--ion-tab-bar-background) 78%, transparent);
   --tab-glass-border: rgba(231, 224, 255, 0.09);
   --tab-glass-highlight: rgba(250, 247, 255, 0.08);
-  --tab-selected-color: #d0b8ff;
-  --tab-selected-glow: rgba(var(--ion-color-secondary-rgb), 0.54);
+  --tab-selected-color: #88d5d7;
+  --tab-selected-glow: rgba(var(--ion-color-primary-rgb), 0.48);
   --tab-glass-shadow: 0 -7px 22px rgba(0, 0, 0, 0.24);
 }

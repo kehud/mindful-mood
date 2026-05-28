@@ -2,6 +2,7 @@
   <app-chip-option
     *ngFor="let option of options"
     [label]="optionLabel(option)"
+    [icon]="optionIcon(option)"
     [tone]="tone"
     [selected]="isSelected(option)"
     (toggleSelection)="toggleOption(option)"

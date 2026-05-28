@@ -1,11 +1,67 @@
+.auth-shell {
+  position: relative;
+  isolation: isolate;
+  min-height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.auth-ambient-aura {
+  --soft-aura-color: var(--aura-mist);
+  --soft-aura-opacity: 0.36;
+  position: absolute;
+  top: 8%;
+  inset-inline: 0;
+  z-index: -1;
+  width: min(90vw, 360px);
+  margin-inline: auto;
+}
+
+:host-context(.ion-palette-dark) .auth-ambient-aura {
+  --soft-aura-color: var(--aura-plum);
+  --soft-aura-opacity: 0.44;
+}
+
+.auth-shell::before,
+.auth-shell::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 999px;
+  filter: blur(34px);
+}
+
+.auth-shell::before {
+  top: 2%;
+  left: -16%;
+  width: min(72vw, 330px);
+  aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(var(--ion-color-primary-rgb), 0.16), transparent 68%);
+}
+
+.auth-shell::after {
+  right: -18%;
+  bottom: 12%;
+  width: min(70vw, 330px);
+  aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(var(--ion-color-tertiary-rgb), 0.14), transparent 70%);
+}
+
 .auth-shell ion-button:first-child {
   margin: 4px 0 12px -12px;
 }
 
 .auth-card {
   display: grid;
-  gap: 13px;
-  padding: 20px;
+  gap: 12px;
+  padding: 18px;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(var(--ion-color-primary-rgb), 0.16), transparent 45%),
+    linear-gradient(180deg, var(--app-inset-highlight), transparent 76%),
+    var(--app-surface);
 }
 
 ion-item {
@@ -15,6 +71,8 @@ ion-item {
   --inner-padding-end: 14px;
   border: 1px solid var(--app-control-border);
   border-radius: 18px;
+  backdrop-filter: var(--aura-glass-blur);
+  -webkit-backdrop-filter: var(--aura-glass-blur);
 }
 
 .form-error {
@@ -48,6 +106,14 @@ ion-item {
 
 .google-action {
   margin-top: 0;
+  --border-radius: 18px;
+  --background: var(--app-input-surface);
+  --background-activated: var(--app-control-surface-strong);
+  --border-color: var(--app-control-border);
+  --box-shadow: 0 12px 28px rgba(17, 24, 34, 0.08);
+  min-height: 50px;
+  backdrop-filter: var(--aura-glass-blur);
+  -webkit-backdrop-filter: var(--aura-glass-blur);
 }
 
 ion-spinner {

@@ -2,229 +2,875 @@
   display: block;
 }
 
-.mood-card {
-  --mood-color: var(--ion-color-secondary);
-  --mood-faint: color-mix(in srgb, var(--mood-color) 18%, transparent);
-  overflow: hidden;
-  border: 1px solid var(--app-soft-border);
-  border-radius: 34px;
-  background: var(--app-mood-card-background);
-  box-shadow: var(--app-card-shadow-strong);
-  padding: 18px 16px 16px;
-  backdrop-filter: blur(18px);
+.mood-screen {
+  --mood-accent: #78c9cb;
+  --mood-accent-rgb: 120, 201, 203;
+  --mood-aura-soft: color-mix(in srgb, var(--mood-accent) 18%, transparent);
+  --mood-aura-mid: color-mix(in srgb, var(--mood-accent) 42%, transparent);
+  --mood-aura-deep: color-mix(in srgb, var(--mood-accent) 66%, #ffffff);
+  --mood-bg-top: #fbf0ee;
+  --mood-bg-mid: #f5eff7;
+  --mood-bg-bottom: #e6f5fa;
+  --mood-ink: #171827;
+  --mood-muted: rgba(23, 24, 39, 0.58);
+  --mood-subtle: rgba(23, 24, 39, 0.46);
+  --mood-nav-surface: rgba(255, 255, 255, 0.78);
+  --mood-nav-border: rgba(255, 255, 255, 0.86);
+  --mood-nav-icon: rgba(18, 20, 32, 0.86);
+  --mood-progress-rest: rgba(110, 88, 132, 0.18);
+  --mood-range-track: rgba(95, 82, 115, 0.18);
+  --mood-range-fill: var(--mood-accent);
+  --mood-range-dot: rgba(95, 82, 115, 0.2);
+  --mood-knob: #ffffff;
+  --mood-button-background: color-mix(in srgb, var(--mood-accent) 88%, #ffffff);
+  --mood-button-background-activated: color-mix(in srgb, var(--mood-accent) 92%, #24194a);
+  --mood-button-text: #ffffff;
+  --mood-button-shadow: 0 16px 34px rgba(var(--mood-accent-rgb), 0.22);
+  --aura-core-opacity: 0.62;
+  --aura-core-opacity-peak: 0.78;
+  --checkin-bg:
+    radial-gradient(circle at 18% 3%, rgba(255, 192, 183, 0.18), transparent 36%),
+    radial-gradient(circle at 88% 8%, rgba(var(--mood-accent-rgb), 0.07), transparent 34%),
+    radial-gradient(circle at 50% 92%, rgba(133, 208, 219, 0.13), transparent 38%),
+    linear-gradient(180deg, var(--mood-bg-top) 0%, var(--mood-bg-mid) 54%, var(--mood-bg-bottom) 100%);
+  --checkin-bottom-background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--mood-bg-bottom) 92%, transparent) 70%);
+  max-width: none;
+  min-height: 100dvh;
+  padding: calc(12px + env(safe-area-inset-top)) 24px calc(14px + env(safe-area-inset-bottom));
+  background: var(--checkin-bg);
+  color: var(--mood-ink);
+  transition:
+    background 1200ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    color 900ms ease;
 }
 
-:host .bottom-action {
-  position: static;
-  padding-top: 16px;
+.mood-screen::before {
+  inset: 11% 8% auto;
+  height: min(30vh, 240px);
+  background: radial-gradient(ellipse at center, rgba(var(--mood-accent-rgb), 0.07), transparent 72%);
+  filter: blur(34px);
+  opacity: 0.52;
+}
+
+.mood-screen::after {
+  left: 7%;
+  right: 7%;
+  bottom: -18%;
+  height: min(26vh, 190px);
+  background: radial-gradient(ellipse at center, rgba(115, 201, 214, 0.13), transparent 74%);
+  filter: blur(36px);
+  opacity: 0.52;
+}
+
+.mood-screen > * {
+  width: min(100%, 388px);
+}
+
+.mood-theme--1.mood-screen {
+  --mood-accent: #5b3a8e;
+  --mood-accent-rgb: 91, 58, 142;
+  --mood-bg-top: #f3eaf4;
+  --mood-bg-mid: #eee6f2;
+  --mood-bg-bottom: #dfe9f4;
+}
+
+.mood-theme--2.mood-screen {
+  --mood-accent: #6d3ed6;
+  --mood-accent-rgb: 109, 62, 214;
+  --mood-bg-top: #fff7f7;
+  --mood-bg-mid: #fbf5fb;
+  --mood-bg-bottom: #f2f8fd;
+}
+
+.mood-theme--3.mood-screen {
+  --mood-accent: #6f8dc8;
+  --mood-accent-rgb: 111, 141, 200;
+  --mood-bg-top: #f4edf2;
+  --mood-bg-mid: #e9edf7;
+  --mood-bg-bottom: #dceef8;
+}
+
+.mood-theme--4.mood-screen {
+  --mood-accent: #78c9cb;
+  --mood-accent-rgb: 120, 201, 203;
+  --mood-bg-top: #f5f0ed;
+  --mood-bg-mid: #edf1f2;
+  --mood-bg-bottom: #dff5f7;
+}
+
+.mood-theme--5.mood-screen {
+  --mood-accent: #8aa378;
+  --mood-accent-rgb: 138, 163, 120;
+  --mood-bg-top: #f7f1e7;
+  --mood-bg-mid: #eef2e7;
+  --mood-bg-bottom: #e2f3e1;
+}
+
+.mood-theme--6.mood-screen {
+  --mood-accent: #d89a4a;
+  --mood-accent-rgb: 216, 154, 74;
+  --mood-bg-top: #fff0df;
+  --mood-bg-mid: #f8ead8;
+  --mood-bg-bottom: #eef1d5;
+}
+
+.mood-theme--7.mood-screen {
+  --mood-accent: #ee806c;
+  --mood-accent-rgb: 238, 128, 108;
+  --mood-bg-top: #ffe9df;
+  --mood-bg-mid: #f9e7d9;
+  --mood-bg-bottom: #f4ecd3;
+}
+
+:host-context(.ion-palette-dark) .mood-screen {
+  --mood-bg-top: #121a2a;
+  --mood-bg-mid: #0d1726;
+  --mood-bg-bottom: #08111d;
+  --mood-ink: rgba(255, 255, 255, 0.92);
+  --mood-muted: rgba(244, 247, 255, 0.62);
+  --mood-subtle: rgba(244, 247, 255, 0.5);
+  --mood-nav-surface: rgba(255, 255, 255, 0.06);
+  --mood-nav-border: rgba(255, 255, 255, 0.1);
+  --mood-nav-icon: #f3c84f;
+  --mood-progress-rest: rgba(231, 236, 255, 0.24);
+  --mood-range-track: rgba(231, 236, 255, 0.18);
+  --mood-range-dot: rgba(231, 236, 255, 0.22);
+  --mood-range-fill: color-mix(in srgb, var(--mood-accent) 92%, #9d5cff);
+  --mood-aura-soft: color-mix(in srgb, var(--mood-accent) 18%, transparent);
+  --mood-aura-mid: color-mix(in srgb, var(--mood-accent) 34%, transparent);
+  --mood-aura-deep: color-mix(in srgb, var(--mood-accent) 56%, #ffffff);
+  --mood-button-shadow: 0 12px 30px rgba(var(--mood-accent-rgb), 0.16);
+  --aura-core-opacity: 0.56;
+  --aura-core-opacity-peak: 0.72;
+  --checkin-bg:
+    radial-gradient(circle at 20% -8%, rgba(var(--mood-accent-rgb), 0.16), transparent 34%),
+    radial-gradient(circle at 90% 4%, rgba(96, 135, 225, 0.1), transparent 30%),
+    radial-gradient(circle at 50% 86%, rgba(var(--mood-accent-rgb), 0.2), transparent 34%),
+    linear-gradient(180deg, var(--mood-bg-top) 0%, var(--mood-bg-mid) 50%, var(--mood-bg-bottom) 100%);
+  --checkin-bottom-background: linear-gradient(180deg, transparent, rgba(8, 17, 29, 0.9) 72%);
+}
+
+:host-context(.ion-palette-dark) .mood-theme--1.mood-screen {
+  --mood-accent: #7440a2;
+  --mood-accent-rgb: 116, 64, 162;
+  --mood-bg-top: #161323;
+  --mood-bg-mid: #11101e;
+  --mood-bg-bottom: #080812;
+}
+
+:host-context(.ion-palette-dark) .mood-theme--2.mood-screen {
+  --mood-accent: #3e2a72;
+  --mood-accent-rgb: 62, 42, 114;
+  --mood-bg-top: #151723;
+  --mood-bg-mid: #101321;
+  --mood-bg-bottom: #070b14;
+}
+
+:host-context(.ion-palette-dark) .mood-theme--3.mood-screen {
+  --mood-accent: #25436f;
+  --mood-accent-rgb: 37, 67, 111;
+  --mood-bg-top: #121b2c;
+  --mood-bg-mid: #0d1727;
+  --mood-bg-bottom: #07101d;
+}
+
+:host-context(.ion-palette-dark) .mood-theme--4.mood-screen {
+  --mood-accent: #73c9c8;
+  --mood-accent-rgb: 115, 201, 200;
+  --mood-bg-top: #132028;
+  --mood-bg-mid: #0d1921;
+  --mood-bg-bottom: #071218;
+}
+
+:host-context(.ion-palette-dark) .mood-theme--5.mood-screen {
+  --mood-accent: #4f6f52;
+  --mood-accent-rgb: 79, 111, 82;
+  --mood-bg-top: #141f19;
+  --mood-bg-mid: #0e1913;
+  --mood-bg-bottom: #071009;
+}
+
+:host-context(.ion-palette-dark) .mood-theme--6.mood-screen {
+  --mood-accent: #b47b43;
+  --mood-accent-rgb: 180, 123, 67;
+  --mood-bg-top: #271d13;
+  --mood-bg-mid: #1b140d;
+  --mood-bg-bottom: #0e0905;
+}
+
+:host-context(.ion-palette-dark) .mood-theme--7.mood-screen {
+  --mood-accent: #df7b65;
+  --mood-accent-rgb: 223, 123, 101;
+  --mood-bg-top: #2b1712;
+  --mood-bg-mid: #1d100c;
+  --mood-bg-bottom: #100806;
+}
+
+.mood-screen .checkin-nav {
+  grid-template-columns: 42px 1fr 42px;
+  min-height: 42px;
+  margin-bottom: clamp(24px, 4.5vh, 44px);
+}
+
+.mood-screen .nav-button {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  min-height: 42px;
+  --background: transparent;
+  --background-activated: transparent;
+  --background-focused: transparent;
+  --background-hover: transparent;
+  --border-radius: 999px;
+  --box-shadow: none;
+  --color: var(--mood-nav-icon);
+  --padding-bottom: 0;
+  --padding-end: 0;
+  --padding-start: 0;
+  --padding-top: 0;
+  --ripple-color: rgba(var(--mood-accent-rgb), 0.18);
+}
+
+.mood-screen .nav-button::part(native) {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  min-height: 42px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.mood-screen .nav-button ion-icon {
+  --ionicon-stroke-width: 34px;
+  font-size: 1.25rem;
+  stroke-width: 1.8;
+}
+
+.mood-screen .flow-progress {
+  justify-self: center;
+  gap: 0;
+  direction: ltr;
+  width: max-content;
+  max-width: calc(100% - 16px);
+  padding-inline: 2px;
+  min-height: 16px;
+  overflow: visible;
+  transform-origin: center;
+}
+
+:host-context([dir="rtl"]) .mood-screen .flow-progress {
+  transform: scaleX(-1);
+}
+
+.mood-screen .flow-progress span {
+  position: relative;
+  width: clamp(30px, 8.4vw, 36px);
+  height: 12px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.mood-screen .flow-progress span::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  z-index: 1;
+  width: 9px;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--mood-progress-rest) 82%, #d8cde3);
+  transform: translate(-1px, -50%);
+}
+
+.mood-screen .flow-progress span::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 8px;
+  right: 0;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--mood-progress-rest);
+  transform: translateY(-50%);
+}
+
+.mood-screen .flow-progress span.active {
+  background: transparent;
+  box-shadow: none;
+}
+
+.mood-screen .flow-progress span.active::before {
+  background:
+    radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.32), transparent 34%),
+    linear-gradient(135deg, color-mix(in srgb, var(--mood-accent) 76%, #ffffff), var(--mood-accent));
+  box-shadow: 0 2px 7px rgba(var(--mood-accent-rgb), 0.2);
+}
+
+.mood-screen .flow-progress span.active::after {
+  background: linear-gradient(
+    90deg,
+    rgba(var(--mood-accent-rgb), 0.52),
+    rgba(var(--mood-accent-rgb), 0.24)
+  );
+  box-shadow: 0 0 7px rgba(var(--mood-accent-rgb), 0.1);
+}
+
+.mood-screen .flow-progress span.completed::after {
+  background: linear-gradient(
+    90deg,
+    rgba(var(--mood-accent-rgb), 0.58),
+    rgba(var(--mood-accent-rgb), 0.3)
+  );
+  box-shadow: 0 0 7px rgba(var(--mood-accent-rgb), 0.1);
+}
+
+.mood-screen .flow-progress span:last-child {
+  width: 9px;
   background: transparent;
 }
 
-:host .step-dots,
-:host .question-block {
-  margin-bottom: 14px;
+.mood-screen .flow-progress span:last-child::after {
+  display: none;
 }
 
-.mood-display {
+.mood-question {
+  max-width: 356px;
+  margin: 0 auto clamp(18px, 3vh, 30px);
+}
+
+.mood-screen .question-block h1 {
+  margin: 0;
+  color: var(--mood-ink);
+  font-size: clamp(1.5rem, 6.5vw, 1.94rem);
+  font-weight: 540;
+  line-height: 1.18;
+}
+
+.mood-screen .question-block p:last-child {
+  margin: 14px 0 0;
+  color: var(--mood-muted);
+  font-size: clamp(0.9rem, 3.55vw, 1.06rem);
+  font-weight: 450;
+  line-height: 1.38;
+}
+
+.config-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: var(--mood-muted);
+  font-size: 0.82rem;
+  font-weight: 680;
+}
+
+.config-loading ion-spinner {
+  width: 18px;
+  height: 18px;
+}
+
+.mood-stage {
   display: grid;
   place-items: center;
+  align-content: start;
+  gap: clamp(15px, 2.6vh, 27px);
+  min-height: 0;
   text-align: center;
+  animation: mood-stage-enter 520ms 80ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.mood-visual {
-  --mood-scale: 1;
-  --mood-tilt: 0deg;
-  --mood-lift: 0px;
-  --shape-radius: 42% 58% 54% 46%;
-  --shape-y: 0;
-  --halo-opacity: 0.58;
+.mood-aura {
+  --aura-scale: 1;
   position: relative;
   display: grid;
   place-items: center;
-  width: 142px;
-  max-width: 64vw;
+  width: clamp(230px, min(72vw, 34dvh), 336px);
   aspect-ratio: 1;
-  margin: 0 auto 6px;
-  transform: translateY(var(--mood-lift)) scale(var(--mood-scale));
-  transition: transform 360ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  border-radius: 50%;
+  transform: scale(var(--aura-scale));
+  filter: saturate(1.04);
+  transition:
+    filter 1200ms ease,
+    transform 1200ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.mood-halo,
-.mood-shape {
+.aura-layer,
+.aura-core,
+.aura-spark {
   position: absolute;
-  display: grid;
-  place-items: center;
-  transition: all 360ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: block;
+  pointer-events: none;
+  transition:
+    background 1200ms ease,
+    box-shadow 1200ms ease,
+    opacity 1000ms ease,
+    transform 1200ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.mood-halo {
-  inset: 14%;
-  border-radius: 999px;
-  background: var(--mood-faint);
-  filter: blur(18px);
-  opacity: var(--halo-opacity);
+.aura-layer {
+  top: var(--aura-top);
+  left: var(--aura-left);
+  width: var(--aura-width);
+  height: var(--aura-height);
+  border-radius: var(--aura-radius);
+  background:
+    radial-gradient(ellipse at var(--aura-highlight-x) var(--aura-highlight-y), rgba(255, 255, 255, var(--aura-highlight)), transparent 22%),
+    radial-gradient(ellipse at var(--aura-core-x) var(--aura-core-y), var(--mood-aura-mid), transparent 58%),
+    color-mix(in srgb, var(--mood-accent) var(--aura-strength), transparent);
+  box-shadow: 0 20px 52px rgba(var(--mood-accent-rgb), 0.1);
+  filter: blur(var(--aura-blur));
+  mix-blend-mode: multiply;
+  opacity: var(--aura-opacity);
+  transform: translate3d(-50%, -50%, 0) rotate(var(--aura-rotate)) translate3d(var(--aura-x), var(--aura-y), 0);
+  animation: aura-breathe var(--aura-duration) ease-in-out infinite;
 }
 
-.mood-shape--main {
-  width: 68%;
-  height: 68%;
-  border: 1px solid var(--app-mood-shape-border);
-  border-radius: var(--shape-radius);
-  background: var(--app-mood-shape-background);
-  box-shadow: 0 26px 42px var(--mood-faint), inset 0 1px 2px var(--app-inset-highlight-strong);
-  transform: translateY(var(--shape-y)) rotate(var(--mood-tilt));
+.aura-layer--1 {
+  --aura-width: 86%;
+  --aura-height: 70%;
+  --aura-top: 52%;
+  --aura-left: 43%;
+  --aura-radius: 42% 58% 55% 45%;
+  --aura-opacity: 0.26;
+  --aura-strength: 26%;
+  --aura-blur: 1.3px;
+  --aura-rotate: -18deg;
+  --aura-rotate-end: -8deg;
+  --aura-x: -3%;
+  --aura-x-end: 0%;
+  --aura-y: 1%;
+  --aura-y-end: -1%;
+  --aura-highlight: 0.08;
+  --aura-highlight-x: 34%;
+  --aura-highlight-y: 28%;
+  --aura-core-x: 52%;
+  --aura-core-y: 56%;
+  --aura-duration: 10.8s;
 }
 
-.mood-shape ion-icon {
-  color: var(--mood-color);
-  font-size: 4.35rem;
-  filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.14));
+.aura-layer--2 {
+  --aura-width: 68%;
+  --aura-height: 88%;
+  --aura-top: 48%;
+  --aura-left: 56%;
+  --aura-radius: 58% 42% 48% 52%;
+  --aura-opacity: 0.32;
+  --aura-strength: 32%;
+  --aura-blur: 1.2px;
+  --aura-rotate: 20deg;
+  --aura-rotate-end: 7deg;
+  --aura-x: 2%;
+  --aura-x-end: -2%;
+  --aura-y: -2%;
+  --aura-y-end: 2%;
+  --aura-highlight: 0.1;
+  --aura-highlight-x: 52%;
+  --aura-highlight-y: 32%;
+  --aura-core-x: 48%;
+  --aura-core-y: 58%;
+  --aura-duration: 12s;
 }
 
-.mood-visual--very-low {
-  --shape-radius: 52% 48% 60% 40%;
-  --shape-y: 8px;
-  --halo-opacity: 0.42;
+.aura-layer--3 {
+  --aura-width: 80%;
+  --aura-height: 74%;
+  --aura-top: 58%;
+  --aura-left: 52%;
+  --aura-radius: 46% 54% 62% 38%;
+  --aura-opacity: 0.38;
+  --aura-strength: 38%;
+  --aura-blur: 1.4px;
+  --aura-rotate: -32deg;
+  --aura-rotate-end: -17deg;
+  --aura-x: -2%;
+  --aura-x-end: 1%;
+  --aura-y: 2%;
+  --aura-y-end: -2%;
+  --aura-highlight: 0.1;
+  --aura-highlight-x: 46%;
+  --aura-highlight-y: 38%;
+  --aura-core-x: 54%;
+  --aura-core-y: 50%;
+  --aura-duration: 11.4s;
 }
 
-.mood-visual--low {
-  --shape-radius: 48% 52% 55% 45%;
-  --shape-y: 4px;
-  --halo-opacity: 0.48;
+.aura-layer--4 {
+  --aura-width: 62%;
+  --aura-height: 76%;
+  --aura-top: 49%;
+  --aura-left: 47%;
+  --aura-radius: 64% 36% 47% 53%;
+  --aura-opacity: 0.46;
+  --aura-strength: 46%;
+  --aura-blur: 1.1px;
+  --aura-rotate: 30deg;
+  --aura-rotate-end: 14deg;
+  --aura-x: 2%;
+  --aura-x-end: -1%;
+  --aura-y: 1%;
+  --aura-y-end: -1%;
+  --aura-highlight: 0.12;
+  --aura-highlight-x: 40%;
+  --aura-highlight-y: 30%;
+  --aura-core-x: 52%;
+  --aura-core-y: 55%;
+  --aura-duration: 10.2s;
 }
 
-.mood-visual--middle {
-  --shape-radius: 38% 62% 48% 52%;
+.aura-layer--5 {
+  --aura-width: 60%;
+  --aura-height: 60%;
+  --aura-top: 54%;
+  --aura-left: 54%;
+  --aura-radius: 44% 56% 43% 57%;
+  --aura-opacity: 0.54;
+  --aura-strength: 54%;
+  --aura-blur: 1.5px;
+  --aura-rotate: -14deg;
+  --aura-rotate-end: 4deg;
+  --aura-x: 0%;
+  --aura-x-end: 1%;
+  --aura-y: -1%;
+  --aura-y-end: 1%;
+  --aura-highlight: 0.1;
+  --aura-highlight-x: 44%;
+  --aura-highlight-y: 36%;
+  --aura-core-x: 50%;
+  --aura-core-y: 54%;
+  --aura-duration: 11s;
 }
 
-.mood-visual--high {
-  --shape-radius: 36% 64% 42% 58%;
-  --shape-y: -2px;
-  --halo-opacity: 0.72;
+.aura-layer--6 {
+  --aura-width: 46%;
+  --aura-height: 52%;
+  --aura-top: 50%;
+  --aura-left: 49%;
+  --aura-radius: 56% 44% 52% 48%;
+  --aura-opacity: 0.62;
+  --aura-strength: 60%;
+  --aura-blur: 1.8px;
+  --aura-rotate: 14deg;
+  --aura-rotate-end: -6deg;
+  --aura-x: 1%;
+  --aura-x-end: -1%;
+  --aura-y: 1%;
+  --aura-y-end: 0%;
+  --aura-highlight: 0.08;
+  --aura-highlight-x: 52%;
+  --aura-highlight-y: 34%;
+  --aura-core-x: 50%;
+  --aura-core-y: 56%;
+  --aura-duration: 12.6s;
 }
 
-.mood-visual--very-high {
-  --shape-radius: 44% 56% 38% 62%;
-  --shape-y: -5px;
-  --halo-opacity: 0.78;
+.aura-core {
+  inset: 30% 31% 29% 33%;
+  border-radius: 46% 54% 43% 57%;
+  background:
+    radial-gradient(ellipse at 44% 38%, rgba(255, 255, 255, 0.16), transparent 24%),
+    radial-gradient(ellipse at 50% 56%, var(--mood-aura-deep), transparent 66%);
+  filter: blur(9px);
+  opacity: var(--aura-core-opacity);
+  animation: aura-core-breathe 9.6s ease-in-out infinite;
 }
 
-.mood-copy {
-  display: grid;
-  gap: 6px;
-  max-width: 310px;
-  margin: 0 auto;
-}
-
-.mood-tone {
-  justify-self: center;
-  border-radius: 999px;
-  background: var(--app-pill-surface);
-  color: var(--app-muted-strong);
-  padding: 6px 12px;
-  font-size: 0.76rem;
-  font-weight: 760;
-  line-height: 1;
-}
-
-.mood-copy h2 {
-  margin: 4px 0 0;
-  color: var(--app-text-strong);
-  font-size: 1.56rem;
-  font-weight: 830;
-  letter-spacing: 0;
-}
-
-.mood-copy p {
-  margin: 0;
-  color: var(--app-muted);
-  font-size: 0.94rem;
-  line-height: 1.42;
-}
-
-.mood-control {
-  margin-top: 15px;
-  border-radius: 28px;
-  background: var(--app-control-surface);
-  box-shadow: inset 0 1px 0 var(--app-inset-highlight), var(--app-control-shadow);
-  padding: 12px 10px 11px;
-}
-
-ion-range {
-  --bar-background: var(--app-mood-range-bar);
-  --bar-background-active: var(--mood-color);
-  --bar-height: 9px;
-  --knob-background: var(--app-mood-knob-background);
-  --knob-box-shadow: 0 11px 25px rgba(33, 28, 58, 0.18), 0 0 0 8px var(--mood-faint);
-  --knob-size: 34px;
-  padding: 0 4px 12px;
-}
-
-.mood-scale {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(38px, 1fr));
-  gap: 8px;
-}
-
-.mood-scale button {
-  display: grid;
-  place-items: center;
-  min-width: 0;
+.aura-spark {
+  width: 3px;
   aspect-ratio: 1;
-  border: 0;
-  border-radius: 17px;
-  background: var(--app-control-surface-strong);
-  box-shadow: inset 0 0 0 1px var(--app-strong-border);
-  color: var(--mood-color);
-  transition: 180ms ease;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 0 12px rgba(var(--mood-accent-rgb), 0.26);
 }
 
-.scale-shape {
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 14px;
-  background: var(--app-control-surface-strong);
-  transition: 180ms ease;
+.aura-spark--1 {
+  top: 50%;
+  left: 50%;
 }
 
-.scale-shape ion-icon {
-  font-size: 1.16rem;
+.aura-spark--2 {
+  top: 46%;
+  left: 54%;
+  width: 2px;
+  opacity: 0.5;
 }
 
-.mood-scale button.selected {
-  box-shadow: inset 0 0 0 1px var(--mood-faint), 0 12px 24px var(--mood-faint);
-  transform: translateY(-3px);
+.mood-bloom--level-1 {
+  --aura-scale: 1.03;
 }
 
-.mood-scale button.selected .scale-shape {
-  border-radius: 16px;
-  background: var(--mood-color);
-  color: var(--app-mood-on-color);
-  transform: scale(1.06);
+.mood-bloom--level-4 {
+  --aura-scale: 0.96;
+}
+
+.mood-bloom--level-7 {
+  --aura-scale: 1.02;
+}
+
+.mood-stage h2 {
+  margin: clamp(2px, 0.8vh, 8px) 0 0;
+  color: var(--mood-ink);
+  font-size: clamp(1.34rem, 5.2vw, 1.62rem);
+  font-weight: 490;
+  line-height: 1.15;
+  letter-spacing: 0;
+  transition: color 900ms ease;
+}
+
+.mood-range-wrap {
+  position: relative;
+  width: min(100%, 382px);
+  margin-top: 0;
+}
+
+.mood-range-wrap::before {
+  content: "";
+  display: none;
+}
+
+.mood-range {
+  --bar-background: var(--mood-range-track);
+  --bar-background-active: var(--mood-range-fill);
+  --bar-height: 3.25px;
+  --bar-border-radius: 999px;
+  --knob-background: var(--mood-knob);
+  --knob-box-shadow:
+    0 8px 18px rgba(37, 28, 58, 0.14),
+    0 0 0 1px rgba(var(--mood-accent-rgb), 0.36),
+    inset 0 1px 1px rgba(255, 255, 255, 0.9);
+  --knob-size: 36px;
+  position: relative;
+  z-index: 1;
+  padding: 5px 0 0;
+  transition:
+    --bar-background 1000ms ease,
+    --bar-background-active 1000ms ease,
+    --knob-background 1000ms ease;
+}
+
+.mood-range::part(bar),
+.mood-range::part(bar-active),
+.mood-range::part(knob),
+.mood-range::part(tick),
+.mood-range::part(tick-active) {
+  transition:
+    background 900ms ease,
+    opacity 900ms ease,
+    box-shadow 900ms ease,
+    transform 190ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.mood-range::part(bar-active) {
+  box-shadow: 0 0 6px rgba(var(--mood-accent-rgb), 0.12);
+}
+
+.mood-range::part(tick),
+.mood-range::part(tick-active) {
+  width: 8.5px;
+  height: 8.5px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--mood-range-dot) 78%, #ddd4e8);
+  opacity: 1;
+}
+
+.mood-range::part(tick-active) {
+  background: var(--mood-accent);
+  box-shadow: 0 1px 6px rgba(var(--mood-accent-rgb), 0.16);
 }
 
 .range-labels {
   display: flex;
-  gap: 10px;
-  margin-top: 15px;
-  color: var(--app-subtle);
-  font-size: 0.75rem;
-  font-weight: 650;
-  line-height: 1.22;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 12px;
+  color: rgba(23, 24, 39, 0.72);
+  font-size: clamp(0.78rem, 3.1vw, 0.92rem);
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.16;
 }
 
 .range-labels span {
-  flex: 1;
+  max-width: 92px;
   min-width: 0;
   overflow-wrap: anywhere;
 }
 
-.range-labels span:nth-child(2) {
-  text-align: center;
+:host-context(.ion-palette-dark) .range-labels {
+  color: rgba(244, 247, 255, 0.74);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.22);
+}
+
+.range-labels span:first-child {
+  text-align: start;
 }
 
 .range-labels span:last-child {
   text-align: end;
+}
+
+.mood-spectrum {
+  position: relative;
+  width: 94%;
+  height: 20px;
+  margin: clamp(16px, 2.8vh, 28px) auto 0;
+  border-radius: 999px;
+  background:
+    radial-gradient(ellipse at 13% 55%, rgba(255, 255, 255, 0.72), transparent 7%, transparent 12%),
+    radial-gradient(ellipse at 31% 54%, rgba(255, 255, 255, 0.56), transparent 6%, transparent 11%),
+    radial-gradient(ellipse at 52% 48%, rgba(255, 255, 255, 0.9), transparent 9%, transparent 15%),
+    radial-gradient(ellipse at 77% 54%, rgba(255, 255, 255, 0.56), transparent 6%, transparent 11%),
+    radial-gradient(ellipse at 12% 50%, rgba(111, 67, 205, 0.68), transparent 20%),
+    radial-gradient(ellipse at 29% 50%, rgba(239, 103, 174, 0.62), transparent 20%),
+    radial-gradient(ellipse at 47% 50%, rgba(255, 152, 72, 0.62), transparent 21%),
+    radial-gradient(ellipse at 58% 50%, rgba(255, 240, 104, 0.7), transparent 19%),
+    radial-gradient(ellipse at 74% 50%, rgba(143, 231, 112, 0.62), transparent 21%),
+    radial-gradient(ellipse at 90% 50%, rgba(94, 211, 220, 0.58), transparent 20%);
+  filter: blur(9px) saturate(1.18);
+  opacity: 0.72;
+  transform: translateZ(0);
+}
+
+.mood-screen .bottom-action {
+  position: relative;
+  bottom: auto;
+  width: min(100%, 388px);
+  margin-top: auto;
+  padding-top: clamp(16px, 2.8vh, 24px);
+  padding-bottom: 0;
+  background: transparent;
+}
+
+.mood-screen .primary-action {
+  position: relative;
+  width: 100%;
+  margin-inline: auto;
+  --border-radius: 26px;
+  --box-shadow: var(--mood-button-shadow);
+  min-height: 64px;
+  font-size: clamp(1.12rem, 4.65vw, 1.28rem);
+  font-weight: 560;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.mood-screen .primary-action::part(native) {
+  position: relative;
+  padding-inline: 28px;
+  min-height: 64px;
+}
+
+.mood-screen .primary-action span {
+  flex: 1 1 auto;
+  text-align: center;
+}
+
+.mood-screen .primary-action ion-icon {
+  position: absolute;
+  inset-inline-end: 28px;
+  margin: 0;
+  font-size: 1.78rem;
+}
+
+:host-context(.ion-palette-dark) .aura-layer {
+  background:
+    radial-gradient(ellipse at var(--aura-highlight-x) var(--aura-highlight-y), rgba(255, 255, 255, 0.08), transparent 22%),
+    radial-gradient(ellipse at var(--aura-core-x) var(--aura-core-y), var(--mood-aura-mid), transparent 66%),
+    color-mix(in srgb, var(--mood-accent) var(--aura-strength), transparent);
+  box-shadow: 0 22px 64px rgba(var(--mood-accent-rgb), 0.14);
+  mix-blend-mode: screen;
+}
+
+:host-context(.ion-palette-dark) .aura-core {
+  opacity: var(--aura-core-opacity);
+  filter: blur(13px);
+}
+
+:host-context(.ion-palette-dark) .mood-spectrum {
+  opacity: 0.58;
+  filter: blur(13px) saturate(1.1);
+}
+
+@media (max-height: 720px) {
+  .mood-screen .checkin-nav {
+    margin-bottom: 18px;
+  }
+
+  .mood-question {
+    margin-bottom: 18px;
+  }
+
+  .mood-aura {
+    width: clamp(162px, 50vw, 204px);
+  }
+
+  .mood-stage {
+    gap: 12px;
+  }
+
+  .mood-spectrum {
+    height: 16px;
+    margin-top: 9px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mood-stage,
+  .mood-aura,
+  .aura-layer,
+  .aura-core,
+  .mood-screen,
+  .mood-screen::before,
+  .mood-screen::after,
+  .mood-range,
+  .mood-range::part(bar),
+  .mood-range::part(bar-active),
+  .mood-range::part(knob) {
+    animation: none;
+    transition: none;
+  }
+}
+
+@keyframes mood-stage-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes aura-breathe {
+  0%,
+  100% {
+    transform: translate3d(-50%, -50%, 0) rotate(var(--aura-rotate)) translate3d(var(--aura-x), var(--aura-y), 0) scale(0.985);
+    opacity: var(--aura-opacity);
+  }
+
+  50% {
+    transform: translate3d(-50%, -50%, 0) rotate(var(--aura-rotate-end)) translate3d(var(--aura-x-end), var(--aura-y-end), 0) scale(1.025);
+    opacity: var(--aura-opacity);
+  }
+}
+
+@keyframes aura-core-breathe {
+  0%,
+  100% {
+    transform: scale(0.96);
+    opacity: var(--aura-core-opacity);
+  }
+
+  50% {
+    transform: scale(1.06);
+    opacity: var(--aura-core-opacity-peak);
+  }
 }
