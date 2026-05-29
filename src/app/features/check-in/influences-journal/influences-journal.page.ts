@@ -1,7 +1,8 @@
 import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
+import { RouterLink } from '@angular/router';
+import { createAnimation, IonicModule, NavController } from '@ionic/angular';
+import type { Animation, AnimationBuilder } from '@ionic/angular';
 
 import { InfluenceOption } from '../../../core/models/config-option.model';
 import { ConfigService } from '../../../core/services/config.service';
@@ -12,7 +13,7 @@ import { ChipSelectorComponent, ChipSelectorOption } from '../../../shared/ui/ch
 import { moodThemeClassForLevel } from '../check-in-mood-theme';
 
 const SUCCESS_SCREEN_HOLD_MS = 2000;
-const SUCCESS_SCREEN_FADE_MS = 280;
+const SUCCESS_ROUTE_FADE_MS = 340;
 
 const INFLUENCE_ICONS: Record<string, string> = {
   Exercise: 'barbell-outline',
@@ -46,7 +47,34 @@ export class InfluencesJournalPage {
   private readonly configService = inject(ConfigService);
   private readonly localization = inject(LocalizationService);
   private readonly moodEntryService = inject(MoodEntryService);
-  private readonly router = inject(Router);
+  private readonly navController = inject(NavController);
+  private readonly successRouteFadeAnimation: AnimationBuilder = (_baseEl, opts) => {
+    const routeAnimation = createAnimation()
+      .duration(SUCCESS_ROUTE_FADE_MS)
+      .easing('cubic-bezier(0.22, 1, 0.36, 1)');
+    const pageAnimations: Animation[] = [];
+    const enteringEl = opts?.enteringEl as HTMLElement | undefined;
+    const leavingEl = opts?.leavingEl as HTMLElement | undefined;
+
+    if (enteringEl) {
+      pageAnimations.push(
+        createAnimation()
+          .addElement(enteringEl)
+          .beforeRemoveClass('ion-page-invisible')
+          .fromTo('opacity', '0.01', '1'),
+      );
+    }
+
+    if (leavingEl) {
+      pageAnimations.push(
+        createAnimation()
+          .addElement(leavingEl)
+          .fromTo('opacity', '1', '0'),
+      );
+    }
+
+    return routeAnimation.addAnimation(pageAnimations);
+  };
 
   readonly influenceOptionsState$ = this.configService.influenceOptionsState$;
   readonly moodOptionsState$ = this.configService.moodOptionsState$;
@@ -104,7 +132,12 @@ export class InfluencesJournalPage {
       this.showSuccess = true;
       this.isSuccessLeaving = false;
       await this.pauseForSuccessFeedback();
-      await this.router.navigateByUrl('/tabs/history', { replaceUrl: true });
+      await this.navController.navigateRoot('/tabs/history', {
+        replaceUrl: true,
+        animated: true,
+        animationDirection: 'forward',
+        animation: this.successRouteFadeAnimation,
+      });
     } catch (error) {
       this.errorMessage = this.moodEntryService.getErrorMessage(error);
       this.showSuccess = false;
@@ -117,7 +150,6 @@ export class InfluencesJournalPage {
   private async pauseForSuccessFeedback(): Promise<void> {
     await this.delay(SUCCESS_SCREEN_HOLD_MS);
     this.isSuccessLeaving = true;
-    await this.delay(SUCCESS_SCREEN_FADE_MS);
   }
 
   private delay(durationMs: number): Promise<void> {

@@ -1,31 +1,36 @@
 ion-tab-bar {
-  --tab-glass-background: color-mix(in srgb, var(--ion-tab-bar-background) 82%, transparent);
-  --tab-glass-border: color-mix(in srgb, var(--app-control-border) 72%, transparent);
-  --tab-glass-highlight: color-mix(in srgb, var(--app-inset-highlight) 34%, transparent);
-  --tab-selected-color: var(--aura-mist);
-  --tab-selected-glow: rgba(var(--ion-color-primary-rgb), 0.36);
-  --tab-glass-shadow: 0 -8px 24px rgba(40, 74, 82, 0.07);
+  --tab-safe-area-bottom: max(var(--ion-safe-area-bottom, 0px), env(safe-area-inset-bottom, 0px));
+  --tab-safe-area-left: max(var(--ion-safe-area-left, 0px), env(safe-area-inset-left, 0px));
+  --tab-safe-area-right: max(var(--ion-safe-area-right, 0px), env(safe-area-inset-right, 0px));
+  --tab-glass-background: rgba(252, 255, 253, 0.74);
+  --tab-glass-border: rgba(188, 204, 206, 0.16);
+  --tab-glass-highlight: rgba(255, 255, 255, 0.44);
+  --tab-selected-color: #4ebfc7;
+  --tab-inactive-color: rgba(77, 92, 102, 0.46);
+  --tab-glass-shadow: 0 -4px 14px rgba(40, 74, 82, 0.035);
   --background: var(--tab-glass-background);
-  --border: 0.55px solid var(--tab-glass-border);
-  height: 48px;
-  padding-top: 0;
-  padding-right: max(4px, env(safe-area-inset-right));
-  padding-bottom: env(safe-area-inset-bottom);
-  padding-left: max(4px, env(safe-area-inset-left));
+  --border: 0;
+  box-sizing: content-box;
+  height: 40px;
+  min-height: 40px;
+  padding-top: 1px;
+  padding-right: max(8px, var(--tab-safe-area-right));
+  padding-bottom: max(1px, var(--tab-safe-area-bottom));
+  padding-left: max(8px, var(--tab-safe-area-left));
   border-radius: 0;
   background:
-    linear-gradient(180deg, var(--tab-glass-highlight), transparent 66%),
+    linear-gradient(180deg, var(--tab-glass-highlight), transparent 72%),
     var(--background);
   box-shadow:
-    inset 0 1px 0 var(--tab-glass-highlight),
+    inset 0 0.5px 0 var(--tab-glass-border),
     var(--tab-glass-shadow);
   overflow: hidden;
-  backdrop-filter: saturate(180%) blur(24px);
-  -webkit-backdrop-filter: saturate(180%) blur(24px);
+  backdrop-filter: saturate(140%) blur(18px);
+  -webkit-backdrop-filter: saturate(140%) blur(18px);
 }
 
 ion-tab-button {
-  --color: var(--app-subtle);
+  --color: var(--tab-inactive-color);
   --color-selected: var(--tab-selected-color);
   --background: transparent;
   --background-focused: transparent;
@@ -34,14 +39,15 @@ ion-tab-button {
   --padding-bottom: 0;
   --ripple-color: rgba(var(--ion-color-secondary-rgb), 0.16);
   flex: 1 1 0;
+  height: 100%;
   max-width: none;
-  min-height: 42px;
+  min-height: 0;
   min-width: 0;
   border-radius: 0;
-  font-size: 0.67rem;
-  font-weight: 620;
+  font-size: 0.53rem;
+  font-weight: 450;
   line-height: 1;
-  transform: translateY(4px);
+  transform: translateY(5px);
   transition:
     color 180ms ease,
     opacity 180ms ease,
@@ -52,26 +58,26 @@ ion-tab-button.tab-selected {
   background: transparent;
   box-shadow: none;
   color: var(--tab-selected-color);
-  font-weight: 700;
+  font-weight: 500;
 }
 
 ion-tab-button.ion-activated {
-  transform: translateY(4px) scale(0.98);
+  transform: translateY(5px) scale(0.985);
 }
 
 .tab-icon-outline,
 .tab-icon-filled {
-  --ionicon-stroke-width: 36px;
+  --ionicon-stroke-width: 40px;
   display: block;
-  width: 24px;
-  height: 24px;
-  min-width: 24px;
+  width: 25px;
+  height: 25px;
+  min-width: 25px;
+  font-size: 25px;
   flex-shrink: 0;
   margin-top: 0;
-  margin-bottom: 5px;
-  font-size: 24px;
+  margin-bottom: 2px;
   line-height: 1;
-  opacity: 0.58;
+  opacity: 0.82;
   transition:
     color 180ms ease,
     filter 180ms ease,
@@ -84,13 +90,19 @@ ion-tab-button.tab-selected .tab-icon-outline {
 }
 
 ion-tab-button.tab-selected .tab-icon-filled {
+  display: none;
+}
+
+ion-tab-button.tab-selected .tab-icon-outline {
   display: block;
 }
 
 ion-label {
   margin-top: 0;
-  opacity: 0.68;
-  line-height: 1;
+  font-size: 0.52rem;
+  font-weight: 450;
+  opacity: 0.78;
+  line-height: 1.05;
   transition:
     color 180ms ease,
     opacity 180ms ease;
@@ -103,18 +115,18 @@ ion-tab-button.tab-selected ion-label {
 }
 
 ion-tab-button.tab-selected ion-icon {
-  filter: drop-shadow(0 0 9px var(--tab-selected-glow));
+  filter: none;
 }
 
 ion-tab-button.tab-selected ion-label {
-  font-weight: 700;
+  font-weight: 500;
 }
 
 :host-context(.ion-palette-dark) ion-tab-bar {
-  --tab-glass-background: color-mix(in srgb, var(--ion-tab-bar-background) 78%, transparent);
-  --tab-glass-border: rgba(231, 224, 255, 0.09);
-  --tab-glass-highlight: rgba(250, 247, 255, 0.08);
-  --tab-selected-color: #88d5d7;
-  --tab-selected-glow: rgba(var(--ion-color-primary-rgb), 0.48);
-  --tab-glass-shadow: 0 -7px 22px rgba(0, 0, 0, 0.24);
+  --tab-glass-background: rgba(3, 11, 20, 0.84);
+  --tab-glass-border: rgba(129, 164, 176, 0.06);
+  --tab-glass-highlight: rgba(255, 255, 255, 0.025);
+  --tab-selected-color: #33bfd0;
+  --tab-inactive-color: rgba(143, 164, 176, 0.54);
+  --tab-glass-shadow: 0 -4px 14px rgba(0, 0, 0, 0.16);
 }

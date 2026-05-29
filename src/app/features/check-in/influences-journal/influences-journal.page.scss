@@ -347,11 +347,11 @@
     radial-gradient(circle at 98% 10%, rgba(245, 204, 183, 0.28), transparent 39%),
     radial-gradient(circle at 78% 82%, rgba(226, 202, 141, 0.12), transparent 36%),
     linear-gradient(180deg, #fbfcf7 0%, #edf8f4 50%, #f8f4e8 100%);
-  animation: success-feedback-fade-in 280ms ease both;
+  animation: success-feedback-fade-in 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .success-feedback--leaving {
-  animation: success-feedback-fade-out 280ms ease both;
+  animation: success-feedback-fade-out 340ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .success-feedback__content {
