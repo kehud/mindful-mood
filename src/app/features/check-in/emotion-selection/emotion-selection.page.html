@@ -43,7 +43,10 @@
       </section>
 
       <footer class="bottom-action">
-        <ion-button class="primary-action" expand="block" (click)="next()">{{ 'common.next' | t }}</ion-button>
+        <ion-button class="primary-action" expand="block" (click)="next()">
+          <span>{{ 'common.next' | t }}</span>
+          <ion-icon slot="end" name="arrow-forward-outline" aria-hidden="true"></ion-icon>
+        </ion-button>
       </footer>
     </ng-container>
   </main>

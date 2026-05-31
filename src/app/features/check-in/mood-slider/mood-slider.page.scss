@@ -634,7 +634,7 @@ ion-content.checkin-immersive-content::part(scroll) {
 
 .mood-range-wrap {
   position: relative;
-  width: min(100%, 382px);
+  width: min(calc(100% - 4px), 378px);
   margin-top: 0;
 }
 
@@ -782,7 +782,7 @@ ion-content.checkin-immersive-content::part(scroll) {
 
 .mood-screen .primary-action ion-icon {
   position: absolute;
-  inset-inline-end: 28px;
+  inset-inline-end: 22px;
   margin: 0;
   font-size: 1.78rem;
 }
