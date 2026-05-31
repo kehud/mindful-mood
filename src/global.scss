@@ -317,10 +317,6 @@ ion-loading.auth-transition-loading::part(message) {
   letter-spacing: 0;
 }
 
-html[dir="rtl"] ion-icon[name="chevron-back-outline"] {
-  transform: scaleX(-1);
-}
-
 .step-dots {
   display: flex;
   justify-content: center;

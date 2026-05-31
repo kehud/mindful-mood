@@ -11,6 +11,9 @@ ion-content.home-content::part(scroll) {
 }
 
 .home-shell {
+  --home-bottom-safe-space: max(var(--ion-safe-area-bottom, 0px), env(safe-area-inset-bottom, 0px));
+  --home-bottom-tab-space: 40px;
+
   height: 100%;
   min-height: 100%;
   width: min(100%, 430px);
@@ -20,7 +23,7 @@ ion-content.home-content::part(scroll) {
   padding:
     calc(12px + env(safe-area-inset-top))
     28px
-    calc(14px + env(safe-area-inset-bottom));
+    calc(22px + var(--home-bottom-tab-space) + var(--home-bottom-safe-space));
   color: #17243a;
 }
 
@@ -117,14 +120,18 @@ ion-content.home-content::part(scroll) {
 }
 
 .home-aura-cta {
+  --home-aura-width: min(104vw, 44dvh, 440px);
+  --home-aura-half-width: min(52vw, 22dvh, 220px);
+
   position: relative;
   display: grid;
-  width: min(104vw, 44dvh, 440px);
+  width: var(--home-aura-width);
   max-width: none;
-  left: 50%;
-  transform: translateX(-50%);
   aspect-ratio: 1;
-  margin: clamp(12px, 2.1vh, 20px) auto 0;
+  margin:
+    clamp(12px, 2.1vh, 20px)
+    calc(50% - var(--home-aura-half-width))
+    0;
   place-items: center;
 }
 
@@ -294,7 +301,8 @@ ion-content.home-content::part(scroll) {
   align-items: center;
   gap: 12px;
   min-height: 78px;
-  margin-top: clamp(24px, 4vh, 36px);
+  margin-top: clamp(12px, 2.4vh, 22px);
+  margin-bottom: calc(12px + var(--home-bottom-safe-space));
   border: 1px solid rgba(255, 255, 255, 0.62);
   border-radius: 18px;
   background:
@@ -336,6 +344,21 @@ ion-content.home-content::part(scroll) {
   color: #17243a;
   font-size: 1.48rem;
   --ionicon-stroke-width: 18px;
+}
+
+:host-context([dir="ltr"]) .reflection-card {
+  margin-bottom: calc(16px + var(--home-bottom-safe-space));
+}
+
+:host-context([dir="ltr"]) .reflection-card > span {
+  gap: 6px;
+}
+
+:host-context([dir="ltr"]) .reflection-card span span {
+  max-width: none;
+  font-size: clamp(0.72rem, 3.15vw, 0.82rem);
+  line-height: 1.36;
+  text-wrap: balance;
 }
 
 :host-context(.ion-palette-dark) ion-content.home-content {
@@ -415,20 +438,11 @@ ion-content.home-content::part(scroll) {
   color: rgba(248, 248, 255, 0.66);
 }
 
-:host-context([dir="rtl"]) .home-checkin-action ion-icon,
-:host-context([dir="rtl"]) .reflection-card ion-icon {
-  transform: scaleX(-1);
-}
-
-:host-context([dir="rtl"]) .home-checkin-action ion-icon {
-  transform: translateX(-50%) scaleX(-1);
-}
-
 @media (max-width: 380px) {
   .home-shell {
     padding-inline: 20px;
     padding-top: calc(10px + env(safe-area-inset-top));
-    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    padding-bottom: calc(20px + var(--home-bottom-tab-space) + var(--home-bottom-safe-space));
   }
 
   .home-greeting {
@@ -440,7 +454,8 @@ ion-content.home-content::part(scroll) {
   }
 
   .home-aura-cta {
-    width: min(89vw, 35.5dvh, 332px);
+    --home-aura-width: min(89vw, 35.5dvh, 332px);
+    --home-aura-half-width: min(44.5vw, 17.75dvh, 166px);
   }
 
   .reflection-card {
