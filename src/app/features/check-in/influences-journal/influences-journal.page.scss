@@ -287,13 +287,6 @@
   text-align: center;
 }
 
-.reflect-flow-shell .primary-action ion-icon {
-  position: absolute;
-  inset-inline-end: 22px;
-  margin: 0;
-  font-size: 1.78rem;
-}
-
 :host-context(.ion-palette-dark) ::ng-deep app-chip-option .chip {
   border-color: rgba(255, 255, 255, 0.055);
   background: transparent;

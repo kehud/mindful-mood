@@ -53,7 +53,6 @@
       <ion-button class="primary-action" expand="block" [disabled]="isSaving" (click)="save()">
         <ion-spinner *ngIf="isSaving" name="crescent"></ion-spinner>
         <span *ngIf="!isSaving">{{ 'common.done' | t }}</span>
-        <ion-icon *ngIf="!isSaving" slot="end" name="arrow-forward-outline" aria-hidden="true"></ion-icon>
       </ion-button>
     </footer>
 

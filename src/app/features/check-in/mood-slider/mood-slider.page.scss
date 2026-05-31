@@ -634,7 +634,7 @@ ion-content.checkin-immersive-content::part(scroll) {
 
 .mood-range-wrap {
   position: relative;
-  width: min(calc(100% - 4px), 378px);
+  width: min(calc(100% - 8px), 374px);
   margin-top: 0;
 }
 
@@ -760,6 +760,16 @@ ion-content.checkin-immersive-content::part(scroll) {
   position: relative;
   width: 100%;
   margin-inline: auto;
+  --background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--mood-accent) 54%, #ffffff),
+    color-mix(in srgb, var(--mood-accent) 82%, #ffffff)
+  );
+  --background-activated: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--mood-accent) 70%, #111827),
+    color-mix(in srgb, var(--mood-accent) 92%, #111827)
+  );
   --border-radius: 26px;
   --box-shadow: var(--mood-button-shadow);
   min-height: 70px;
@@ -782,7 +792,7 @@ ion-content.checkin-immersive-content::part(scroll) {
 
 .mood-screen .primary-action ion-icon {
   position: absolute;
-  inset-inline-end: 22px;
+  inset-inline-end: 0;
   margin: 0;
   font-size: 1.78rem;
 }
