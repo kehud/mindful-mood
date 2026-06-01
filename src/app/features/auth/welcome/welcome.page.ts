@@ -9,7 +9,7 @@ import { LocalizationService } from '../../../core/services/localization.service
 import { TranslationKey } from '../../../core/services/localization.translations';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 
-type AuthSheetMode = 'login' | 'register';
+type AuthSheetMode = 'google' | 'login' | 'register';
 
 @Component({
   selector: 'app-welcome',
@@ -33,8 +33,8 @@ export class WelcomePage implements OnDestroy {
 
   @ViewChild('authSheetModal') private authSheetModal?: IonModal;
 
-  readonly authSheetBreakpoints = [0, 0.76, 0.88, 0.94];
-  readonly authSheetInitialBreakpoint = 0.88;
+  readonly authSheetBreakpoints = [0, 0.74, 0.88, 1];
+  readonly authSheetInitialBreakpoint = 0.74;
   readonly canDismissAuthSheet = async (): Promise<boolean> => !this.isLoading;
   readonly canUseGoogleSignIn = this.authService.canUseGoogleSignIn;
 
@@ -74,6 +74,16 @@ export class WelcomePage implements OnDestroy {
     this.errorMessageKey = '';
   }
 
+  async closeAuthSheet(): Promise<void> {
+    if (this.isLoading) {
+      return;
+    }
+
+    this.isAuthSheetOpen = false;
+    this.errorMessageKey = '';
+    await this.authSheetModal?.dismiss(undefined, 'manual-close');
+  }
+
   switchAuthSheetMode(mode: AuthSheetMode): void {
     if (this.isLoading || this.authSheetMode === mode) {
       return;
@@ -85,6 +95,11 @@ export class WelcomePage implements OnDestroy {
   }
 
   async submitAuthSheet(): Promise<void> {
+    if (this.authSheetMode === 'google') {
+      await this.signInWithGoogle();
+      return;
+    }
+
     if (this.authSheetMode === 'login') {
       await this.submitLogin();
       return;
@@ -153,6 +168,10 @@ export class WelcomePage implements OnDestroy {
   }
 
   private syncEmailBetweenForms(targetMode: AuthSheetMode): void {
+    if (this.authSheetMode === 'google' || targetMode === 'google') {
+      return;
+    }
+
     const sourceEmail =
       this.authSheetMode === 'login'
         ? this.loginForm.controls.email.value
