@@ -1,7 +1,6 @@
 import { NgIf } from '@angular/common';
 import { ChangeDetectorRef, Component, NgZone, OnDestroy, ViewChild, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { IonModal, IonicModule, LoadingController, NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
@@ -15,7 +14,7 @@ type AuthSheetMode = 'login' | 'register';
 @Component({
   selector: 'app-welcome',
   standalone: true,
-  imports: [IonicModule, NgIf, ReactiveFormsModule, RouterLink, TranslatePipe],
+  imports: [IonicModule, NgIf, ReactiveFormsModule, TranslatePipe],
   templateUrl: './welcome.page.html',
   styleUrls: ['./welcome.page.scss'],
 })
