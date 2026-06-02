@@ -43,8 +43,8 @@
 
     <a class="reflection-card" routerLink="/tabs/history">
       <span>
-        <strong>{{ 'home.reflectionTitle' | t }}</strong>
-        <span>{{ 'home.reflectionSubtitle' | t }}</span>
+        <strong>{{ dailyReflection().title }}</strong>
+        <span>{{ dailyReflection().body }}</span>
       </span>
       <ion-icon name="chevron-forward-outline" aria-hidden="true"></ion-icon>
     </a>
