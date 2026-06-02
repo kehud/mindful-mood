@@ -14,7 +14,7 @@ ion-content.history-content {
   margin: 0 auto;
   box-sizing: border-box;
   padding:
-    calc(22px + env(safe-area-inset-top))
+    calc(8px + env(safe-area-inset-top))
     24px
     calc(82px + env(safe-area-inset-bottom));
   color: #17243a;
@@ -91,22 +91,13 @@ ion-content.history-content {
   grid-template-columns: 1fr auto;
   align-items: center;
   gap: 16px;
-  min-height: 136px;
+  min-height: 102px;
   text-align: center;
 }
 
 .history-hero > div {
   min-width: 0;
   transform: translateX(28px);
-}
-
-.history-eyebrow {
-  margin: 0 0 18px;
-  color: rgba(23, 36, 58, 0.64);
-  font-size: 0.86rem;
-  font-weight: 650;
-  letter-spacing: 0;
-  text-transform: uppercase;
 }
 
 .history-hero h1 {
@@ -119,7 +110,7 @@ ion-content.history-content {
 }
 
 .history-hero p:last-child {
-  margin: 17px auto 0;
+  margin: 10px auto 0;
   color: rgba(23, 36, 58, 0.68);
   font-size: 1.02rem;
   font-weight: 430;
@@ -161,7 +152,7 @@ ion-content.history-content {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 8px;
-  margin: 18px 0 20px;
+  margin: 10px 0 18px;
 }
 
 .history-week-strip button {
@@ -570,6 +561,49 @@ ion-content.history-content {
   margin-bottom: 2px;
 }
 
+.saved-heading {
+  align-items: center;
+}
+
+.saved-toggle,
+.load-more-saved {
+  height: 34px;
+  min-height: 34px;
+  margin: 0;
+  --background-activated: rgba(25, 186, 188, 0.1);
+  --border-radius: 999px;
+  --color: #19babc;
+  --padding-bottom: 0;
+  --padding-end: 10px;
+  --padding-start: 10px;
+  --padding-top: 0;
+  font-size: 0.82rem;
+  font-weight: 650;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.saved-toggle::part(native),
+.load-more-saved::part(native) {
+  gap: 4px;
+}
+
+.saved-toggle ion-icon {
+  font-size: 1rem;
+  --ionicon-stroke-width: 30px;
+}
+
+.saved-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.load-more-saved {
+  justify-self: center;
+  margin-top: 2px;
+}
+
 .saved-entry {
   display: grid;
   gap: 13px;
@@ -711,7 +745,6 @@ ion-content.history-content {
   color: #f8f8ff;
 }
 
-:host-context(.ion-palette-dark) .history-eyebrow,
 :host-context(.ion-palette-dark) .history-hero p:last-child,
 :host-context(.ion-palette-dark) .history-empty-card p,
 :host-context(.ion-palette-dark) .panel-heading p,
@@ -783,14 +816,14 @@ ion-content.history-content {
 @media (max-width: 380px) {
   .history-shell {
     padding:
-      calc(16px + env(safe-area-inset-top))
+      calc(6px + env(safe-area-inset-top))
       18px
       calc(72px + env(safe-area-inset-bottom));
   }
 
   .history-hero {
     gap: 12px;
-    min-height: 122px;
+    min-height: 90px;
   }
 
   .history-hero > div {
@@ -801,17 +834,12 @@ ion-content.history-content {
     transform: translateX(-22px);
   }
 
-  .history-eyebrow {
-    margin-bottom: 14px;
-    font-size: 0.8rem;
-  }
-
   .history-hero h1 {
     font-size: 1.72rem;
   }
 
   .history-hero p:last-child {
-    margin-top: 12px;
+    margin-top: 8px;
     font-size: 0.94rem;
   }
 

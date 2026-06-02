@@ -35,6 +35,7 @@ interface FrequencyItem {
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const MAX_TREND_POINTS = 6;
+const SAVED_REFLECTIONS_PAGE_SIZE = 5;
 
 const MOOD_COLORS_BY_LEVEL: Record<number, string> = {
   1: '#8b64c8',
@@ -137,6 +138,8 @@ export class HistoryPage {
   readonly entries$ = this.moodEntryService.entries$;
   readonly entriesLoading$ = this.moodEntryService.entriesLoading$;
   readonly entriesError$ = this.moodEntryService.entriesError$;
+  savedReflectionsExpanded = false;
+  visibleSavedReflectionsCount = SAVED_REFLECTIONS_PAGE_SIZE;
 
   private selectedDateIsoOverride = '';
 
@@ -191,15 +194,24 @@ export class HistoryPage {
   }
 
   checkInCountLabel(count: number): string {
-    return count === 1 ? '1 check-in' : `${count} check-ins`;
+    return this.localization.translate(
+      count === 1 ? 'history.checkInsCountOne' : 'history.checkInsCountMany',
+      { count },
+    );
   }
 
   totalCountLabel(count: number): string {
-    return count === 1 ? '1 total' : `${count} total`;
+    return this.localization.translate(
+      count === 1 ? 'history.totalCountOne' : 'history.totalCountMany',
+      { count },
+    );
   }
 
   frequencyLabel(count: number): string {
-    return count === 1 ? '1 time' : `${count} times`;
+    return this.localization.translate(
+      count === 1 ? 'history.frequencyOne' : 'history.frequencyMany',
+      { count },
+    );
   }
 
   averageMood(entries: readonly MoodEntry[]): number {
@@ -214,10 +226,45 @@ export class HistoryPage {
 
   moodStatusLabel(entries: readonly MoodEntry[], options: readonly MoodOption[]): string {
     if (!entries.length) {
-      return 'No check-ins';
+      return this.localization.translate('history.noCheckInsShort');
     }
 
     return this.moodLabel(this.averageMood(entries), options);
+  }
+
+  moodTrendAriaLabel(entries: readonly MoodEntry[]): string {
+    return this.localization.translate('history.moodTrendAria', {
+      date: this.selectedDateLabel(entries),
+    });
+  }
+
+  savedReflectionsToggleLabel(): string {
+    return this.localization.translate(
+      this.savedReflectionsExpanded ? 'history.hideSavedReflections' : 'history.showSavedReflections',
+    );
+  }
+
+  toggleSavedReflections(): void {
+    this.savedReflectionsExpanded = !this.savedReflectionsExpanded;
+
+    if (!this.savedReflectionsExpanded) {
+      this.visibleSavedReflectionsCount = SAVED_REFLECTIONS_PAGE_SIZE;
+    }
+  }
+
+  visibleSavedEntries(entries: readonly MoodEntry[]): readonly MoodEntry[] {
+    return entries.slice(0, this.visibleSavedReflectionsCount);
+  }
+
+  hasMoreSavedEntries(entries: readonly MoodEntry[]): boolean {
+    return this.visibleSavedReflectionsCount < entries.length;
+  }
+
+  loadMoreSavedReflections(entries: readonly MoodEntry[]): void {
+    this.visibleSavedReflectionsCount = Math.min(
+      this.visibleSavedReflectionsCount + SAVED_REFLECTIONS_PAGE_SIZE,
+      entries.length,
+    );
   }
 
   moodLabel(level: number, options: readonly MoodOption[]): string {

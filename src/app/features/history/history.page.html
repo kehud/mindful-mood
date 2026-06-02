@@ -16,9 +16,8 @@
     <ng-container *ngIf="entries$ | async as entries">
       <header class="history-hero">
         <div>
-          <p class="history-eyebrow">7. {{ 'history.eyebrow' | t }}</p>
-          <h1>Your journey</h1>
-          <p>See your progress over time.</p>
+          <h1>{{ 'history.journeyTitle' | t }}</h1>
+          <p>{{ 'history.journeySubtitle' | t }}</p>
         </div>
 
         <ion-button
@@ -31,7 +30,7 @@
         </ion-button>
       </header>
 
-      <nav class="history-week-strip" aria-label="History week">
+      <nav class="history-week-strip" [attr.aria-label]="'history.weekAria' | t">
         <button
           *ngFor="let day of weekDays(entries); trackBy: trackByWeekDay"
           type="button"
@@ -61,7 +60,7 @@
               <section class="history-panel mood-panel">
                 <div class="panel-heading">
                   <div>
-                    <h2>Overall mood</h2>
+                    <h2>{{ 'history.overallMood' | t }}</h2>
                     <p>{{ selectedDateLabel(entries) }}</p>
                   </div>
                   <span
@@ -80,7 +79,7 @@
                       viewBox="0 0 300 136"
                       preserveAspectRatio="none"
                       role="img"
-                      [attr.aria-label]="'Mood trend for ' + selectedDateLabel(entries)"
+                      [attr.aria-label]="moodTrendAriaLabel(entries)"
                     >
                       <defs>
                         <linearGradient id="historyTrendGradient" x1="0%" x2="100%" y1="0%" y2="0%">
@@ -126,7 +125,7 @@
 
                     <div class="empty-trend" *ngIf="!trend.length">
                       <ion-icon name="calendar-clear-outline" aria-hidden="true"></ion-icon>
-                      <p>No check-ins for this day</p>
+                      <p>{{ 'history.noCheckInsForDay' | t }}</p>
                     </div>
                   </ng-container>
 
@@ -140,7 +139,7 @@
 
               <section class="history-panel checkins-panel">
                 <div class="panel-heading compact">
-                  <h2>Check-ins</h2>
+                  <h2>{{ 'history.checkIns' | t }}</h2>
                   <p>{{ checkInCountLabel(dayEntries.length) }}</p>
                 </div>
 
@@ -157,16 +156,16 @@
                   </div>
                 </div>
 
-                <p class="quiet-empty" *ngIf="!dayEntries.length">No check-ins for this day.</p>
+                <p class="quiet-empty" *ngIf="!dayEntries.length">{{ 'history.noCheckInsForDay' | t }}</p>
               </section>
 
               <section class="history-panel insight-strip">
                 <div class="panel-heading compact">
                   <div>
-                    <h2>Top emotions</h2>
-                    <p>This day</p>
+                    <h2>{{ 'history.topEmotions' | t }}</h2>
+                    <p>{{ 'history.thisDay' | t }}</p>
                   </div>
-                  <ion-button fill="clear" routerLink="/tabs/insights">See all</ion-button>
+                  <ion-button fill="clear" routerLink="/tabs/insights">{{ 'history.seeAll' | t }}</ion-button>
                 </div>
 
                 <ng-container *ngIf="topEmotionItems(dayEntries) as emotions">
@@ -187,17 +186,17 @@
                     </article>
                   </div>
 
-                  <p class="quiet-empty" *ngIf="!emotions.length">No emotions saved for this day.</p>
+                  <p class="quiet-empty" *ngIf="!emotions.length">{{ 'history.noEmotionsForDay' | t }}</p>
                 </ng-container>
               </section>
 
               <section class="history-panel insight-strip">
                 <div class="panel-heading compact">
                   <div>
-                    <h2>Top influences</h2>
-                    <p>This day</p>
+                    <h2>{{ 'history.topInfluences' | t }}</h2>
+                    <p>{{ 'history.thisDay' | t }}</p>
                   </div>
-                  <ion-button fill="clear" routerLink="/tabs/insights">See all</ion-button>
+                  <ion-button fill="clear" routerLink="/tabs/insights">{{ 'history.seeAll' | t }}</ion-button>
                 </div>
 
                 <ng-container *ngIf="topInfluenceItems(dayEntries) as influences">
@@ -218,52 +217,80 @@
                     </article>
                   </div>
 
-                  <p class="quiet-empty" *ngIf="!influences.length">No influences saved for this day.</p>
+                  <p class="quiet-empty" *ngIf="!influences.length">{{ 'history.noInfluencesForDay' | t }}</p>
                 </ng-container>
               </section>
 
               <section class="history-panel saved-panel" *ngIf="entries.length">
-                <div class="panel-heading compact">
+                <div class="panel-heading compact saved-heading">
                   <div>
-                    <h2>Saved reflections</h2>
+                    <h2>{{ 'history.savedReflections' | t }}</h2>
                     <p>{{ totalCountLabel(entries.length) }}</p>
                   </div>
+
+                  <ion-button
+                    class="saved-toggle"
+                    fill="clear"
+                    type="button"
+                    [attr.aria-expanded]="savedReflectionsExpanded"
+                    (click)="toggleSavedReflections()"
+                  >
+                    <span>{{ savedReflectionsToggleLabel() }}</span>
+                    <ion-icon
+                      [name]="savedReflectionsExpanded ? 'chevron-up-outline' : 'chevron-down-outline'"
+                      aria-hidden="true"
+                    ></ion-icon>
+                  </ion-button>
                 </div>
 
-                <article
-                  class="saved-entry"
-                  *ngFor="let entry of entries; trackBy: trackByEntryId"
-                  [style.--history-mood-color]="moodColor(entry.moodLevel, moodConfig.options)"
-                >
-                  <div class="saved-entry__top">
-                    <span class="saved-entry__icon">
-                      <ion-icon [name]="moodIcon(entry.moodLevel)" aria-hidden="true"></ion-icon>
-                    </span>
+                <ng-container *ngIf="savedReflectionsExpanded">
+                  <div class="saved-list">
+                    <article
+                      class="saved-entry"
+                      *ngFor="let entry of visibleSavedEntries(entries); trackBy: trackByEntryId"
+                      [style.--history-mood-color]="moodColor(entry.moodLevel, moodConfig.options)"
+                    >
+                      <div class="saved-entry__top">
+                        <span class="saved-entry__icon">
+                          <ion-icon [name]="moodIcon(entry.moodLevel)" aria-hidden="true"></ion-icon>
+                        </span>
 
-                    <div>
-                      <p>{{ entry.createdAt | date: 'EEEE, MMM d, h:mm a': undefined : currentLanguage() }}</p>
-                      <h3>{{ entry.moodLevel | moodLabel: moodConfig.options }}</h3>
-                    </div>
+                        <div>
+                          <p>{{ entry.createdAt | date: 'EEEE, MMM d, h:mm a': undefined : currentLanguage() }}</p>
+                          <h3>{{ entry.moodLevel | moodLabel: moodConfig.options }}</h3>
+                        </div>
 
-                    <strong>{{ entry.moodLevel }}</strong>
+                        <strong>{{ entry.moodLevel }}</strong>
+                      </div>
+
+                      <div class="tag-section" *ngIf="entry.emotions.length">
+                        <p>{{ 'history.emotions' | t }}</p>
+                        <div class="tag-row">
+                          <span *ngFor="let emotion of entry.emotions">{{ emotion | configLabel: emotionConfig.options }}</span>
+                        </div>
+                      </div>
+
+                      <div class="tag-section" *ngIf="entry.influences.length">
+                        <p>{{ 'history.influences' | t }}</p>
+                        <div class="tag-row influence">
+                          <span *ngFor="let influence of entry.influences">{{ influence | configLabel: influenceConfig.options }}</span>
+                        </div>
+                      </div>
+
+                      <p class="journal" *ngIf="entry.journalNote">{{ entry.journalNote }}</p>
+                    </article>
                   </div>
 
-                  <div class="tag-section" *ngIf="entry.emotions.length">
-                    <p>{{ 'history.emotions' | t }}</p>
-                    <div class="tag-row">
-                      <span *ngFor="let emotion of entry.emotions">{{ emotion | configLabel: emotionConfig.options }}</span>
-                    </div>
-                  </div>
-
-                  <div class="tag-section" *ngIf="entry.influences.length">
-                    <p>{{ 'history.influences' | t }}</p>
-                    <div class="tag-row influence">
-                      <span *ngFor="let influence of entry.influences">{{ influence | configLabel: influenceConfig.options }}</span>
-                    </div>
-                  </div>
-
-                  <p class="journal" *ngIf="entry.journalNote">{{ entry.journalNote }}</p>
-                </article>
+                  <ion-button
+                    class="load-more-saved"
+                    fill="clear"
+                    type="button"
+                    *ngIf="hasMoreSavedEntries(entries)"
+                    (click)="loadMoreSavedReflections(entries)"
+                  >
+                    {{ 'history.loadMore' | t }}
+                  </ion-button>
+                </ng-container>
               </section>
             </ng-container>
           </ng-container>

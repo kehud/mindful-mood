@@ -6,16 +6,16 @@
       <ion-label>{{ 'tabs.home' | t }}</ion-label>
     </ion-tab-button>
 
+    <ion-tab-button href="/check-in/mood" (click)="openCheckIn($event)">
+      <ion-icon class="tab-icon-outline" name="happy-outline"></ion-icon>
+      <ion-icon class="tab-icon-filled" name="happy-outline"></ion-icon>
+      <ion-label>{{ 'tabs.checkIn' | t }}</ion-label>
+    </ion-tab-button>
+
     <ion-tab-button tab="history" href="/tabs/history">
       <ion-icon class="tab-icon-outline" name="calendar-clear-outline"></ion-icon>
       <ion-icon class="tab-icon-filled" name="calendar-clear-outline"></ion-icon>
       <ion-label>{{ 'tabs.history' | t }}</ion-label>
-    </ion-tab-button>
-
-    <ion-tab-button tab="insights" href="/tabs/insights">
-      <ion-icon class="tab-icon-outline" name="pulse-outline"></ion-icon>
-      <ion-icon class="tab-icon-filled" name="pulse-outline"></ion-icon>
-      <ion-label>{{ 'tabs.insights' | t }}</ion-label>
     </ion-tab-button>
 
     <ion-tab-button tab="tools" href="/tabs/tools">
