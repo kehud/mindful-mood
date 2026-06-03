@@ -1,53 +1,75 @@
-<ion-content class="wellness-content" fullscreen>
-  <main class="page-shell aura-page">
-    <app-wellness-header
-      [eyebrow]="'profile.eyebrow' | t"
-      [title]="'profile.title' | t"
-      [subtitle]="'profile.subtitle' | t"
-    ></app-wellness-header>
+<ion-content class="profile-content" fullscreen>
+  <main class="profile-shell aura-page">
+    <header class="profile-header">
+      <p class="profile-eyebrow">{{ 'profile.eyebrow' | t }}</p>
+      <h1>{{ 'profile.title' | t }}</h1>
+      <p>{{ 'profile.subtitle' | t }}</p>
+    </header>
 
-    <app-wellness-card tone="mint">
-      <div class="profile-row" *ngIf="user$ | async as user; else previewProfile">
-        <div class="avatar">{{ user.displayName.charAt(0) }}</div>
-        <div>
-          <h2>{{ user.displayName }}</h2>
-          <p>{{ user.email }}</p>
+    <section class="profile-card profile-user-card" *ngIf="user$ | async as user; else previewProfile">
+      <div class="avatar">{{ profileInitial(user.displayName) }}</div>
+      <div class="profile-user-copy">
+        <h2>{{ user.displayName }}</h2>
+        <p>{{ user.email }}</p>
+      </div>
+      <ion-icon class="chevron-icon user-chevron" name="chevron-forward-outline" aria-hidden="true"></ion-icon>
+    </section>
+
+    <ng-template #previewProfile>
+      <section class="profile-card profile-user-card">
+        <div class="avatar">R</div>
+        <div class="profile-user-copy">
+          <h2>{{ 'profile.previewTitle' | t }}</h2>
+          <p>{{ 'profile.previewSubtitle' | t }}</p>
         </div>
+        <ion-icon class="chevron-icon user-chevron" name="chevron-forward-outline" aria-hidden="true"></ion-icon>
+      </section>
+    </ng-template>
+
+    <section class="profile-card preferences-card">
+      <div class="profile-card-heading">
+        <h2>{{ 'profile.preferences' | t }}</h2>
       </div>
 
-      <ng-template #previewProfile>
-        <div class="profile-row">
-          <div class="avatar">M</div>
+      <div class="preference-group">
+        <div class="preference-intro">
+          <span class="preference-icon" aria-hidden="true">
+            <ion-icon name="contrast-outline"></ion-icon>
+          </span>
           <div>
-            <h2>{{ 'profile.previewTitle' | t }}</h2>
-            <p>{{ 'profile.previewSubtitle' | t }}</p>
+            <h3>{{ 'profile.appearance' | t }}</h3>
+            <p>{{ 'profile.appearanceSubtitle' | t }}</p>
           </div>
         </div>
-      </ng-template>
-    </app-wellness-card>
 
-    <section class="settings-list">
-      <app-wellness-card [title]="'profile.appearance' | t" [subtitle]="'profile.appearanceSubtitle' | t">
         <ion-segment
-          class="theme-segment"
+          class="compact-segment theme-segment"
           mode="ios"
+          [attr.aria-label]="'profile.appearance' | t"
           [value]="themePreference$ | async"
           (ionChange)="setTheme($event.detail.value)"
         >
           <ion-segment-button *ngFor="let option of themeOptions" [value]="option.value">
-            <ion-icon [name]="option.icon" aria-hidden="true"></ion-icon>
             <ion-label>{{ themeLabel(option.value) }}</ion-label>
           </ion-segment-button>
         </ion-segment>
+      </div>
 
-        <p class="theme-current" *ngIf="resolvedTheme$ | async as resolvedTheme">
-          {{ 'profile.themeCurrent' | t: { theme: themeLabel(resolvedTheme) } }}
-        </p>
-      </app-wellness-card>
+      <div class="preference-divider"></div>
 
-      <app-wellness-card [title]="'profile.language' | t" [subtitle]="'profile.languageSubtitle' | t">
+      <div class="preference-group">
+        <div class="preference-intro">
+          <span class="preference-icon" aria-hidden="true">
+            <ion-icon name="globe-outline"></ion-icon>
+          </span>
+          <div>
+            <h3>{{ 'profile.language' | t }}</h3>
+            <p>{{ 'profile.languageSubtitle' | t }}</p>
+          </div>
+        </div>
+
         <ion-segment
-          class="theme-segment language-segment"
+          class="compact-segment language-segment"
           mode="ios"
           [attr.aria-label]="'language.current' | t"
           [disabled]="isLanguageSwitching()"
@@ -62,20 +84,25 @@
             <ion-label>{{ option.nativeLabel }}</ion-label>
           </ion-segment-button>
         </ion-segment>
+      </div>
+    </section>
 
-        <p class="theme-current">
-          {{ 'profile.languageCurrent' | t: { language: languageLabel(currentLanguage()) } }}
-        </p>
-      </app-wellness-card>
-
-      <app-wellness-card [title]="'profile.privacy' | t" [subtitle]="'profile.privacySubtitle' | t"></app-wellness-card>
-      <app-wellness-card [title]="'profile.reminders' | t" [subtitle]="'profile.remindersSubtitle' | t"></app-wellness-card>
+    <section class="profile-card settings-card" [attr.aria-label]="'profile.settings' | t">
+      <div class="settings-row" *ngFor="let item of settingsItems">
+        <span class="settings-icon" aria-hidden="true">
+          <ion-icon [name]="item.icon"></ion-icon>
+        </span>
+        <span class="settings-label">{{ item.labelKey | t }}</span>
+        <ion-icon class="chevron-icon settings-chevron" name="chevron-forward-outline" aria-hidden="true"></ion-icon>
+      </div>
     </section>
 
     <p class="profile-error" *ngIf="errorMessage">{{ errorMessage }}</p>
-    <ion-button class="secondary-action" expand="block" fill="clear" [disabled]="isSigningOut" (click)="signOut()">
+
+    <button class="profile-card sign-out-card" type="button" [disabled]="isSigningOut" (click)="signOut()">
       <ion-spinner *ngIf="isSigningOut" name="crescent"></ion-spinner>
       <span *ngIf="!isSigningOut">{{ 'profile.signOut' | t }}</span>
-    </ion-button>
+      <ion-icon *ngIf="!isSigningOut" class="sign-out-icon" name="log-out-outline" aria-hidden="true"></ion-icon>
+    </button>
   </main>
 </ion-content>

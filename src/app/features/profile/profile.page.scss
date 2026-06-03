@@ -1,99 +1,580 @@
-.profile-row {
+ion-content.profile-content {
+  --background:
+    radial-gradient(circle at 5% 10%, rgba(138, 216, 211, 0.23), transparent 38%),
+    radial-gradient(circle at 96% 5%, rgba(247, 198, 173, 0.31), transparent 40%),
+    radial-gradient(circle at 50% 75%, rgba(73, 197, 187, 0.16), transparent 44%),
+    linear-gradient(180deg, #fbfcf6 0%, #f0f8f3 48%, #fbf4e7 100%);
+}
+
+.profile-shell {
+  --profile-bottom-safe-space: max(var(--ion-safe-area-bottom, 0px), env(safe-area-inset-bottom, 0px));
+  --profile-bottom-tab-space: 48px;
+
   display: grid;
-  justify-items: center;
   gap: 10px;
+  width: min(100%, 390px);
+  min-height: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  direction: inherit;
+  padding:
+    calc(15px + env(safe-area-inset-top))
+    20px
+    calc(20px + var(--profile-bottom-tab-space) + var(--profile-bottom-safe-space));
+  color: #17243a;
+}
+
+.profile-header {
+  display: grid;
+  gap: 6px;
+  padding: 3px 6px 1px;
   text-align: center;
+}
+
+.profile-eyebrow {
+  margin: 0;
+  color: rgba(23, 36, 58, 0.68);
+  font-size: 0.74rem;
+  font-weight: 470;
+  letter-spacing: 0;
+}
+
+.profile-header h1 {
+  margin: 0;
+  color: #142741;
+  font-size: 1.54rem;
+  font-weight: 540;
+  letter-spacing: 0;
+  line-height: 1.13;
+}
+
+.profile-header p:last-child {
+  max-width: 290px;
+  margin: 0 auto;
+  color: rgba(23, 36, 58, 0.68);
+  font-size: 0.8rem;
+  font-weight: 340;
+  letter-spacing: 0;
+  line-height: 1.38;
+}
+
+.profile-card {
+  border: 1px solid rgba(255, 255, 255, 0.58);
+  border-radius: 18px;
+  direction: inherit;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.5)),
+    rgba(255, 255, 255, 0.54);
+  box-shadow:
+    0 12px 32px rgba(60, 78, 92, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.68);
+  backdrop-filter: blur(26px) saturate(125%);
+  -webkit-backdrop-filter: blur(26px) saturate(125%);
+}
+
+.profile-user-card {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-height: 76px;
+  padding: 12px 14px;
 }
 
 .avatar {
   display: grid;
+  flex: 0 0 auto;
   place-items: center;
-  width: 64px;
-  height: 64px;
-  border-radius: 44% 56% 48% 52%;
-  border: 1px solid var(--app-control-border);
+  width: 47px;
+  height: 47px;
+  border: 1px solid rgba(255, 255, 255, 0.48);
+  border-radius: 999px;
   background:
-    radial-gradient(circle at 34% 24%, var(--app-white-glow), transparent 36%),
-    radial-gradient(circle at 52% 60%, rgba(var(--ion-color-primary-rgb), 0.28), transparent 64%),
-    linear-gradient(145deg, rgba(var(--ion-color-secondary-rgb), 0.18), rgba(var(--ion-color-tertiary-rgb), 0.13));
-  color: var(--app-secondary-text);
-  font-size: 1.6rem;
-  font-weight: 850;
+    radial-gradient(circle at 34% 24%, rgba(255, 255, 255, 0.88), transparent 35%),
+    radial-gradient(circle at 68% 72%, rgba(239, 128, 151, 0.18), transparent 46%),
+    linear-gradient(145deg, rgba(126, 105, 211, 0.18), rgba(105, 203, 198, 0.16));
+  color: #10243d;
+  font-size: 1.26rem;
+  font-weight: 560;
   box-shadow:
-    0 16px 36px rgba(var(--ion-color-primary-rgb), 0.14),
-    inset 0 1px 0 var(--app-inset-highlight);
+    0 10px 24px rgba(79, 132, 150, 0.11),
+    inset 0 1px 0 rgba(255, 255, 255, 0.66);
 }
 
-h2 {
+.profile-user-copy {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: start;
+}
+
+.profile-user-copy h2 {
   margin: 0;
-  color: var(--app-text);
-  font-size: 1.15rem;
-  font-weight: 780;
+  overflow: hidden;
+  color: #142741;
+  font-size: 0.94rem;
+  font-weight: 540;
+  letter-spacing: 0;
+  line-height: 1.18;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-p {
+.profile-user-copy p {
   margin: 5px 0 0;
-  color: var(--app-muted);
-  line-height: 1.42;
+  overflow: hidden;
+  color: rgba(23, 36, 58, 0.67);
+  font-size: 0.79rem;
+  font-weight: 340;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.settings-list {
+.chevron-icon {
+  color: rgba(23, 36, 58, 0.56);
+  font-size: 1rem;
+  --ionicon-stroke-width: 26px;
+}
+
+.user-chevron {
+  flex: 0 0 auto;
+}
+
+.preferences-card {
   display: grid;
   gap: 10px;
-  margin-top: 18px;
+  padding: 13px;
 }
 
-.theme-segment {
-  --background: var(--app-control-surface);
-  border: 1px solid var(--app-control-border);
-  border-radius: 20px;
-  padding: 4px;
+.profile-card-heading,
+.preference-intro > div {
+  text-align: start;
+}
+
+.profile-card-heading h2 {
+  margin: 0;
+  color: #142741;
+  font-size: 0.92rem;
+  font-weight: 560;
+  letter-spacing: 0;
+  line-height: 1.2;
+}
+
+.preference-group {
+  display: grid;
+  gap: 8px;
+}
+
+.preference-intro {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.preference-icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.72), transparent 36%),
+    rgba(109, 105, 220, 0.11);
+  color: rgba(71, 72, 178, 0.86);
+}
+
+.preference-icon ion-icon {
+  font-size: 0.98rem;
+  --ionicon-stroke-width: 24px;
+}
+
+.preference-intro > div {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.preference-intro h3 {
+  margin: 0;
+  color: #142741;
+  font-size: 0.86rem;
+  font-weight: 510;
+  letter-spacing: 0;
+  line-height: 1.18;
+}
+
+.preference-intro p {
+  margin: 3px 0 0;
+  color: rgba(23, 36, 58, 0.62);
+  font-size: 0.71rem;
+  font-weight: 330;
+  letter-spacing: 0;
+  line-height: 1.28;
+}
+
+.preference-divider {
+  height: 1px;
+  background: rgba(56, 71, 86, 0.08);
+}
+
+.compact-segment {
+  --background: rgba(255, 255, 255, 0.38);
+  min-height: 32px;
+  border: 1px solid rgba(56, 71, 86, 0.06);
+  border-radius: 13px;
+  padding: 3px;
   direction: inherit;
-  box-shadow: inset 0 1px 0 var(--app-inset-highlight);
-  backdrop-filter: blur(14px) saturate(125%);
-  -webkit-backdrop-filter: blur(14px) saturate(125%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.48);
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
 }
 
-.language-segment ion-segment-button {
-  min-height: 46px;
-}
-
-ion-segment-button {
-  --border-radius: 16px;
-  --color: var(--app-muted);
-  --color-checked: var(--app-text);
-  --indicator-color: var(--app-theme-segment-indicator);
-  --indicator-box-shadow: var(--app-theme-segment-shadow);
-  min-height: 48px;
-  font-size: 0.78rem;
-  font-weight: 720;
+.compact-segment ion-segment-button {
+  --border-radius: 10px;
+  --color: rgba(23, 36, 58, 0.58);
+  --color-checked: #142741;
+  --indicator-color: rgba(255, 255, 255, 0.94);
+  --indicator-box-shadow: 0 6px 14px rgba(44, 65, 74, 0.08);
+  min-height: 26px;
+  font-size: 0.72rem;
+  font-weight: 430;
   letter-spacing: 0;
 }
 
-ion-segment-button ion-icon {
-  margin-bottom: 3px;
-  font-size: 1.05rem;
+.compact-segment ion-label {
+  margin: 0;
+  line-height: 1;
 }
 
-.theme-current {
-  margin: 12px 2px 0;
-  color: var(--app-muted);
-  font-size: 0.88rem;
-  font-weight: 650;
+.settings-card {
+  overflow: hidden;
+  padding: 3px 13px;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 40px;
+  border-bottom: 1px solid rgba(56, 71, 86, 0.075);
+}
+
+.settings-row:last-child {
+  border-bottom: 0;
+}
+
+.settings-icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  color: rgba(69, 87, 108, 0.78);
+}
+
+.settings-icon ion-icon {
+  font-size: 1rem;
+  --ionicon-stroke-width: 22px;
+}
+
+.settings-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  color: #142741;
+  font-size: 0.84rem;
+  font-weight: 410;
+  letter-spacing: 0;
+  line-height: 1.2;
+  text-align: start;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.settings-chevron {
+  flex: 0 0 auto;
+  font-size: 0.92rem;
 }
 
 .profile-error {
-  margin: 16px 0 0;
-  border-radius: 16px;
+  margin: 0;
+  border: 1px solid var(--app-danger-border);
+  border-radius: 14px;
   background: var(--app-danger-soft);
   color: var(--ion-color-danger);
-  font-size: 0.9rem;
-  font-weight: 650;
+  font-size: 0.8rem;
+  font-weight: 480;
   line-height: 1.35;
-  padding: 12px 14px;
+  padding: 10px 12px;
+}
+
+.sign-out-card {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #e84d5b;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 430;
+  letter-spacing: 0;
+  text-align: center;
+}
+
+.sign-out-card:disabled {
+  opacity: 0.65;
+}
+
+.sign-out-icon {
+  font-size: 1rem;
+  --ionicon-stroke-width: 22px;
 }
 
 ion-spinner {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
+  color: currentColor;
+}
+
+:host-context([dir="rtl"]) .profile-header h1 {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+:host-context([dir="rtl"]) .profile-header p:last-child {
+  font-size: 0.78rem;
+  font-weight: 320;
+}
+
+:host-context([dir="rtl"]) .profile-card-heading h2 {
+  font-size: 0.9rem;
+  font-weight: 520;
+}
+
+:host-context([dir="rtl"]) .preference-intro h3 {
+  font-size: 0.84rem;
+  font-weight: 480;
+}
+
+:host-context([dir="rtl"]) .settings-label {
+  font-size: 0.82rem;
+  font-weight: 390;
+}
+
+:host-context(.ion-palette-dark) ion-content.profile-content {
+  --background:
+    radial-gradient(circle at 50% 36%, rgba(35, 63, 160, 0.34), transparent 37%),
+    radial-gradient(circle at 2% 55%, rgba(14, 111, 147, 0.17), transparent 36%),
+    radial-gradient(circle at 95% 6%, rgba(29, 70, 149, 0.18), transparent 32%),
+    linear-gradient(180deg, #061121 0%, #020a18 50%, #06101f 100%);
+}
+
+:host-context(.ion-palette-dark) .profile-shell {
+  color: #fbfbff;
+}
+
+:host-context(.ion-palette-dark) .profile-eyebrow,
+:host-context(.ion-palette-dark) .profile-header p:last-child {
+  color: rgba(248, 248, 255, 0.7);
+}
+
+:host-context(.ion-palette-dark) .profile-header h1,
+:host-context(.ion-palette-dark) .profile-user-copy h2,
+:host-context(.ion-palette-dark) .profile-card-heading h2,
+:host-context(.ion-palette-dark) .preference-intro h3,
+:host-context(.ion-palette-dark) .settings-label {
+  color: #f8f8ff;
+}
+
+:host-context(.ion-palette-dark) .profile-card {
+  border-color: rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(180deg, rgba(26, 39, 65, 0.76), rgba(12, 22, 42, 0.62)),
+    rgba(8, 18, 36, 0.68);
+  box-shadow:
+    0 14px 42px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+:host-context(.ion-palette-dark) .avatar {
+  border-color: rgba(255, 255, 255, 0.08);
+  background:
+    radial-gradient(circle at 34% 24%, rgba(255, 255, 255, 0.12), transparent 35%),
+    radial-gradient(circle at 68% 72%, rgba(218, 94, 191, 0.22), transparent 46%),
+    linear-gradient(145deg, rgba(90, 101, 255, 0.34), rgba(82, 214, 216, 0.14));
+  color: #fbfbff;
+  box-shadow:
+    0 12px 30px rgba(39, 74, 210, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+:host-context(.ion-palette-dark) .profile-user-copy p,
+:host-context(.ion-palette-dark) .preference-intro p {
+  color: rgba(248, 248, 255, 0.64);
+}
+
+:host-context(.ion-palette-dark) .preference-icon {
+  background: rgba(90, 101, 255, 0.16);
+  color: rgba(148, 219, 255, 0.9);
+}
+
+:host-context(.ion-palette-dark) .preference-divider {
+  background: rgba(255, 255, 255, 0.075);
+}
+
+:host-context(.ion-palette-dark) .settings-row {
+  border-color: rgba(255, 255, 255, 0.075);
+}
+
+:host-context(.ion-palette-dark) .compact-segment {
+  --background: rgba(255, 255, 255, 0.075);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+:host-context(.ion-palette-dark) .compact-segment ion-segment-button {
+  --color: rgba(248, 248, 255, 0.58);
+  --color-checked: #f8f8ff;
+  --indicator-color: rgba(250, 247, 255, 0.14);
+  --indicator-box-shadow: 0 8px 20px rgba(0, 0, 0, 0.24);
+}
+
+:host-context(.ion-palette-dark) .settings-icon,
+:host-context(.ion-palette-dark) .chevron-icon {
+  color: rgba(219, 230, 244, 0.66);
+}
+
+:host-context(.ion-palette-dark) .sign-out-card {
+  color: #ff8a95;
+}
+
+@media (max-width: 380px) {
+  .profile-shell {
+    gap: 7px;
+    padding-inline: 16px;
+    padding-top: calc(10px + env(safe-area-inset-top));
+    padding-bottom: calc(16px + var(--profile-bottom-tab-space) + var(--profile-bottom-safe-space));
+  }
+
+  .profile-header {
+    gap: 4px;
+    padding-top: 0;
+  }
+
+  .profile-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .profile-header p:last-child {
+    max-width: 250px;
+    font-size: 0.72rem;
+    line-height: 1.32;
+  }
+
+  .profile-user-card {
+    min-height: 62px;
+    gap: 9px;
+    padding: 9px 11px;
+  }
+
+  .avatar {
+    width: 39px;
+    height: 39px;
+    font-size: 1.06rem;
+  }
+
+  .profile-user-copy h2 {
+    font-size: 0.88rem;
+  }
+
+  .profile-user-copy p {
+    margin-top: 4px;
+    font-size: 0.74rem;
+  }
+
+  .preferences-card {
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .profile-card-heading h2 {
+    font-size: 0.86rem;
+  }
+
+  .preference-group {
+    gap: 6px;
+  }
+
+  .preference-intro {
+    gap: 7px;
+  }
+
+  .preference-icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .preference-icon ion-icon {
+    font-size: 0.9rem;
+  }
+
+  .preference-intro h3 {
+    font-size: 0.8rem;
+  }
+
+  .preference-intro p {
+    margin-top: 2px;
+    font-size: 0.67rem;
+    line-height: 1.22;
+  }
+
+  .compact-segment {
+    min-height: 29px;
+    border-radius: 12px;
+    padding: 2px;
+  }
+
+  .compact-segment ion-segment-button {
+    min-height: 25px;
+    font-size: 0.68rem;
+  }
+
+  .settings-card {
+    padding: 2px 10px;
+  }
+
+  .settings-row {
+    min-height: 34px;
+    gap: 8px;
+  }
+
+  .settings-icon {
+    width: 27px;
+    height: 27px;
+  }
+
+  .settings-icon ion-icon {
+    font-size: 0.92rem;
+  }
+
+  .settings-label {
+    font-size: 0.78rem;
+  }
+
+  .sign-out-card {
+    min-height: 40px;
+    font-size: 0.82rem;
+  }
+
+  :host-context([dir="rtl"]) .profile-header h1 {
+    font-size: 1.26rem;
+  }
+
+  :host-context([dir="rtl"]) .settings-label {
+    font-size: 0.76rem;
+  }
 }

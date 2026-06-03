@@ -4,15 +4,19 @@ import { IonicModule, LoadingController, NavController } from '@ionic/angular';
 
 import { AuthService } from '../../core/services/auth.service';
 import { AppLanguage, LocalizationService } from '../../core/services/localization.service';
+import { TranslationKey } from '../../core/services/localization.translations';
 import { ThemeService } from '../../core/services/theme.service';
-import { WellnessCardComponent } from '../../shared/components/wellness-card/wellness-card.component';
-import { WellnessHeaderComponent } from '../../shared/components/wellness-header/wellness-header.component';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
+
+interface ProfileSettingsItem {
+  readonly icon: string;
+  readonly labelKey: TranslationKey;
+}
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [AsyncPipe, IonicModule, NgFor, NgIf, TranslatePipe, WellnessCardComponent, WellnessHeaderComponent],
+  imports: [AsyncPipe, IonicModule, NgFor, NgIf, TranslatePipe],
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
 })
@@ -30,7 +34,14 @@ export class ProfilePage {
   readonly isLanguageSwitching = this.localization.isSwitchingLanguage;
   readonly themeOptions = this.themeService.themeOptions;
   readonly themePreference$ = this.themeService.preference$;
-  readonly resolvedTheme$ = this.themeService.resolvedTheme$;
+  readonly settingsItems: readonly ProfileSettingsItem[] = [
+    { icon: 'person-outline', labelKey: 'profile.settings.personalInformation' },
+    { icon: 'notifications-outline', labelKey: 'profile.settings.reminders' },
+    { icon: 'lock-closed-outline', labelKey: 'profile.settings.privacyData' },
+    { icon: 'download-outline', labelKey: 'profile.settings.exportData' },
+    { icon: 'help-circle-outline', labelKey: 'profile.settings.helpSupport' },
+    { icon: 'information-circle-outline', labelKey: 'profile.settings.about' },
+  ];
   isSigningOut = false;
   errorMessage = '';
 
@@ -46,10 +57,10 @@ export class ProfilePage {
     }
   }
 
-  languageLabel(language: AppLanguage): string {
-    const option = this.languageOptions.find((item) => item.code === language);
+  profileInitial(displayName: string): string {
+    const initial = displayName.trim().charAt(0);
 
-    return option?.nativeLabel ?? language;
+    return initial ? initial.toLocaleUpperCase() : 'R';
   }
 
   themeLabel(value: string): string {
