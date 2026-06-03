@@ -1,4 +1,4 @@
-import { AsyncPipe, DatePipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
@@ -12,11 +12,11 @@ import { ConfigLabelPipe } from '../../shared/pipes/config-label.pipe';
 import { MoodLabelPipe } from '../../shared/pipes/mood-label.pipe';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
-interface WeekDayItem {
-  readonly iso: string;
-  readonly weekday: string;
-  readonly day: string;
-  readonly count: number;
+type JourneyRangeKey = '7d' | '30d' | '90d' | 'all';
+
+interface TimeFilterOption {
+  readonly key: JourneyRangeKey;
+  readonly labelKey: string;
 }
 
 interface TrendPoint {
@@ -28,14 +28,28 @@ interface TrendPoint {
   readonly color: string;
 }
 
+interface TrendBucket {
+  readonly id: string;
+  readonly label: string;
+  readonly averageMood: number;
+  readonly count: number;
+}
+
 interface FrequencyItem {
   readonly label: string;
   readonly count: number;
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000;
-const MAX_TREND_POINTS = 6;
-const SAVED_REFLECTIONS_PAGE_SIZE = 5;
+const RECENT_CHECK_INS_LIMIT = 5;
+const SEGMENTED_TREND_BUCKETS = 6;
+
+const TIME_FILTERS: readonly TimeFilterOption[] = [
+  { key: '7d', labelKey: 'history.range7d' },
+  { key: '30d', labelKey: 'history.range30d' },
+  { key: '90d', labelKey: 'history.range90d' },
+  { key: 'all', labelKey: 'history.rangeAll' },
+];
 
 const MOOD_COLORS_BY_LEVEL: Record<number, string> = {
   1: '#8b64c8',
@@ -115,7 +129,6 @@ const INFLUENCE_ICONS: Record<string, string> = {
   imports: [
     AsyncPipe,
     ConfigLabelPipe,
-    DatePipe,
     IonicModule,
     MoodLabelPipe,
     NgFor,
@@ -138,71 +151,39 @@ export class HistoryPage {
   readonly entries$ = this.moodEntryService.entries$;
   readonly entriesLoading$ = this.moodEntryService.entriesLoading$;
   readonly entriesError$ = this.moodEntryService.entriesError$;
-  savedReflectionsExpanded = false;
-  visibleSavedReflectionsCount = SAVED_REFLECTIONS_PAGE_SIZE;
+  readonly timeFilters = TIME_FILTERS;
 
-  private selectedDateIsoOverride = '';
+  selectedRange: JourneyRangeKey = '7d';
 
-  selectDate(iso: string): void {
-    this.selectedDateIsoOverride = iso;
+  selectRange(range: JourneyRangeKey): void {
+    this.selectedRange = range;
   }
 
-  activeDateIso(entries: readonly MoodEntry[]): string {
-    if (this.selectedDateIsoOverride) {
-      return this.selectedDateIsoOverride;
+  periodEntries(entries: readonly MoodEntry[]): readonly MoodEntry[] {
+    const selectedRange = this.selectedRange;
+
+    if (selectedRange === 'all') {
+      return [...entries];
     }
 
-    const latestEntry = entries[0];
+    const startDate = this.rangeStartDate(selectedRange);
 
-    return latestEntry ? this.isoDayFromDate(this.toDate(latestEntry.createdAt)) : this.isoDayFromDate(new Date());
+    return entries.filter((entry) => this.toDate(entry.createdAt) >= startDate);
   }
 
-  weekDays(entries: readonly MoodEntry[]): WeekDayItem[] {
-    const activeDate = this.dateFromIsoDay(this.activeDateIso(entries));
-    const startDate = new Date(activeDate.getTime() - 3 * DAY_MS);
-    const entryCounts = this.countEntriesByDay(entries);
-
-    return Array.from({ length: 7 }, (_, index) => {
-      const date = new Date(startDate.getTime() + index * DAY_MS);
-      const iso = this.isoDayFromDate(date);
-
-      return {
-        iso,
-        weekday: new Intl.DateTimeFormat(this.currentLanguage(), { weekday: 'short' }).format(date),
-        day: new Intl.DateTimeFormat(this.currentLanguage(), { day: 'numeric' }).format(date),
-        count: entryCounts.get(iso) ?? 0,
-      };
-    });
+  recentEntries(entries: readonly MoodEntry[]): readonly MoodEntry[] {
+    return entries.slice(0, RECENT_CHECK_INS_LIMIT);
   }
 
-  selectedDayEntries(entries: readonly MoodEntry[]): MoodEntry[] {
-    const activeIso = this.activeDateIso(entries);
+  selectedRangeLabel(): string {
+    const activeFilter = this.timeFilters.find((filter) => filter.key === this.selectedRange);
 
-    return entries
-      .filter((entry) => this.isoDayFromDate(this.toDate(entry.createdAt)) === activeIso)
-      .sort((a, b) => this.toDate(a.createdAt).getTime() - this.toDate(b.createdAt).getTime());
+    return this.localization.translate(activeFilter?.labelKey ?? 'history.range7d');
   }
 
-  selectedDateLabel(entries: readonly MoodEntry[]): string {
-    const date = this.dateFromIsoDay(this.activeDateIso(entries));
-
-    return new Intl.DateTimeFormat(this.currentLanguage(), {
-      weekday: 'long',
-      month: 'long',
-      day: 'numeric',
-    }).format(date);
-  }
-
-  checkInCountLabel(count: number): string {
+  periodCountLabel(count: number): string {
     return this.localization.translate(
       count === 1 ? 'history.checkInsCountOne' : 'history.checkInsCountMany',
-      { count },
-    );
-  }
-
-  totalCountLabel(count: number): string {
-    return this.localization.translate(
-      count === 1 ? 'history.totalCountOne' : 'history.totalCountMany',
       { count },
     );
   }
@@ -224,47 +205,10 @@ export class HistoryPage {
     return total / entries.length;
   }
 
-  moodStatusLabel(entries: readonly MoodEntry[], options: readonly MoodOption[]): string {
-    if (!entries.length) {
-      return this.localization.translate('history.noCheckInsShort');
-    }
-
-    return this.moodLabel(this.averageMood(entries), options);
-  }
-
-  moodTrendAriaLabel(entries: readonly MoodEntry[]): string {
+  moodTrendAriaLabel(): string {
     return this.localization.translate('history.moodTrendAria', {
-      date: this.selectedDateLabel(entries),
+      range: this.selectedRangeLabel(),
     });
-  }
-
-  savedReflectionsToggleLabel(): string {
-    return this.localization.translate(
-      this.savedReflectionsExpanded ? 'history.hideSavedReflections' : 'history.showSavedReflections',
-    );
-  }
-
-  toggleSavedReflections(): void {
-    this.savedReflectionsExpanded = !this.savedReflectionsExpanded;
-
-    if (!this.savedReflectionsExpanded) {
-      this.visibleSavedReflectionsCount = SAVED_REFLECTIONS_PAGE_SIZE;
-    }
-  }
-
-  visibleSavedEntries(entries: readonly MoodEntry[]): readonly MoodEntry[] {
-    return entries.slice(0, this.visibleSavedReflectionsCount);
-  }
-
-  hasMoreSavedEntries(entries: readonly MoodEntry[]): boolean {
-    return this.visibleSavedReflectionsCount < entries.length;
-  }
-
-  loadMoreSavedReflections(entries: readonly MoodEntry[]): void {
-    this.visibleSavedReflectionsCount = Math.min(
-      this.visibleSavedReflectionsCount + SAVED_REFLECTIONS_PAGE_SIZE,
-      entries.length,
-    );
   }
 
   moodLabel(level: number, options: readonly MoodOption[]): string {
@@ -299,27 +243,62 @@ export class HistoryPage {
     }).format(this.toDate(value));
   }
 
+  recentEntryTimeLabel(value: string): string {
+    const date = this.toDate(value);
+
+    if (this.isoDayFromDate(date) === this.isoDayFromDate(new Date())) {
+      return this.timeLabel(value);
+    }
+
+    return new Intl.DateTimeFormat(this.currentLanguage(), {
+      month: 'short',
+      day: 'numeric',
+    }).format(date);
+  }
+
+  entrySummary(
+    entry: MoodEntry,
+    emotionOptions: readonly EmotionOption[],
+    influenceOptions: readonly InfluenceOption[],
+  ): string {
+    const emotionLabels = entry.emotions.map((emotion) => this.configLabel(emotion, emotionOptions));
+    const influenceLabels = entry.influences.map((influence) => this.configLabel(influence, influenceOptions));
+    const labels = [...emotionLabels, ...influenceLabels].filter(Boolean);
+    const visibleLabels = labels.slice(0, 2);
+    const remainingCount = labels.length - visibleLabels.length;
+
+    if (!visibleLabels.length) {
+      return entry.journalNote
+        ? this.localization.translate('history.noteSaved')
+        : this.localization.translate('history.noTagsSaved');
+    }
+
+    return remainingCount
+      ? `${visibleLabels.join(', ')} +${remainingCount}`
+      : visibleLabels.join(', ');
+  }
+
   trendPoints(entries: readonly MoodEntry[], moodOptions: readonly MoodOption[]): TrendPoint[] {
-    const visibleEntries = this.visibleTrendEntries(entries);
-    const chartStartX = 24;
-    const chartEndX = 262;
-    const chartTopY = 22;
-    const chartBottomY = 108;
+    const buckets = this.trendBuckets(entries).filter((bucket) => bucket.count > 0);
+    const chartStartX = 16;
+    const chartEndX = 304;
+    const chartTopY = 24;
+    const chartBottomY = 114;
     const spanX = chartEndX - chartStartX;
     const spanY = chartBottomY - chartTopY;
 
-    return visibleEntries.map((entry, index) => {
-      const x = visibleEntries.length === 1
+    return buckets.map((bucket, index) => {
+      const x = buckets.length === 1
         ? chartStartX + spanX / 2
-        : chartStartX + (spanX / (visibleEntries.length - 1)) * index;
-      const level = this.normalizeMoodLevel(entry.moodLevel);
-      const y = chartBottomY - ((level - 1) / 6) * spanY;
+        : chartStartX + (spanX / (buckets.length - 1)) * index;
+      const level = this.normalizeMoodLevel(bucket.averageMood);
+      const y = chartBottomY - ((bucket.averageMood - 1) / 6) * spanY;
 
       return {
-        id: entry.id,
+        id: bucket.id,
         x: Math.round(x * 10) / 10,
         y: Math.round(y * 10) / 10,
-        label: this.timeLabel(entry.createdAt),
+        label: bucket.label,
         level,
         color: this.moodColor(level, moodOptions),
       };
@@ -345,12 +324,24 @@ export class HistoryPage {
     }, `M ${points[0].x} ${points[0].y}`);
   }
 
-  topEmotionItems(entries: readonly MoodEntry[]): FrequencyItem[] {
-    return this.topItems(this.collectEntryValues(entries, 'emotions'));
+  topEmotionItem(entries: readonly MoodEntry[]): FrequencyItem | null {
+    return this.topItems(this.collectEntryValues(entries, 'emotions'))[0] ?? null;
   }
 
-  topInfluenceItems(entries: readonly MoodEntry[]): FrequencyItem[] {
-    return this.topItems(this.collectEntryValues(entries, 'influences'));
+  topInfluenceItem(entries: readonly MoodEntry[]): FrequencyItem | null {
+    return this.topItems(this.collectEntryValues(entries, 'influences'))[0] ?? null;
+  }
+
+  topEmotionIcon(entries: readonly MoodEntry[], options: readonly EmotionOption[]): string {
+    const emotion = this.topEmotionItem(entries);
+
+    return emotion ? this.emotionIcon(emotion.label, options) : 'sparkles-outline';
+  }
+
+  topInfluenceIcon(entries: readonly MoodEntry[], options: readonly InfluenceOption[]): string {
+    const influence = this.topInfluenceItem(entries);
+
+    return influence ? this.influenceIcon(influence.label, options) : 'compass-outline';
   }
 
   emotionIcon(label: string, options: readonly EmotionOption[]): string {
@@ -361,8 +352,98 @@ export class HistoryPage {
     return INFLUENCE_ICONS[this.configLabel(label, options)] ?? INFLUENCE_ICONS[label] ?? 'ellipse-outline';
   }
 
-  trackByWeekDay(_index: number, item: WeekDayItem): string {
-    return item.iso;
+  reflectionText(entries: readonly MoodEntry[], moodOptions: readonly MoodOption[]): string {
+    if (!entries.length) {
+      return this.localization.translate('history.reflectionEmpty');
+    }
+
+    return this.localization.translate('history.reflectionCopy', {
+      mood: this.moodLabel(this.averageMood(entries), moodOptions),
+    });
+  }
+
+  patternText(
+    entries: readonly MoodEntry[],
+    emotionOptions: readonly EmotionOption[],
+    influenceOptions: readonly InfluenceOption[],
+  ): string {
+    const emotion = this.topEmotionItem(entries);
+    const influence = this.topInfluenceItem(entries);
+
+    if (emotion && influence) {
+      return this.localization.translate('history.patternCopyBoth', {
+        emotion: this.configLabel(emotion.label, emotionOptions),
+        influence: this.configLabel(influence.label, influenceOptions),
+      });
+    }
+
+    if (emotion) {
+      return this.localization.translate('history.patternCopyEmotion', {
+        emotion: this.configLabel(emotion.label, emotionOptions),
+      });
+    }
+
+    if (influence) {
+      return this.localization.translate('history.patternCopyInfluence', {
+        influence: this.configLabel(influence.label, influenceOptions),
+      });
+    }
+
+    return this.localization.translate('history.patternEmpty');
+  }
+
+  growthText(entries: readonly MoodEntry[]): string {
+    if (!entries.length) {
+      return this.localization.translate('history.growthEmpty');
+    }
+
+    return this.localization.translate(
+      entries.length === 1 ? 'history.growthCopyOne' : 'history.growthCopyMany',
+      { count: entries.length },
+    );
+  }
+
+  currentStreak(entries: readonly MoodEntry[]): number {
+    if (!entries.length) {
+      return 0;
+    }
+
+    const entryDays = new Set(entries.map((entry) => this.isoDayFromDate(this.toDate(entry.createdAt))));
+    let cursor = this.startOfDay(new Date());
+
+    if (!entryDays.has(this.isoDayFromDate(cursor))) {
+      const yesterday = new Date(cursor.getTime() - DAY_MS);
+
+      if (!entryDays.has(this.isoDayFromDate(yesterday))) {
+        return 0;
+      }
+
+      cursor = yesterday;
+    }
+
+    let streak = 0;
+
+    while (entryDays.has(this.isoDayFromDate(cursor))) {
+      streak += 1;
+      cursor = new Date(cursor.getTime() - DAY_MS);
+    }
+
+    return streak;
+  }
+
+  streakLabel(count: number): string {
+    return this.localization.translate(
+      count === 1 ? 'history.streakDayOne' : 'history.streakDayMany',
+      { count },
+    );
+  }
+
+  streakDetailLabel(count: number): string {
+    return this.localization.translate(count ? 'history.keepItUp' : 'history.startGently');
+  }
+
+  trackByTimeFilter(_index: number, filter: TimeFilterOption): string {
+    return filter.key;
   }
 
   trackByEntryId(_index: number, entry: MoodEntry): string {
@@ -373,12 +454,106 @@ export class HistoryPage {
     return point.id;
   }
 
-  trackByFrequency(_index: number, item: FrequencyItem): string {
-    return item.label;
+  private trendBuckets(entries: readonly MoodEntry[]): TrendBucket[] {
+    const selectedRange = this.selectedRange;
+    const sortedEntries = [...entries].sort(
+      (a, b) => this.toDate(a.createdAt).getTime() - this.toDate(b.createdAt).getTime(),
+    );
+
+    if (!sortedEntries.length) {
+      return [];
+    }
+
+    if (selectedRange === '7d') {
+      return this.dailyTrendBuckets(sortedEntries);
+    }
+
+    if (selectedRange === 'all') {
+      return this.allTimeTrendBuckets(sortedEntries);
+    }
+
+    return this.segmentedTrendBuckets(
+      sortedEntries,
+      this.rangeStartDate(selectedRange),
+      this.endOfDay(new Date()),
+      SEGMENTED_TREND_BUCKETS,
+    );
   }
 
-  private visibleTrendEntries(entries: readonly MoodEntry[]): readonly MoodEntry[] {
-    return entries.length > MAX_TREND_POINTS ? entries.slice(-MAX_TREND_POINTS) : entries;
+  private dailyTrendBuckets(entries: readonly MoodEntry[]): TrendBucket[] {
+    const startDate = this.rangeStartDate('7d');
+
+    return Array.from({ length: 7 }, (_, index) => {
+      const bucketDate = new Date(startDate.getTime() + index * DAY_MS);
+      const iso = this.isoDayFromDate(bucketDate);
+      const bucketEntries = entries.filter((entry) => this.isoDayFromDate(this.toDate(entry.createdAt)) === iso);
+
+      return this.createTrendBucket(
+        iso,
+        new Intl.DateTimeFormat(this.currentLanguage(), { weekday: 'short' }).format(bucketDate),
+        bucketEntries,
+      );
+    });
+  }
+
+  private allTimeTrendBuckets(entries: readonly MoodEntry[]): TrendBucket[] {
+    const uniqueDays = Array.from(new Set(entries.map((entry) => this.isoDayFromDate(this.toDate(entry.createdAt)))));
+
+    if (uniqueDays.length <= 7) {
+      return uniqueDays.map((iso) => {
+        const bucketDate = this.dateFromIsoDay(iso);
+        const bucketEntries = entries.filter((entry) => this.isoDayFromDate(this.toDate(entry.createdAt)) === iso);
+
+        return this.createTrendBucket(
+          iso,
+          new Intl.DateTimeFormat(this.currentLanguage(), { month: 'short', day: 'numeric' }).format(bucketDate),
+          bucketEntries,
+        );
+      });
+    }
+
+    return this.segmentedTrendBuckets(
+      entries,
+      this.startOfDay(this.toDate(entries[0].createdAt)),
+      this.endOfDay(this.toDate(entries[entries.length - 1].createdAt)),
+      7,
+    );
+  }
+
+  private segmentedTrendBuckets(
+    entries: readonly MoodEntry[],
+    startDate: Date,
+    endDate: Date,
+    bucketCount: number,
+  ): TrendBucket[] {
+    const startTime = startDate.getTime();
+    const endTime = endDate.getTime();
+    const bucketSpan = Math.max(DAY_MS, (endTime - startTime + 1) / bucketCount);
+
+    return Array.from({ length: bucketCount }, (_, index) => {
+      const bucketStart = new Date(startTime + bucketSpan * index);
+      const bucketEndTime = index === bucketCount - 1 ? endTime + 1 : startTime + bucketSpan * (index + 1);
+      const bucketEntries = entries.filter((entry) => {
+        const entryTime = this.toDate(entry.createdAt).getTime();
+
+        return entryTime >= bucketStart.getTime() && entryTime < bucketEndTime;
+      });
+
+      return this.createTrendBucket(
+        `${this.selectedRange}-${index}`,
+        new Intl.DateTimeFormat(this.currentLanguage(), { month: 'short', day: 'numeric' }).format(bucketStart),
+        bucketEntries,
+      );
+    });
+  }
+
+  private createTrendBucket(id: string, label: string, entries: readonly MoodEntry[]): TrendBucket {
+    return {
+      id,
+      label,
+      averageMood: this.averageMood(entries),
+      count: entries.length,
+    };
   }
 
   private collectEntryValues(entries: readonly MoodEntry[], key: 'emotions' | 'influences'): string[] {
@@ -408,14 +583,13 @@ export class HistoryPage {
     return this.localization.configLabel(option ?? label);
   }
 
-  private countEntriesByDay(entries: readonly MoodEntry[]): Map<string, number> {
-    return entries.reduce<Map<string, number>>((counts, entry) => {
-      const iso = this.isoDayFromDate(this.toDate(entry.createdAt));
+  private rangeStartDate(range: Exclude<JourneyRangeKey, 'all'>): Date {
+    const days = range === '7d' ? 7 : range === '30d' ? 30 : 90;
+    const startDate = this.startOfDay(new Date());
 
-      counts.set(iso, (counts.get(iso) ?? 0) + 1);
+    startDate.setDate(startDate.getDate() - (days - 1));
 
-      return counts;
-    }, new Map());
+    return startDate;
   }
 
   private normalizeMoodLevel(level: number): number {
@@ -430,6 +604,20 @@ export class HistoryPage {
     const date = new Date(value);
 
     return Number.isNaN(date.getTime()) ? new Date() : date;
+  }
+
+  private startOfDay(date: Date): Date {
+    const start = new Date(date);
+    start.setHours(0, 0, 0, 0);
+
+    return start;
+  }
+
+  private endOfDay(date: Date): Date {
+    const end = new Date(date);
+    end.setHours(23, 59, 59, 999);
+
+    return end;
   }
 
   private isoDayFromDate(date: Date): string {
