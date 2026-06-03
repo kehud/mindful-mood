@@ -13,6 +13,7 @@ ion-content.tools-content::part(scroll) {
 .tools-shell {
   --tools-bottom-safe-space: max(var(--ion-safe-area-bottom, 0px), env(safe-area-inset-bottom, 0px));
   --tools-bottom-tab-space: 40px;
+  --tools-top-space: clamp(12px, 4.2vw, 20px);
 
   position: relative;
   isolation: isolate;
@@ -26,7 +27,7 @@ ion-content.tools-content::part(scroll) {
   box-sizing: border-box;
   overflow: hidden;
   padding:
-    calc(10px + env(safe-area-inset-top))
+    calc(var(--tools-top-space) + env(safe-area-inset-top))
     18px
     calc(14px + var(--tools-bottom-tab-space) + var(--tools-bottom-safe-space));
   color: #17243a;
@@ -83,7 +84,7 @@ ion-content.tools-content::part(scroll) {
 }
 
 .tools-hero h1 {
-  margin: clamp(8px, 3.4vh, 26px) 0 0;
+  margin: 0;
   color: #17243a;
   font-size: 2.02rem;
   font-weight: 560;
@@ -245,13 +246,14 @@ ion-content.tools-content::part(scroll) {
 
 @media (max-height: 760px) {
   .tools-shell {
+    --tools-top-space: 10px;
+
     gap: 14px;
-    padding-top: calc(6px + env(safe-area-inset-top));
     padding-bottom: calc(12px + var(--tools-bottom-tab-space) + var(--tools-bottom-safe-space));
   }
 
   .tools-hero h1 {
-    margin-top: clamp(4px, 2.6vh, 18px);
+    margin-top: 0;
     font-size: 1.86rem;
   }
 

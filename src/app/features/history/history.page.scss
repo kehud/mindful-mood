@@ -7,17 +7,40 @@ ion-content.history-content {
 }
 
 .history-shell {
+  --history-inline-pad: clamp(18px, 5.95vw, 28px);
+  --history-bottom-pad: clamp(86px, 23vw, 108px);
+  --history-section-gap: clamp(12px, 3.95vw, 18px);
+  --history-panel-pad: clamp(13px, 4.25vw, 19px);
+  --history-panel-radius: clamp(20px, 5.6vw, 25px);
+  --history-hero-min-height: clamp(84px, 25.2vw, 108px);
+  --history-title-size: clamp(1.36rem, 6.45vw, 1.74rem);
+  --history-subtitle-size: clamp(0.78rem, 0.45rem + 1.62vw, 0.96rem);
+  --history-calendar-size: clamp(40px, 12.1vw, 52px);
+  --history-filter-height: clamp(38px, 11vw, 48px);
+  --history-filter-button-height: clamp(30px, 8.8vw, 39px);
+  --history-filter-text-size: clamp(0.7rem, 0.5rem + 0.94vw, 0.88rem);
+  --history-heading-size: clamp(0.82rem, 0.56rem + 1.32vw, 1.04rem);
+  --history-body-size: clamp(0.72rem, 0.52rem + 0.94vw, 0.88rem);
+  --history-status-height: clamp(28px, 8vw, 35px);
+  --history-chart-height: clamp(132px, 39vw, 166px);
+  --history-chart-scale-width: clamp(21px, 6.6vw, 28px);
+  --history-checkin-row-height: clamp(46px, 13.1vw, 58px);
+  --history-checkin-icon-size: clamp(32px, 9.4vw, 40px);
+  --history-pattern-icon-size: clamp(22px, 6.6vw, 30px);
+  --history-highlight-icon-size: clamp(26px, 7.3vw, 32px);
+  --history-chip-radius: clamp(12px, 4.2vw, 18px);
+
   position: relative;
   isolation: isolate;
-  width: min(100%, 410px);
+  width: min(100%, 438px);
   min-height: 100%;
   margin: 0 auto;
   box-sizing: border-box;
   overflow: hidden;
   padding:
     env(safe-area-inset-top)
-    22px
-    calc(94px + env(safe-area-inset-bottom));
+    var(--history-inline-pad)
+    calc(var(--history-bottom-pad) + env(safe-area-inset-bottom));
   color: #17243a;
   -webkit-font-smoothing: antialiased;
 }
@@ -66,15 +89,15 @@ ion-content.history-content {
 .history-state {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 14px;
-  padding: 12px 14px;
+  gap: clamp(8px, 2.5vw, 12px);
+  margin-bottom: var(--history-section-gap);
+  padding: clamp(10px, 3vw, 14px) var(--history-panel-pad);
 }
 
 .history-state p {
   margin: 0;
   color: rgba(23, 36, 58, 0.68);
-  font-size: 0.78rem;
+  font-size: var(--history-body-size);
   font-weight: 430;
   letter-spacing: 0;
 }
@@ -91,8 +114,8 @@ ion-content.history-content {
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
-  gap: 14px;
-  min-height: 92px;
+  gap: clamp(10px, 3.4vw, 16px);
+  min-height: var(--history-hero-min-height);
 }
 
 .history-hero > div {
@@ -102,29 +125,29 @@ ion-content.history-content {
 .history-hero h1 {
   margin: 0;
   color: #17243a;
-  font-size: 1.48rem;
+  font-size: var(--history-title-size);
   font-weight: 500;
   letter-spacing: 0;
   line-height: 1.12;
 }
 
 .history-hero p {
-  margin: 7px 0 0;
+  margin: clamp(5px, 1.8vw, 8px) 0 0;
   color: rgba(23, 36, 58, 0.66);
-  font-size: 0.82rem;
+  font-size: var(--history-subtitle-size);
   font-weight: 360;
   letter-spacing: 0;
   line-height: 1.42;
 }
 
 .history-calendar-button {
-  width: 44px;
-  height: 44px;
-  min-height: 44px;
+  width: var(--history-calendar-size);
+  height: var(--history-calendar-size);
+  min-height: var(--history-calendar-size);
   margin: 0;
   --background: rgba(255, 255, 255, 0.5);
   --background-activated: rgba(255, 255, 255, 0.72);
-  --border-radius: 15px;
+  --border-radius: clamp(14px, 3.8vw, 17px);
   --box-shadow:
     0 10px 24px rgba(74, 92, 108, 0.045),
     inset 0 1px 0 rgba(255, 255, 255, 0.72);
@@ -143,42 +166,42 @@ ion-content.history-content {
 }
 
 .history-calendar-button ion-icon {
-  font-size: 1.26rem;
+  font-size: clamp(1.16rem, 3.45vw, 1.46rem);
   --ionicon-stroke-width: 26px;
 }
 
 .history-filter {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 4px;
-  min-height: 40px;
-  margin: 2px 0 14px;
+  gap: clamp(3px, 1vw, 5px);
+  min-height: var(--history-filter-height);
+  margin: clamp(1px, 0.6vw, 3px) 0 var(--history-section-gap);
   border: 1px solid rgba(255, 255, 255, 0.58);
-  border-radius: 16px;
+  border-radius: clamp(15px, 4.1vw, 18px);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.22)),
     rgba(255, 255, 255, 0.26);
   box-shadow:
     0 10px 24px rgba(66, 78, 92, 0.035),
     inset 0 1px 0 rgba(255, 255, 255, 0.58);
-  padding: 4px;
+  padding: clamp(3px, 1vw, 5px);
   backdrop-filter: blur(22px) saturate(124%);
   -webkit-backdrop-filter: blur(22px) saturate(124%);
 }
 
 .history-filter button {
   min-width: 0;
-  min-height: 32px;
+  min-height: var(--history-filter-button-height);
   border: 1px solid transparent;
-  border-radius: 12px;
+  border-radius: clamp(11px, 3.1vw, 14px);
   background: transparent;
   color: rgba(23, 36, 58, 0.62);
   font: inherit;
-  font-size: 0.76rem;
+  font-size: var(--history-filter-text-size);
   font-weight: 500;
   letter-spacing: 0;
   line-height: 1;
-  padding: 0 6px;
+  padding: 0 clamp(3px, 1.5vw, 7px);
   white-space: nowrap;
 }
 
@@ -197,7 +220,7 @@ ion-content.history-content {
 .history-panel,
 .history-empty-card {
   border: 1px solid rgba(255, 255, 255, 0.68);
-  border-radius: 22px;
+  border-radius: var(--history-panel-radius);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.44)),
     rgba(255, 255, 255, 0.54);
@@ -212,25 +235,25 @@ ion-content.history-content {
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 14px;
-  padding: 15px;
+  gap: clamp(10px, 3vw, 14px);
+  margin-bottom: var(--history-section-gap);
+  padding: var(--history-panel-pad);
 }
 
 .history-panel {
-  margin-top: 14px;
-  padding: 15px;
+  margin-top: var(--history-section-gap);
+  padding: var(--history-panel-pad);
 }
 
 .mood-panel {
-  padding-bottom: 12px;
+  padding-bottom: clamp(12px, 3.2vw, 16px);
 }
 
 .panel-heading {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 12px;
+  gap: clamp(10px, 3vw, 14px);
 }
 
 .panel-heading.compact {
@@ -241,7 +264,7 @@ ion-content.history-content {
 .panel-heading h2 {
   margin: 0;
   color: #17243a;
-  font-size: 0.84rem;
+  font-size: var(--history-heading-size);
   font-weight: 520;
   letter-spacing: 0;
   line-height: 1.22;
@@ -249,9 +272,9 @@ ion-content.history-content {
 
 .history-empty-card p,
 .panel-heading p {
-  margin: 5px 0 0;
+  margin: clamp(4px, 1.3vw, 6px) 0 0;
   color: rgba(23, 36, 58, 0.64);
-  font-size: 0.74rem;
+  font-size: var(--history-body-size);
   font-weight: 360;
   letter-spacing: 0;
   line-height: 1.34;
@@ -263,17 +286,17 @@ ion-content.history-content {
 }
 
 .history-empty-card ion-button {
-  height: 30px;
-  min-height: 30px;
+  height: clamp(30px, 7.8vw, 34px);
+  min-height: clamp(30px, 7.8vw, 34px);
   margin: 0;
   --color: #19babc;
   --background-activated: rgba(25, 186, 188, 0.1);
   --border-radius: 999px;
   --padding-bottom: 0;
-  --padding-end: 6px;
-  --padding-start: 6px;
+  --padding-end: clamp(5px, 1.5vw, 8px);
+  --padding-start: clamp(5px, 1.5vw, 8px);
   --padding-top: 0;
-  font-size: 0.74rem;
+  font-size: var(--history-body-size);
   font-weight: 520;
   letter-spacing: 0;
   text-transform: none;
@@ -283,19 +306,19 @@ ion-content.history-content {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
-  gap: 6px;
-  min-height: 28px;
+  gap: clamp(5px, 1.6vw, 7px);
+  min-height: var(--history-status-height);
   border: 1px solid color-mix(in srgb, var(--history-mood-color) 18%, rgba(255, 255, 255, 0.72));
-  border-radius: 10px;
+  border-radius: clamp(10px, 2.8vw, 12px);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0.36)),
     color-mix(in srgb, var(--history-mood-color) 9%, transparent);
   color: #17243a;
-  font-size: 0.68rem;
+  font-size: clamp(0.68rem, 0.5rem + 0.84vw, 0.84rem);
   font-weight: 520;
   letter-spacing: 0;
   line-height: 1;
-  padding: 0 9px;
+  padding: 0 clamp(8px, 2.4vw, 11px);
   white-space: nowrap;
 }
 
@@ -310,25 +333,25 @@ ion-content.history-content {
 .mood-chart {
   position: relative;
   display: grid;
-  grid-template-columns: 24px minmax(0, 1fr);
-  gap: 8px;
-  min-height: 144px;
-  margin-top: 12px;
+  grid-template-columns: var(--history-chart-scale-width) minmax(0, 1fr);
+  gap: clamp(7px, 2vw, 10px);
+  min-height: var(--history-chart-height);
+  margin-top: clamp(10px, 3vw, 14px);
 }
 
 .mood-scale {
   display: grid;
   align-content: start;
-  gap: 17px;
-  padding-top: 25px;
+  gap: clamp(15px, 4.25vw, 19px);
+  padding-top: clamp(23px, 6.3vw, 28px);
   color: rgba(82, 102, 117, 0.54);
 }
 
 .mood-scale ion-icon {
-  width: 20px;
-  height: 20px;
+  width: clamp(18px, 5.1vw, 22px);
+  height: clamp(18px, 5.1vw, 22px);
   border-radius: 999px;
-  font-size: 1.08rem;
+  font-size: clamp(0.98rem, 3vw, 1.26rem);
   --ionicon-stroke-width: 24px;
 }
 
@@ -343,7 +366,7 @@ ion-content.history-content {
 .mood-chart svg {
   display: block;
   width: 100%;
-  height: 142px;
+  height: var(--history-chart-height);
   overflow: visible;
 }
 
@@ -375,7 +398,7 @@ ion-content.history-content {
 
 .trend-labels text {
   fill: rgba(23, 36, 58, 0.58);
-  font-size: 0.58rem;
+  font-size: clamp(0.56rem, 0.42rem + 0.68vw, 0.68rem);
   font-weight: 430;
   letter-spacing: 0;
   text-anchor: middle;
@@ -383,16 +406,16 @@ ion-content.history-content {
 
 .empty-trend {
   display: grid;
-  min-height: 132px;
+  min-height: clamp(132px, 36vw, 154px);
   place-items: center;
   align-content: center;
-  gap: 9px;
+  gap: clamp(8px, 2.4vw, 11px);
   color: rgba(23, 36, 58, 0.58);
   text-align: center;
 }
 
 .empty-trend ion-icon {
-  font-size: 1.34rem;
+  font-size: clamp(1.24rem, 3.7vw, 1.56rem);
   color: rgba(31, 184, 187, 0.76);
 }
 
@@ -400,7 +423,7 @@ ion-content.history-content {
 .quiet-empty {
   margin: 0;
   color: rgba(23, 36, 58, 0.58);
-  font-size: 0.74rem;
+  font-size: var(--history-body-size);
   font-weight: 390;
   letter-spacing: 0;
   line-height: 1.38;
@@ -408,23 +431,23 @@ ion-content.history-content {
 
 .checkin-list {
   display: grid;
-  gap: 7px;
-  margin-top: 12px;
+  gap: clamp(7px, 2vw, 9px);
+  margin-top: clamp(10px, 3vw, 14px);
 }
 
 .checkin-row {
   display: grid;
-  grid-template-columns: 34px minmax(0, 1fr) auto 12px;
+  grid-template-columns: var(--history-checkin-icon-size) minmax(0, 1fr) auto clamp(11px, 3vw, 14px);
   align-items: center;
-  gap: 9px;
-  min-height: 48px;
+  gap: clamp(8px, 2.3vw, 11px);
+  min-height: var(--history-checkin-row-height);
   border: 1px solid rgba(224, 228, 236, 0.58);
-  border-radius: 16px;
+  border-radius: var(--history-chip-radius);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.54), rgba(255, 255, 255, 0.3)),
     rgba(255, 255, 255, 0.34);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.58);
-  padding: 7px 9px;
+  padding: clamp(7px, 2vw, 9px) clamp(8px, 2.3vw, 11px);
 }
 
 .checkin-icon,
@@ -443,12 +466,12 @@ ion-content.history-content {
 }
 
 .checkin-icon {
-  width: 34px;
-  height: 34px;
+  width: var(--history-checkin-icon-size);
+  height: var(--history-checkin-icon-size);
 }
 
 .checkin-icon ion-icon {
-  font-size: 1.18rem;
+  font-size: clamp(1.08rem, 3.25vw, 1.36rem);
   --ionicon-stroke-width: 24px;
 }
 
@@ -462,7 +485,7 @@ ion-content.history-content {
   display: block;
   overflow: hidden;
   color: #17243a;
-  font-size: 0.75rem;
+  font-size: clamp(0.7rem, 0.5rem + 0.96vw, 0.9rem);
   font-weight: 500;
   letter-spacing: 0;
   line-height: 1.18;
@@ -476,7 +499,7 @@ ion-content.history-content {
   overflow: hidden;
   margin-top: 3px;
   color: rgba(23, 36, 58, 0.6);
-  font-size: 0.68rem;
+  font-size: clamp(0.64rem, 0.48rem + 0.76vw, 0.82rem);
   font-weight: 360;
   letter-spacing: 0;
   line-height: 1.2;
@@ -486,7 +509,7 @@ ion-content.history-content {
 
 .checkin-row time {
   color: rgba(23, 36, 58, 0.62);
-  font-size: 0.68rem;
+  font-size: clamp(0.64rem, 0.48rem + 0.76vw, 0.82rem);
   font-weight: 430;
   letter-spacing: 0;
   line-height: 1;
@@ -495,24 +518,24 @@ ion-content.history-content {
 
 .checkin-row > ion-icon {
   color: rgba(23, 36, 58, 0.46);
-  font-size: 0.82rem;
+  font-size: clamp(0.78rem, 2.3vw, 1rem);
   --ionicon-stroke-width: 30px;
 }
 
 .checkins-panel .quiet-empty {
-  margin-top: 12px;
+  margin-top: clamp(10px, 3vw, 14px);
 }
 
 .patterns-panel,
 .highlights-panel {
-  padding-bottom: 15px;
+  padding-bottom: var(--history-panel-pad);
 }
 
 .pattern-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 9px;
-  margin-top: 12px;
+  gap: clamp(7px, 2.3vw, 11px);
+  margin-top: clamp(10px, 3vw, 14px);
 }
 
 .pattern-card {
@@ -520,14 +543,14 @@ ion-content.history-content {
   min-width: 0;
   aspect-ratio: 1 / 0.96;
   border: 1px solid color-mix(in srgb, var(--history-mood-color) 18%, rgba(255, 255, 255, 0.7));
-  border-radius: 16px;
+  border-radius: var(--history-chip-radius);
   background:
     linear-gradient(145deg, rgba(255, 255, 255, 0.58), rgba(255, 255, 255, 0.28)),
     color-mix(in srgb, var(--history-mood-color) 7%, transparent);
   box-shadow:
     0 6px 16px color-mix(in srgb, var(--history-mood-color) 6%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  padding: 8px;
+  padding: clamp(7px, 2.1vw, 10px);
 }
 
 .pattern-card--pattern {
@@ -539,23 +562,23 @@ ion-content.history-content {
 }
 
 .pattern-card span {
-  width: 24px;
-  height: 24px;
-  margin-bottom: 7px;
+  width: var(--history-pattern-icon-size);
+  height: var(--history-pattern-icon-size);
+  margin-bottom: clamp(6px, 1.8vw, 8px);
 }
 
 .pattern-card ion-icon {
-  font-size: 0.82rem;
+  font-size: clamp(0.78rem, 2.25vw, 1rem);
   --ionicon-stroke-width: 22px;
 }
 
 .pattern-card p {
   display: -webkit-box;
   overflow: hidden;
-  min-height: 22px;
-  margin: 5px 0 0;
+  min-height: clamp(20px, 5.4vw, 24px);
+  margin: clamp(4px, 1.3vw, 6px) 0 0;
   color: rgba(23, 36, 58, 0.66);
-  font-size: 0.54rem;
+  font-size: clamp(0.5rem, 0.34rem + 0.72vw, 0.64rem);
   font-weight: 300;
   letter-spacing: 0;
   line-height: 1.24;
@@ -564,7 +587,7 @@ ion-content.history-content {
 }
 
 .pattern-card h3 {
-  font-size: 0.58rem;
+  font-size: clamp(0.54rem, 0.38rem + 0.72vw, 0.68rem);
   font-weight: 420;
   line-height: 1.14;
 }
@@ -572,16 +595,16 @@ ion-content.history-content {
 .highlights-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 12px;
+  gap: clamp(9px, 2.5vw, 12px);
+  margin-top: clamp(10px, 3vw, 14px);
 }
 
 .highlight-item {
   --history-mood-color: #23bcc5;
   display: grid;
-  grid-template-columns: 26px minmax(0, 1fr);
+  grid-template-columns: var(--history-highlight-icon-size) minmax(0, 1fr);
   align-items: center;
-  gap: 6px;
+  gap: clamp(6px, 1.8vw, 8px);
   min-width: 0;
 }
 
@@ -594,12 +617,12 @@ ion-content.history-content {
 }
 
 .highlight-item > span {
-  width: 26px;
-  height: 26px;
+  width: var(--history-highlight-icon-size);
+  height: var(--history-highlight-icon-size);
 }
 
 .highlight-item ion-icon {
-  font-size: 0.86rem;
+  font-size: clamp(0.82rem, 2.35vw, 1.02rem);
   --ionicon-stroke-width: 22px;
 }
 
@@ -607,7 +630,7 @@ ion-content.history-content {
   overflow: hidden;
   margin: 0 0 2px;
   color: rgba(23, 36, 58, 0.78);
-  font-size: 0.5rem;
+  font-size: clamp(0.5rem, 0.34rem + 0.68vw, 0.62rem);
   font-weight: 420;
   letter-spacing: 0;
   line-height: 1.12;
@@ -616,13 +639,13 @@ ion-content.history-content {
 }
 
 .highlight-item strong {
-  font-size: 0.58rem;
+  font-size: clamp(0.56rem, 0.38rem + 0.78vw, 0.72rem);
   font-weight: 420;
   line-height: 1.12;
 }
 
 .highlight-item small {
-  font-size: 0.5rem;
+  font-size: clamp(0.5rem, 0.34rem + 0.68vw, 0.62rem);
   font-weight: 300;
   line-height: 1.12;
 }
@@ -847,8 +870,8 @@ ion-content.history-content {
   }
 }
 
-@media (min-width: 431px) {
+@media (min-width: 420px) {
   .history-shell {
-    padding-inline: 28px;
+    --history-inline-pad: clamp(24px, 6.4vw, 30px);
   }
 }
