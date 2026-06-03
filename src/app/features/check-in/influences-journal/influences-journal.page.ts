@@ -1,9 +1,10 @@
 import { AsyncPipe, NgClass, NgIf } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, OnDestroy, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { createAnimation, IonicModule, NavController } from '@ionic/angular';
 import type { Animation, AnimationBuilder } from '@ionic/angular';
 
+import { influenceIconForLabel } from '../../../core/config-option-icons';
 import { InfluenceOption } from '../../../core/models/config-option.model';
 import { ConfigService } from '../../../core/services/config.service';
 import { LocalizationService } from '../../../core/services/localization.service';
@@ -15,27 +16,6 @@ import { moodThemeClassForLevel } from '../check-in-mood-theme';
 const SUCCESS_SCREEN_HOLD_MS = 2000;
 const SUCCESS_ROUTE_FADE_MS = 340;
 
-const INFLUENCE_ICONS: Record<string, string> = {
-  Exercise: 'barbell-outline',
-  Family: 'people-outline',
-  Fitness: 'barbell-outline',
-  Food: 'restaurant-outline',
-  Friends: 'people-circle-outline',
-  Health: 'heart-outline',
-  Hobbies: 'color-palette-outline',
-  Money: 'cash-outline',
-  News: 'newspaper-outline',
-  Other: 'ellipsis-horizontal-circle-outline',
-  Partner: 'heart-circle-outline',
-  Relationships: 'people-outline',
-  School: 'school-outline',
-  Sleep: 'moon-outline',
-  'Social media': 'chatbubbles-outline',
-  Travel: 'airplane-outline',
-  Weather: 'partly-sunny-outline',
-  Work: 'briefcase-outline',
-};
-
 @Component({
   selector: 'app-influences-journal',
   standalone: true,
@@ -43,7 +23,7 @@ const INFLUENCE_ICONS: Record<string, string> = {
   templateUrl: './influences-journal.page.html',
   styleUrls: ['./influences-journal.page.scss'],
 })
-export class InfluencesJournalPage {
+export class InfluencesJournalPage implements OnDestroy {
   private readonly configService = inject(ConfigService);
   private readonly localization = inject(LocalizationService);
   private readonly moodEntryService = inject(MoodEntryService);
@@ -86,6 +66,8 @@ export class InfluencesJournalPage {
   showSuccess = false;
   isSuccessLeaving = false;
   errorMessage = '';
+  private successNavigationTimer?: ReturnType<typeof setTimeout>;
+  private isNavigatingAfterSuccess = false;
 
   get selectedMoodValue(): number {
     return this.moodEntryService.draftSnapshot.moodLevel;
@@ -95,7 +77,7 @@ export class InfluencesJournalPage {
     return options.map((option) => ({
       value: option.label,
       label: this.localization.configLabel(option),
-      icon: INFLUENCE_ICONS[option.label] ?? 'ellipse-outline',
+      icon: influenceIconForLabel(option.label),
     }));
   }
 
@@ -115,7 +97,7 @@ export class InfluencesJournalPage {
   }
 
   async save(): Promise<void> {
-    if (this.isSaving) {
+    if (this.isSaving || this.showSuccess || this.isNavigatingAfterSuccess) {
       return;
     }
 
@@ -131,28 +113,58 @@ export class InfluencesJournalPage {
       await this.moodEntryService.saveDraft();
       this.showSuccess = true;
       this.isSuccessLeaving = false;
-      await this.pauseForSuccessFeedback();
-      await this.navController.navigateRoot('/tabs/history', {
-        replaceUrl: true,
-        animated: true,
-        animationDirection: 'forward',
-        animation: this.successRouteFadeAnimation,
-      });
+      this.scheduleSuccessNavigation();
     } catch (error) {
       this.errorMessage = this.moodEntryService.getErrorMessage(error);
+      this.clearSuccessNavigationTimer();
       this.showSuccess = false;
       this.isSuccessLeaving = false;
+      this.isNavigatingAfterSuccess = false;
     } finally {
       this.isSaving = false;
     }
   }
 
-  private async pauseForSuccessFeedback(): Promise<void> {
-    await this.delay(SUCCESS_SCREEN_HOLD_MS);
-    this.isSuccessLeaving = true;
+  ngOnDestroy(): void {
+    this.clearSuccessNavigationTimer();
   }
 
-  private delay(durationMs: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, durationMs));
+  private scheduleSuccessNavigation(): void {
+    if (this.successNavigationTimer || this.isNavigatingAfterSuccess) {
+      return;
+    }
+
+    this.successNavigationTimer = setTimeout(() => {
+      this.successNavigationTimer = undefined;
+      void this.navigateToToolsAfterSuccess().catch(() => {
+        this.isNavigatingAfterSuccess = false;
+        this.isSuccessLeaving = false;
+      });
+    }, SUCCESS_SCREEN_HOLD_MS);
+  }
+
+  private async navigateToToolsAfterSuccess(): Promise<void> {
+    if (this.isNavigatingAfterSuccess) {
+      return;
+    }
+
+    this.isNavigatingAfterSuccess = true;
+    this.isSuccessLeaving = true;
+
+    await this.navController.navigateRoot('/tabs/tools', {
+      replaceUrl: true,
+      animated: true,
+      animationDirection: 'forward',
+      animation: this.successRouteFadeAnimation,
+    });
+  }
+
+  private clearSuccessNavigationTimer(): void {
+    if (!this.successNavigationTimer) {
+      return;
+    }
+
+    clearTimeout(this.successNavigationTimer);
+    this.successNavigationTimer = undefined;
   }
 }

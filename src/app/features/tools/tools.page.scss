@@ -14,6 +14,8 @@ ion-content.tools-content::part(scroll) {
   --tools-bottom-safe-space: max(var(--ion-safe-area-bottom, 0px), env(safe-area-inset-bottom, 0px));
   --tools-bottom-tab-space: 40px;
   --tools-top-space: clamp(12px, 4.2vw, 20px);
+  --tools-section-gap: clamp(16px, 3.4vw, 22px);
+  --tools-card-gap: clamp(9px, 2.8vw, 12px);
 
   position: relative;
   isolation: isolate;
@@ -102,11 +104,69 @@ ion-content.tools-content::part(scroll) {
   line-height: 1.48;
 }
 
+.tools-sections {
+  display: grid;
+  align-content: start;
+  gap: var(--tools-section-gap);
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 0 3px;
+  scrollbar-width: none;
+}
+
+.tools-sections::-webkit-scrollbar {
+  display: none;
+}
+
+.tools-recommendations,
+.tools-all {
+  display: grid;
+  align-content: start;
+  gap: clamp(10px, 2.8vw, 14px);
+}
+
+.tools-section-heading {
+  display: grid;
+  gap: clamp(3px, 1vw, 5px);
+  text-align: start;
+}
+
+.tools-section-heading h2,
+.tools-list-title {
+  margin: 0;
+  color: #17243a;
+  font-size: clamp(1.18rem, 5vw, 1.36rem);
+  font-weight: 560;
+  letter-spacing: 0;
+  line-height: 1.14;
+}
+
+.tools-section-heading h2 {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.tools-section-heading p {
+  margin: 0;
+  color: rgba(23, 36, 58, 0.68);
+  font-size: clamp(0.84rem, 3.4vw, 0.96rem);
+  font-weight: 360;
+  letter-spacing: 0;
+  line-height: 1.35;
+}
+
+.tools-recommendation-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--tools-card-gap);
+}
+
 .tools-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   align-content: start;
-  gap: 12px;
+  gap: var(--tools-card-gap);
   min-height: 0;
   overflow-y: auto;
   padding: 0 0 3px;
@@ -209,6 +269,42 @@ ion-content.tools-content::part(scroll) {
   word-break: normal;
 }
 
+.tool-card--recommended {
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  align-content: start;
+  gap: clamp(8px, 2.4vw, 11px);
+  min-height: clamp(126px, 19vh, 150px);
+  border-radius: clamp(19px, 5vw, 23px);
+  padding: clamp(12px, 3vw, 15px) clamp(8px, 2.6vw, 12px);
+  text-align: center;
+}
+
+.tool-card--recommended .tool-card__icon {
+  width: clamp(42px, 11vw, 50px);
+  height: clamp(42px, 11vw, 50px);
+}
+
+.tool-card--recommended .tool-card__icon ion-icon {
+  font-size: clamp(1.24rem, 4vw, 1.42rem);
+}
+
+.tool-card--recommended h2 {
+  font-size: clamp(0.8rem, 3.1vw, 0.92rem);
+  line-height: 1.18;
+  white-space: normal;
+}
+
+.tool-card--recommended p {
+  display: -webkit-box;
+  margin-top: 5px;
+  overflow: hidden;
+  font-size: clamp(0.64rem, 2.45vw, 0.72rem);
+  line-height: 1.3;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
 :host-context(.ion-palette-dark) ion-content.tools-content {
   --background:
     radial-gradient(circle at 50% 36%, rgba(35, 63, 160, 0.34), transparent 37%),
@@ -219,11 +315,14 @@ ion-content.tools-content::part(scroll) {
 
 :host-context(.ion-palette-dark) .tools-shell,
 :host-context(.ion-palette-dark) .tools-hero h1,
+:host-context(.ion-palette-dark) .tools-section-heading h2,
+:host-context(.ion-palette-dark) .tools-list-title,
 :host-context(.ion-palette-dark) .tool-card h2 {
   color: #f8f8ff;
 }
 
 :host-context(.ion-palette-dark) .tools-hero span,
+:host-context(.ion-palette-dark) .tools-section-heading p,
 :host-context(.ion-palette-dark) .tool-card p {
   color: rgba(248, 248, 255, 0.68);
 }
@@ -247,6 +346,8 @@ ion-content.tools-content::part(scroll) {
 @media (max-height: 760px) {
   .tools-shell {
     --tools-top-space: 10px;
+    --tools-section-gap: 13px;
+    --tools-card-gap: 9px;
 
     gap: 14px;
     padding-bottom: calc(12px + var(--tools-bottom-tab-space) + var(--tools-bottom-safe-space));
@@ -261,6 +362,16 @@ ion-content.tools-content::part(scroll) {
     margin-top: 10px;
     font-size: 0.9rem;
     line-height: 1.36;
+  }
+
+  .tools-section-heading h2,
+  .tools-list-title {
+    font-size: 1.1rem;
+  }
+
+  .tools-section-heading p {
+    font-size: 0.8rem;
+    line-height: 1.3;
   }
 
   .tool-card {
@@ -288,6 +399,33 @@ ion-content.tools-content::part(scroll) {
     font-size: 0.68rem;
     line-height: 1.25;
   }
+
+  .tool-card--recommended {
+    min-height: 116px;
+    border-radius: 18px;
+    gap: 7px;
+    padding: 11px 8px;
+  }
+
+  .tool-card--recommended .tool-card__icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .tool-card--recommended .tool-card__icon ion-icon {
+    font-size: 1.16rem;
+  }
+
+  .tool-card--recommended h2 {
+    font-size: 0.76rem;
+    white-space: normal;
+  }
+
+  .tool-card--recommended p {
+    margin-top: 4px;
+    font-size: 0.61rem;
+    line-height: 1.22;
+  }
 }
 
 @media (max-width: 380px) {
@@ -295,7 +433,8 @@ ion-content.tools-content::part(scroll) {
     padding-inline: 14px;
   }
 
-  .tools-grid {
+  .tools-grid,
+  .tools-recommendation-grid {
     gap: 9px;
   }
 
@@ -311,5 +450,15 @@ ion-content.tools-content::part(scroll) {
 
   .tool-card__icon ion-icon {
     font-size: 1.22rem;
+  }
+
+  .tool-card--recommended {
+    min-height: 120px;
+    padding-inline: 8px;
+  }
+
+  .tool-card--recommended .tool-card__icon {
+    width: 39px;
+    height: 39px;
   }
 }

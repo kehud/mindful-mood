@@ -3,6 +3,7 @@ import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
+import { emotionIconForLabel } from '../../../core/config-option-icons';
 import { EmotionOption } from '../../../core/models/config-option.model';
 import { ConfigService } from '../../../core/services/config.service';
 import { LocalizationService } from '../../../core/services/localization.service';
@@ -10,28 +11,6 @@ import { MoodEntryService } from '../../../core/services/mood-entry.service';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 import { ChipSelectorComponent, ChipSelectorOption } from '../../../shared/ui/chip-selector/chip-selector.component';
 import { moodThemeClassForLevel } from '../check-in-mood-theme';
-
-const EMOTION_ICONS: Record<string, string> = {
-  Angry: 'flame-outline',
-  Anxious: 'warning-outline',
-  Calm: 'water-outline',
-  Content: 'heart-outline',
-  Excited: 'flash-outline',
-  Focused: 'eye-outline',
-  Frustrated: 'thunderstorm-outline',
-  Grateful: 'sparkles-outline',
-  Happy: 'sunny-outline',
-  Hopeful: 'heart-circle-outline',
-  Irritated: 'alert-circle-outline',
-  Lonely: 'person-outline',
-  Other: 'ellipsis-horizontal-circle-outline',
-  Overwhelmed: 'layers-outline',
-  Proud: 'ribbon-outline',
-  Relaxed: 'leaf-outline',
-  Sad: 'sad-outline',
-  Stressed: 'snow-outline',
-  Tired: 'moon-outline',
-};
 
 @Component({
   selector: 'app-emotion-selection',
@@ -60,7 +39,7 @@ export class EmotionSelectionPage {
     return options.map((option) => ({
       value: option.label,
       label: this.localization.configLabel(option),
-      icon: EMOTION_ICONS[option.label] ?? 'ellipse-outline',
+      icon: emotionIconForLabel(option.label),
     }));
   }
 

@@ -6,27 +6,63 @@
 
     <header class="tools-hero">
       <h1>{{ 'tabs.tools' | t }}</h1>
-      <span>Support for your<br />mind and wellbeing.</span>
+      <span>{{ 'tools.heroSubtitle' | t }}</span>
     </header>
 
-    <section class="tools-grid" [attr.aria-label]="'tabs.tools' | t">
-      <article
-        class="tool-card"
-        *ngFor="let tool of tools"
-        [class.tool-card--teal]="tool.tone === 'teal'"
-        [class.tool-card--peach]="tool.tone === 'peach'"
-        [class.tool-card--violet]="tool.tone === 'violet'"
-        [class.tool-card--plum]="tool.tone === 'plum'"
-      >
-        <span class="tool-card__icon" aria-hidden="true">
-          <ion-icon [name]="tool.icon"></ion-icon>
-        </span>
-
-        <div>
-          <h2>{{ tool.titleKey | t }}</h2>
-          <p>{{ tool.subtitleKey | t }}</p>
+    <section class="tools-sections">
+      <section class="tools-recommendations" aria-labelledby="tools-recommendations-title">
+        <div class="tools-section-heading">
+          <h2 id="tools-recommendations-title">
+            <span aria-hidden="true">&#10024;</span>
+            {{ 'tools.recommendations.title' | t }}
+          </h2>
+          <p>{{ 'tools.recommendations.subtitle' | t }}</p>
         </div>
-      </article>
+
+        <div class="tools-recommendation-grid">
+          <article
+            class="tool-card tool-card--recommended"
+            *ngFor="let tool of recommendedTools; trackBy: trackTool"
+            [class.tool-card--teal]="tool.tone === 'teal'"
+            [class.tool-card--peach]="tool.tone === 'peach'"
+            [class.tool-card--violet]="tool.tone === 'violet'"
+            [class.tool-card--plum]="tool.tone === 'plum'"
+          >
+            <span class="tool-card__icon" aria-hidden="true">
+              <ion-icon [name]="tool.icon"></ion-icon>
+            </span>
+
+            <div>
+              <h2>{{ tool.titleKey | t }}</h2>
+              <p>{{ tool.subtitleKey | t }}</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="tools-all" aria-labelledby="tools-all-title">
+        <h2 id="tools-all-title" class="tools-list-title">{{ 'tools.allTools' | t }}</h2>
+
+        <section class="tools-grid" [attr.aria-label]="'tools.allTools' | t">
+          <article
+            class="tool-card"
+            *ngFor="let tool of tools; trackBy: trackTool"
+            [class.tool-card--teal]="tool.tone === 'teal'"
+            [class.tool-card--peach]="tool.tone === 'peach'"
+            [class.tool-card--violet]="tool.tone === 'violet'"
+            [class.tool-card--plum]="tool.tone === 'plum'"
+          >
+            <span class="tool-card__icon" aria-hidden="true">
+              <ion-icon [name]="tool.icon"></ion-icon>
+            </span>
+
+            <div>
+              <h2>{{ tool.titleKey | t }}</h2>
+              <p>{{ tool.subtitleKey | t }}</p>
+            </div>
+          </article>
+        </section>
+      </section>
     </section>
   </main>
 </ion-content>

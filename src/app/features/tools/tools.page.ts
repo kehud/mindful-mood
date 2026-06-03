@@ -19,6 +19,8 @@ interface ToolCard {
   styleUrls: ['./tools.page.scss'],
 })
 export class ToolsPage {
+  private readonly recommendationLimit = 3;
+
   readonly tools: readonly ToolCard[] = [
     {
       titleKey: 'tools.breathe',
@@ -45,4 +47,34 @@ export class ToolsPage {
       tone: 'plum',
     },
   ];
+
+  readonly recommendedTools = this.createRecommendedTools(this.tools);
+
+  trackTool(_index: number, tool: ToolCard): string {
+    return tool.titleKey;
+  }
+
+  private createRecommendedTools(tools: readonly ToolCard[]): readonly ToolCard[] {
+    return this.pickRandomTools(tools, this.recommendationLimit);
+  }
+
+  private pickRandomTools(tools: readonly ToolCard[], count: number): readonly ToolCard[] {
+    const seen = new Set<string>();
+    const uniqueTools = tools.filter((tool) => {
+      if (seen.has(tool.titleKey)) {
+        return false;
+      }
+
+      seen.add(tool.titleKey);
+      return true;
+    });
+    const shuffledTools = [...uniqueTools];
+
+    for (let index = shuffledTools.length - 1; index > 0; index -= 1) {
+      const swapIndex = Math.floor(Math.random() * (index + 1));
+      [shuffledTools[index], shuffledTools[swapIndex]] = [shuffledTools[swapIndex], shuffledTools[index]];
+    }
+
+    return shuffledTools.slice(0, Math.min(count, shuffledTools.length));
+  }
 }

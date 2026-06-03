@@ -3,6 +3,7 @@ import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
+import { emotionIconForLabel, influenceIconForLabel } from '../../core/config-option-icons';
 import { EmotionOption, InfluenceOption, MoodOption } from '../../core/models/config-option.model';
 import { MoodEntry } from '../../core/models/mood-entry.model';
 import { ConfigService } from '../../core/services/config.service';
@@ -79,48 +80,6 @@ const MOOD_ICONS_BY_LEVEL: Record<number, string> = {
   5: 'happy-outline',
   6: 'happy-outline',
   7: 'heart-outline',
-};
-
-const EMOTION_ICONS: Record<string, string> = {
-  Angry: 'flame-outline',
-  Anxious: 'warning-outline',
-  Calm: 'water-outline',
-  Content: 'heart-outline',
-  Excited: 'flash-outline',
-  Focused: 'eye-outline',
-  Frustrated: 'thunderstorm-outline',
-  Grateful: 'heart-outline',
-  Happy: 'sunny-outline',
-  Hopeful: 'heart-circle-outline',
-  Lonely: 'person-outline',
-  Overwhelmed: 'layers-outline',
-  Proud: 'ribbon-outline',
-  Relaxed: 'leaf-outline',
-  Sad: 'sad-outline',
-  Stressed: 'snow-outline',
-  Tired: 'moon-outline',
-};
-
-const INFLUENCE_ICONS: Record<string, string> = {
-  Exercise: 'barbell-outline',
-  Family: 'people-outline',
-  Fitness: 'barbell-outline',
-  Food: 'restaurant-outline',
-  Friends: 'people-circle-outline',
-  Health: 'heart-outline',
-  Hobbies: 'color-palette-outline',
-  Money: 'cash-outline',
-  News: 'newspaper-outline',
-  Other: 'ellipsis-horizontal-circle-outline',
-  Partner: 'heart-circle-outline',
-  Relationships: 'people-outline',
-  School: 'school-outline',
-  Sleep: 'moon-outline',
-  'Social Media': 'chatbubbles-outline',
-  'Social media': 'chatbubbles-outline',
-  Travel: 'airplane-outline',
-  Weather: 'partly-sunny-outline',
-  Work: 'briefcase-outline',
 };
 
 @Component({
@@ -345,11 +304,11 @@ export class HistoryPage {
   }
 
   emotionIcon(label: string, options: readonly EmotionOption[]): string {
-    return EMOTION_ICONS[this.configLabel(label, options)] ?? EMOTION_ICONS[label] ?? 'sparkles-outline';
+    return emotionIconForLabel(label, this.configLabel(label, options));
   }
 
   influenceIcon(label: string, options: readonly InfluenceOption[]): string {
-    return INFLUENCE_ICONS[this.configLabel(label, options)] ?? INFLUENCE_ICONS[label] ?? 'ellipse-outline';
+    return influenceIconForLabel(label, this.configLabel(label, options));
   }
 
   reflectionText(entries: readonly MoodEntry[], moodOptions: readonly MoodOption[]): string {
