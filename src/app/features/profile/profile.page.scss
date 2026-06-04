@@ -9,21 +9,21 @@ ion-content.profile-content {
 .profile-shell {
   --profile-bottom-safe-space: max(var(--ion-safe-area-bottom, 0px), env(safe-area-inset-bottom, 0px));
   --profile-bottom-tab-space: 48px;
-  --profile-inline-pad: clamp(16px, 5.4vw, 26px);
-  --profile-top-pad: clamp(12px, 4.2vw, 20px);
-  --profile-bottom-pad: clamp(16px, 5.6vw, 26px);
-  --profile-section-gap: clamp(8px, 2.9vw, 15px);
-  --profile-header-gap: clamp(4px, 1.7vw, 8px);
-  --profile-card-radius: clamp(16px, 4.9vw, 21px);
-  --profile-card-pad: clamp(11px, 3.7vw, 17px);
-  --profile-user-min-height: clamp(68px, 20.8vw, 90px);
-  --profile-avatar-size: clamp(42px, 12.8vw, 56px);
-  --profile-preference-icon-size: clamp(27px, 8.2vw, 34px);
-  --profile-settings-icon-size: clamp(27px, 8vw, 34px);
-  --profile-segment-height: clamp(30px, 8.75vw, 39px);
-  --profile-segment-button-height: clamp(25px, 7.2vw, 32px);
-  --profile-settings-row-height: clamp(36px, 11.1vw, 48px);
-  --profile-signout-height: clamp(42px, 13vw, 56px);
+  --profile-inline-pad: clamp(17px, 5.75vw, 29px);
+  --profile-top-pad: clamp(13px, 4.55vw, 23px);
+  --profile-bottom-pad: clamp(17px, 5.95vw, 29px);
+  --profile-section-gap: clamp(9px, 3.28vw, 18px);
+  --profile-header-gap: clamp(5px, 1.95vw, 10px);
+  --profile-card-radius: clamp(17px, 5.2vw, 23px);
+  --profile-card-pad: clamp(12px, 4.1vw, 20px);
+  --profile-user-min-height: clamp(72px, 22vw, 100px);
+  --profile-avatar-size: clamp(44px, 13.45vw, 60px);
+  --profile-preference-icon-size: clamp(29px, 8.65vw, 37px);
+  --profile-settings-icon-size: clamp(29px, 8.55vw, 37px);
+  --profile-segment-height: clamp(32px, 9.2vw, 42px);
+  --profile-segment-button-height: clamp(26px, 7.55vw, 35px);
+  --profile-settings-row-height: clamp(39px, 11.75vw, 52px);
+  --profile-signout-height: clamp(45px, 13.6vw, 60px);
 
   display: grid;
   gap: var(--profile-section-gap);
@@ -57,7 +57,7 @@ ion-content.profile-content {
 .profile-header h1 {
   margin: 0;
   color: #142741;
-  font-size: clamp(1.36rem, 6.6vw, 1.74rem);
+  font-size: clamp(1.44rem, 7.05vw, 1.94rem);
   font-weight: 540;
   letter-spacing: 0;
   line-height: 1.13;
@@ -67,7 +67,7 @@ ion-content.profile-content {
   max-width: 290px;
   margin: 0 auto;
   color: rgba(23, 36, 58, 0.68);
-  font-size: clamp(0.74rem, 0.52rem + 1vw, 0.9rem);
+  font-size: clamp(0.78rem, 0.54rem + 1.1vw, 0.96rem);
   font-weight: 340;
   letter-spacing: 0;
   line-height: 1.38;
@@ -90,9 +90,9 @@ ion-content.profile-content {
 .profile-user-card {
   display: flex;
   align-items: center;
-  gap: clamp(9px, 2.8vw, 13px);
+  gap: clamp(10px, 3.15vw, 15px);
   min-height: var(--profile-user-min-height);
-  padding: clamp(10px, 3vw, 14px) var(--profile-card-pad);
+  padding: clamp(11px, 3.35vw, 16px) var(--profile-card-pad);
 }
 
 .avatar {
@@ -108,7 +108,7 @@ ion-content.profile-content {
     radial-gradient(circle at 68% 72%, rgba(239, 128, 151, 0.18), transparent 46%),
     linear-gradient(145deg, rgba(126, 105, 211, 0.18), rgba(105, 203, 198, 0.16));
   color: #10243d;
-  font-size: clamp(1.12rem, 3.5vw, 1.5rem);
+  font-size: clamp(1.18rem, 3.85vw, 1.62rem);
   font-weight: 560;
   box-shadow:
     0 10px 24px rgba(79, 132, 150, 0.11),
@@ -125,7 +125,7 @@ ion-content.profile-content {
   margin: 0;
   overflow: hidden;
   color: #142741;
-  font-size: clamp(0.88rem, 0.62rem + 1.15vw, 1.06rem);
+  font-size: clamp(0.93rem, 0.65rem + 1.28vw, 1.14rem);
   font-weight: 540;
   letter-spacing: 0;
   line-height: 1.18;
@@ -137,7 +137,7 @@ ion-content.profile-content {
   margin: 5px 0 0;
   overflow: hidden;
   color: rgba(23, 36, 58, 0.67);
-  font-size: clamp(0.74rem, 0.54rem + 0.88vw, 0.9rem);
+  font-size: clamp(0.78rem, 0.56rem + 0.98vw, 0.94rem);
   font-weight: 340;
   line-height: 1.25;
   text-overflow: ellipsis;
@@ -146,7 +146,7 @@ ion-content.profile-content {
 
 .chevron-icon {
   color: rgba(23, 36, 58, 0.56);
-  font-size: clamp(0.92rem, 2.65vw, 1.14rem);
+  font-size: clamp(0.98rem, 2.95vw, 1.22rem);
   --ionicon-stroke-width: 26px;
 }
 
@@ -156,7 +156,7 @@ ion-content.profile-content {
 
 .preferences-card {
   display: grid;
-  gap: clamp(8px, 2.6vw, 12px);
+  gap: clamp(9px, 2.95vw, 14px);
   padding: var(--profile-card-pad);
 }
 
@@ -168,7 +168,7 @@ ion-content.profile-content {
 .profile-card-heading h2 {
   margin: 0;
   color: #142741;
-  font-size: clamp(0.86rem, 0.6rem + 1.15vw, 1.06rem);
+  font-size: clamp(0.91rem, 0.63rem + 1.28vw, 1.14rem);
   font-weight: 560;
   letter-spacing: 0;
   line-height: 1.2;
@@ -176,13 +176,13 @@ ion-content.profile-content {
 
 .preference-group {
   display: grid;
-  gap: clamp(6px, 2vw, 10px);
+  gap: clamp(7px, 2.28vw, 12px);
 }
 
 .preference-intro {
   display: flex;
   align-items: center;
-  gap: clamp(7px, 2.3vw, 10px);
+  gap: clamp(8px, 2.55vw, 12px);
 }
 
 .preference-icon {
@@ -199,7 +199,7 @@ ion-content.profile-content {
 }
 
 .preference-icon ion-icon {
-  font-size: clamp(0.9rem, 2.7vw, 1.14rem);
+  font-size: clamp(0.96rem, 2.95vw, 1.24rem);
   --ionicon-stroke-width: 24px;
 }
 
@@ -211,7 +211,7 @@ ion-content.profile-content {
 .preference-intro h3 {
   margin: 0;
   color: #142741;
-  font-size: clamp(0.8rem, 0.58rem + 1vw, 1rem);
+  font-size: clamp(0.85rem, 0.61rem + 1.12vw, 1.07rem);
   font-weight: 510;
   letter-spacing: 0;
   line-height: 1.18;
@@ -220,7 +220,7 @@ ion-content.profile-content {
 .preference-intro p {
   margin: 3px 0 0;
   color: rgba(23, 36, 58, 0.62);
-  font-size: clamp(0.67rem, 0.5rem + 0.78vw, 0.82rem);
+  font-size: clamp(0.72rem, 0.52rem + 0.88vw, 0.88rem);
   font-weight: 330;
   letter-spacing: 0;
   line-height: 1.28;
@@ -250,7 +250,7 @@ ion-content.profile-content {
   --indicator-color: rgba(255, 255, 255, 0.94);
   --indicator-box-shadow: 0 6px 14px rgba(44, 65, 74, 0.08);
   min-height: var(--profile-segment-button-height);
-  font-size: clamp(0.68rem, 0.5rem + 0.82vw, 0.84rem);
+  font-size: clamp(0.72rem, 0.51rem + 0.92vw, 0.88rem);
   font-weight: 430;
   letter-spacing: 0;
 }
@@ -262,13 +262,13 @@ ion-content.profile-content {
 
 .settings-card {
   overflow: hidden;
-  padding: clamp(2px, 0.75vw, 4px) var(--profile-card-pad);
+  padding: clamp(3px, 1vw, 6px) var(--profile-card-pad);
 }
 
 .settings-row {
   display: flex;
   align-items: center;
-  gap: clamp(8px, 2.3vw, 11px);
+  gap: clamp(9px, 2.62vw, 13px);
   min-height: var(--profile-settings-row-height);
   border-bottom: 1px solid rgba(56, 71, 86, 0.075);
 }
@@ -287,7 +287,7 @@ ion-content.profile-content {
 }
 
 .settings-icon ion-icon {
-  font-size: clamp(0.92rem, 2.65vw, 1.14rem);
+  font-size: clamp(0.98rem, 2.95vw, 1.22rem);
   --ionicon-stroke-width: 22px;
 }
 
@@ -296,7 +296,7 @@ ion-content.profile-content {
   min-width: 0;
   overflow: hidden;
   color: #142741;
-  font-size: clamp(0.78rem, 0.56rem + 1vw, 0.98rem);
+  font-size: clamp(0.83rem, 0.59rem + 1.12vw, 1.06rem);
   font-weight: 410;
   letter-spacing: 0;
   line-height: 1.2;
@@ -307,7 +307,7 @@ ion-content.profile-content {
 
 .settings-chevron {
   flex: 0 0 auto;
-  font-size: clamp(0.86rem, 2.45vw, 1.08rem);
+  font-size: clamp(0.92rem, 2.75vw, 1.15rem);
 }
 
 .profile-error {
@@ -316,7 +316,7 @@ ion-content.profile-content {
   border-radius: 14px;
   background: var(--app-danger-soft);
   color: var(--ion-color-danger);
-  font-size: clamp(0.76rem, 0.56rem + 0.88vw, 0.9rem);
+  font-size: clamp(0.8rem, 0.58rem + 0.98vw, 0.94rem);
   font-weight: 480;
   line-height: 1.35;
   padding: 10px 12px;
@@ -327,14 +327,14 @@ ion-content.profile-content {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(6px, 1.9vw, 9px);
+  gap: clamp(7px, 2.18vw, 11px);
   width: 100%;
   min-height: var(--profile-signout-height);
   padding: 0 var(--profile-card-pad);
   border-color: rgba(255, 255, 255, 0.5);
   color: #e84d5b;
   font: inherit;
-  font-size: clamp(0.82rem, 0.6rem + 1vw, 1rem);
+  font-size: clamp(0.87rem, 0.63rem + 1.12vw, 1.08rem);
   font-weight: 430;
   letter-spacing: 0;
   text-align: center;
@@ -345,7 +345,7 @@ ion-content.profile-content {
 }
 
 .sign-out-icon {
-  font-size: clamp(0.94rem, 2.65vw, 1.14rem);
+  font-size: clamp(1rem, 2.95vw, 1.22rem);
   --ionicon-stroke-width: 22px;
 }
 
@@ -356,27 +356,27 @@ ion-spinner {
 }
 
 :host-context([dir="rtl"]) .profile-header h1 {
-  font-size: clamp(1.3rem, 6.3vw, 1.68rem);
+  font-size: clamp(1.38rem, 6.75vw, 1.88rem);
   font-weight: 500;
 }
 
 :host-context([dir="rtl"]) .profile-header p:last-child {
-  font-size: clamp(0.72rem, 0.5rem + 0.96vw, 0.86rem);
+  font-size: clamp(0.77rem, 0.53rem + 1.06vw, 0.92rem);
   font-weight: 320;
 }
 
 :host-context([dir="rtl"]) .profile-card-heading h2 {
-  font-size: clamp(0.84rem, 0.58rem + 1.1vw, 1.02rem);
+  font-size: clamp(0.89rem, 0.61rem + 1.22vw, 1.1rem);
   font-weight: 520;
 }
 
 :host-context([dir="rtl"]) .preference-intro h3 {
-  font-size: clamp(0.78rem, 0.56rem + 0.96vw, 0.96rem);
+  font-size: clamp(0.83rem, 0.59rem + 1.08vw, 1.04rem);
   font-weight: 480;
 }
 
 :host-context([dir="rtl"]) .settings-label {
-  font-size: clamp(0.76rem, 0.54rem + 0.94vw, 0.94rem);
+  font-size: clamp(0.81rem, 0.57rem + 1.04vw, 1rem);
   font-weight: 390;
 }
 

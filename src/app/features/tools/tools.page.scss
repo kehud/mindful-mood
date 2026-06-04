@@ -13,15 +13,20 @@ ion-content.tools-content::part(scroll) {
 .tools-shell {
   --tools-bottom-safe-space: max(var(--ion-safe-area-bottom, 0px), env(safe-area-inset-bottom, 0px));
   --tools-bottom-tab-space: 40px;
-  --tools-top-space: clamp(12px, 4.2vw, 20px);
-  --tools-section-gap: clamp(16px, 3.4vw, 22px);
-  --tools-card-gap: clamp(9px, 2.8vw, 12px);
+  --tools-inline-pad: clamp(17px, 5.05vw, 23px);
+  --tools-top-space: clamp(13px, 4.58vw, 23px);
+  --tools-section-gap: clamp(17px, 3.95vw, 25px);
+  --tools-card-gap: clamp(11px, 3.18vw, 15px);
+  --tools-card-min-height: clamp(114px, 27vw, 126px);
+  --tools-card-pad-block: clamp(18px, 4.3vw, 22px);
+  --tools-card-pad-inline: clamp(19px, 4.85vw, 23px);
+  --tools-card-icon-size: clamp(51px, 12.75vw, 58px);
 
   position: relative;
   isolation: isolate;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
-  gap: clamp(18px, 2.4vh, 24px);
+  gap: clamp(19px, 2.8vh, 29px);
   width: min(100%, 430px);
   height: 100%;
   min-height: 100%;
@@ -30,7 +35,7 @@ ion-content.tools-content::part(scroll) {
   overflow: hidden;
   padding:
     calc(var(--tools-top-space) + env(safe-area-inset-top))
-    18px
+    var(--tools-inline-pad)
     calc(14px + var(--tools-bottom-tab-space) + var(--tools-bottom-safe-space));
   color: #17243a;
 }
@@ -88,7 +93,7 @@ ion-content.tools-content::part(scroll) {
 .tools-hero h1 {
   margin: 0;
   color: #17243a;
-  font-size: 2.02rem;
+  font-size: clamp(2.08rem, 8.05vw, 2.3rem);
   font-weight: 560;
   letter-spacing: 0;
   line-height: 1.08;
@@ -98,7 +103,7 @@ ion-content.tools-content::part(scroll) {
   display: block;
   margin-top: 13px;
   color: rgba(23, 36, 58, 0.68);
-  font-size: 1rem;
+  font-size: clamp(1.03rem, 4.08vw, 1.14rem);
   font-weight: 360;
   letter-spacing: 0;
   line-height: 1.48;
@@ -122,7 +127,7 @@ ion-content.tools-content::part(scroll) {
 .tools-all {
   display: grid;
   align-content: start;
-  gap: clamp(10px, 2.8vw, 14px);
+  gap: clamp(11px, 3.2vw, 16px);
 }
 
 .tools-section-heading {
@@ -135,7 +140,7 @@ ion-content.tools-content::part(scroll) {
 .tools-list-title {
   margin: 0;
   color: #17243a;
-  font-size: clamp(1.18rem, 5vw, 1.36rem);
+  font-size: clamp(1.25rem, 5.45vw, 1.52rem);
   font-weight: 560;
   letter-spacing: 0;
   line-height: 1.14;
@@ -150,7 +155,7 @@ ion-content.tools-content::part(scroll) {
 .tools-section-heading p {
   margin: 0;
   color: rgba(23, 36, 58, 0.68);
-  font-size: clamp(0.84rem, 3.4vw, 0.96rem);
+  font-size: clamp(0.88rem, 3.68vw, 1.04rem);
   font-weight: 360;
   letter-spacing: 0;
   line-height: 1.35;
@@ -183,8 +188,8 @@ ion-content.tools-content::part(scroll) {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
-  gap: 14px;
-  min-height: 108px;
+  gap: clamp(15px, 3.85vw, 18px);
+  min-height: var(--tools-card-min-height);
   border: 1px solid rgba(255, 255, 255, 0.66);
   border-radius: 24px;
   background:
@@ -193,7 +198,7 @@ ion-content.tools-content::part(scroll) {
   box-shadow:
     0 14px 34px rgba(58, 72, 88, 0.055),
     inset 0 1px 0 rgba(255, 255, 255, 0.72);
-  padding: 16px 18px;
+  padding: var(--tools-card-pad-block) var(--tools-card-pad-inline);
   overflow: hidden;
   backdrop-filter: blur(28px) saturate(126%);
   -webkit-backdrop-filter: blur(28px) saturate(126%);
@@ -229,8 +234,8 @@ ion-content.tools-content::part(scroll) {
 
 .tool-card__icon {
   display: grid;
-  width: 48px;
-  height: 48px;
+  width: var(--tools-card-icon-size);
+  height: var(--tools-card-icon-size);
   flex: 0 0 auto;
   place-items: center;
   border-radius: 999px;
@@ -244,14 +249,14 @@ ion-content.tools-content::part(scroll) {
 }
 
 .tool-card__icon ion-icon {
-  font-size: 1.44rem;
+  font-size: clamp(1.54rem, 4.35vw, 1.72rem);
   --ionicon-stroke-width: 23px;
 }
 
 .tool-card h2 {
   margin: 0;
   color: #17243a;
-  font-size: 0.9rem;
+  font-size: clamp(0.95rem, 3.5vw, 1.04rem);
   font-weight: 500;
   letter-spacing: 0;
   line-height: 1.16;
@@ -261,7 +266,7 @@ ion-content.tools-content::part(scroll) {
 .tool-card p {
   margin: 7px 0 0;
   color: rgba(23, 36, 58, 0.68);
-  font-size: 0.71rem;
+  font-size: clamp(0.75rem, 2.92vw, 0.84rem);
   font-weight: 340;
   letter-spacing: 0;
   line-height: 1.36;
@@ -273,24 +278,24 @@ ion-content.tools-content::part(scroll) {
   grid-template-columns: minmax(0, 1fr);
   justify-items: center;
   align-content: start;
-  gap: clamp(8px, 2.4vw, 11px);
-  min-height: clamp(126px, 19vh, 150px);
-  border-radius: clamp(19px, 5vw, 23px);
-  padding: clamp(12px, 3vw, 15px) clamp(8px, 2.6vw, 12px);
+  gap: clamp(9px, 2.75vw, 13px);
+  min-height: clamp(134px, 20vh, 164px);
+  border-radius: clamp(20px, 5.35vw, 25px);
+  padding: clamp(14px, 3.45vw, 18px) clamp(9px, 2.95vw, 14px);
   text-align: center;
 }
 
 .tool-card--recommended .tool-card__icon {
-  width: clamp(42px, 11vw, 50px);
-  height: clamp(42px, 11vw, 50px);
+  width: clamp(45px, 11.8vw, 56px);
+  height: clamp(45px, 11.8vw, 56px);
 }
 
 .tool-card--recommended .tool-card__icon ion-icon {
-  font-size: clamp(1.24rem, 4vw, 1.42rem);
+  font-size: clamp(1.32rem, 4.35vw, 1.56rem);
 }
 
 .tool-card--recommended h2 {
-  font-size: clamp(0.8rem, 3.1vw, 0.92rem);
+  font-size: clamp(0.85rem, 3.42vw, 1rem);
   line-height: 1.18;
   white-space: normal;
 }
@@ -299,7 +304,7 @@ ion-content.tools-content::part(scroll) {
   display: -webkit-box;
   margin-top: 5px;
   overflow: hidden;
-  font-size: clamp(0.64rem, 2.45vw, 0.72rem);
+  font-size: clamp(0.68rem, 2.68vw, 0.78rem);
   line-height: 1.3;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -339,8 +344,17 @@ ion-content.tools-content::part(scroll) {
 
 :host-context(.ion-palette-dark) .tool-card__icon {
   background:
-    radial-gradient(circle at 34% 24%, rgba(255, 255, 255, 0.12), transparent 40%),
-    color-mix(in srgb, var(--tool-color) 17%, rgba(255, 255, 255, 0.06));
+    radial-gradient(circle at 34% 24%, rgba(255, 255, 255, 0.08), transparent 40%),
+    color-mix(in srgb, var(--tool-color) 22%, rgba(255, 255, 255, 0.05));
+  color: color-mix(in srgb, var(--tool-color) 70%, #f8f8ff);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--tool-color) 20%, rgba(255, 255, 255, 0.04)),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 8px 18px color-mix(in srgb, var(--tool-color) 13%, transparent);
+}
+
+:host-context(.ion-palette-dark) .tool-card__icon ion-icon {
+  color: color-mix(in srgb, var(--tool-color) 68%, #f8f8ff);
 }
 
 @media (max-height: 760px) {
