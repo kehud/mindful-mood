@@ -6,25 +6,45 @@
       <p>{{ 'profile.subtitle' | t }}</p>
     </header>
 
-    <section class="profile-card profile-user-card" *ngIf="user$ | async as user; else previewProfile">
-      <div class="avatar">{{ profileInitial(user.displayName) }}</div>
-      <div class="profile-user-copy">
-        <h2>{{ user.displayName }}</h2>
-        <p>{{ user.email }}</p>
-      </div>
-      <ion-icon class="chevron-icon user-chevron" name="chevron-forward-outline" aria-hidden="true"></ion-icon>
-    </section>
-
-    <ng-template #previewProfile>
-      <section class="profile-card profile-user-card">
-        <div class="avatar">R</div>
-        <div class="profile-user-copy">
-          <h2>{{ 'profile.previewTitle' | t }}</h2>
-          <p>{{ 'profile.previewSubtitle' | t }}</p>
+    <ng-container *ngIf="userView$ | async as userView">
+      <section
+        class="profile-card profile-user-card"
+        *ngIf="userView.resolved && userView.user as user; else pendingOrPreviewProfile"
+      >
+        <div class="avatar reflect-reveal">{{ profileInitial(user.displayName) }}</div>
+        <div class="profile-user-copy reflect-reveal">
+          <h2>{{ user.displayName }}</h2>
+          <p>{{ user.email }}</p>
         </div>
         <ion-icon class="chevron-icon user-chevron" name="chevron-forward-outline" aria-hidden="true"></ion-icon>
       </section>
-    </ng-template>
+
+      <ng-template #pendingOrPreviewProfile>
+        <section
+          class="profile-card profile-user-card"
+          [class.profile-user-card--loading]="!userView.resolved"
+          [attr.aria-busy]="!userView.resolved"
+        >
+          <ng-container *ngIf="userView.resolved; else profileSkeleton">
+            <div class="avatar">R</div>
+            <div class="profile-user-copy">
+              <h2>{{ 'profile.previewTitle' | t }}</h2>
+              <p>{{ 'profile.previewSubtitle' | t }}</p>
+            </div>
+            <ion-icon class="chevron-icon user-chevron" name="chevron-forward-outline" aria-hidden="true"></ion-icon>
+          </ng-container>
+        </section>
+      </ng-template>
+
+      <ng-template #profileSkeleton>
+        <span class="profile-avatar-skeleton reflect-skeleton reflect-skeleton-circle" aria-hidden="true"></span>
+        <span class="profile-user-copy profile-user-copy--skeleton" aria-hidden="true">
+          <span class="reflect-skeleton reflect-skeleton-line reflect-skeleton-line--lg"></span>
+          <span class="reflect-skeleton reflect-skeleton-line"></span>
+        </span>
+        <ion-icon class="chevron-icon user-chevron" name="chevron-forward-outline" aria-hidden="true"></ion-icon>
+      </ng-template>
+    </ng-container>
 
     <section class="profile-card preferences-card">
       <div class="profile-card-heading">

@@ -80,7 +80,14 @@ ion-content.home-content::part(scroll) {
 
 .home-name {
   display: inline-flex;
+  min-width: 1.8em;
   white-space: nowrap;
+}
+
+.home-name__skeleton {
+  width: clamp(54px, 15vw, 72px);
+  height: 0.78em;
+  align-self: center;
 }
 
 .home-name__accent {
@@ -321,6 +328,22 @@ ion-content.home-content::part(scroll) {
 .reflection-card > span {
   display: grid;
   gap: 8px;
+}
+
+.reflection-card__skeleton {
+  width: 100%;
+}
+
+.reflection-card__skeleton .reflect-skeleton:first-child {
+  width: min(68%, 184px);
+}
+
+.reflection-card__skeleton .reflect-skeleton:last-child {
+  width: min(92%, 256px);
+}
+
+.reflection-card--loading ion-icon {
+  opacity: 0.42;
 }
 
 .reflection-card strong {

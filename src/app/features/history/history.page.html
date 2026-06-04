@@ -4,16 +4,12 @@
     <span class="history-glow history-glow--peach" aria-hidden="true"></span>
     <span class="history-glow history-glow--mint" aria-hidden="true"></span>
 
-    <section class="history-state soft-panel" *ngIf="entriesLoading$ | async">
-      <ion-spinner name="crescent"></ion-spinner>
-      <p>{{ 'history.loading' | t }}</p>
-    </section>
+    <ng-container *ngIf="entriesView$ | async as entriesView">
+      <ng-container *ngIf="entriesView.resolved; else historySkeleton">
+        <section class="history-state error-state soft-panel" *ngIf="entriesError$ | async as error">
+          <p>{{ error }}</p>
+        </section>
 
-    <section class="history-state error-state soft-panel" *ngIf="entriesError$ | async as error">
-      <p>{{ error }}</p>
-    </section>
-
-    <ng-container *ngIf="entries$ | async as entries">
       <header class="history-hero">
         <div>
           <h1>{{ 'history.journeyTitle' | t }}</h1>
@@ -44,8 +40,8 @@
       <ng-container *ngIf="moodOptionsState$ | async as moodConfig">
         <ng-container *ngIf="emotionOptionsState$ | async as emotionConfig">
           <ng-container *ngIf="influenceOptionsState$ | async as influenceConfig">
-            <ng-container *ngIf="periodEntries(entries) as periodEntries">
-              <section class="history-empty-card" *ngIf="!entries.length">
+            <ng-container *ngIf="periodEntries(entriesView.entries) as periodEntries">
+              <section class="history-empty-card" *ngIf="!entriesView.entries.length">
                 <div>
                   <h2>{{ 'history.emptyTitle' | t }}</h2>
                   <p>{{ 'history.emptySubtitle' | t }}</p>
@@ -252,8 +248,8 @@
                     </span>
                     <div>
                       <p>{{ 'history.currentStreak' | t }}</p>
-                      <strong>{{ streakLabel(currentStreak(entries)) }}</strong>
-                      <small>{{ streakDetailLabel(currentStreak(entries)) }}</small>
+                      <strong>{{ streakLabel(currentStreak(entriesView.entries)) }}</strong>
+                      <small>{{ streakDetailLabel(currentStreak(entriesView.entries)) }}</small>
                     </div>
                   </article>
                 </div>
@@ -262,6 +258,144 @@
           </ng-container>
         </ng-container>
       </ng-container>
+      </ng-container>
     </ng-container>
+
+    <ng-template #historySkeleton>
+      <section class="history-loading-layout" aria-busy="true" aria-live="polite" role="status">
+        <span class="history-loading-text">{{ 'history.loading' | t }}</span>
+
+        <header class="history-hero history-hero--skeleton" aria-hidden="true">
+          <div>
+            <span class="reflect-skeleton reflect-skeleton-line history-skeleton-title"></span>
+            <span class="reflect-skeleton reflect-skeleton-line history-skeleton-subtitle"></span>
+          </div>
+
+          <span class="reflect-skeleton history-skeleton-calendar"></span>
+        </header>
+
+        <nav class="history-filter history-filter--skeleton" aria-hidden="true">
+          <span class="reflect-skeleton"></span>
+          <span class="reflect-skeleton"></span>
+          <span class="reflect-skeleton"></span>
+          <span class="reflect-skeleton"></span>
+        </nav>
+
+        <section class="history-panel mood-panel history-panel--skeleton" aria-hidden="true">
+          <div class="panel-heading">
+            <div>
+              <span class="reflect-skeleton reflect-skeleton-line history-skeleton-heading"></span>
+              <span class="reflect-skeleton reflect-skeleton-line history-skeleton-copy"></span>
+            </div>
+            <span class="reflect-skeleton history-skeleton-status"></span>
+          </div>
+
+          <div class="mood-chart mood-chart--skeleton">
+            <div class="mood-scale">
+              <span class="reflect-skeleton reflect-skeleton-circle"></span>
+              <span class="reflect-skeleton reflect-skeleton-circle"></span>
+              <span class="reflect-skeleton reflect-skeleton-circle"></span>
+            </div>
+
+            <div class="history-skeleton-chart">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </section>
+
+        <section class="history-panel checkins-panel history-panel--skeleton" aria-hidden="true">
+          <div class="panel-heading compact">
+            <span class="reflect-skeleton reflect-skeleton-line history-skeleton-heading"></span>
+            <span class="reflect-skeleton reflect-skeleton-line history-skeleton-count"></span>
+          </div>
+
+          <div class="checkin-list">
+            <article class="checkin-row checkin-row--skeleton">
+              <span class="reflect-skeleton reflect-skeleton-circle"></span>
+              <span class="history-skeleton-copy-stack">
+                <span class="reflect-skeleton reflect-skeleton-line"></span>
+                <span class="reflect-skeleton reflect-skeleton-line reflect-skeleton-line--sm"></span>
+              </span>
+              <span class="reflect-skeleton reflect-skeleton-line"></span>
+              <span class="reflect-skeleton reflect-skeleton-circle"></span>
+            </article>
+
+            <article class="checkin-row checkin-row--skeleton">
+              <span class="reflect-skeleton reflect-skeleton-circle"></span>
+              <span class="history-skeleton-copy-stack">
+                <span class="reflect-skeleton reflect-skeleton-line"></span>
+                <span class="reflect-skeleton reflect-skeleton-line reflect-skeleton-line--sm"></span>
+              </span>
+              <span class="reflect-skeleton reflect-skeleton-line"></span>
+              <span class="reflect-skeleton reflect-skeleton-circle"></span>
+            </article>
+
+            <article class="checkin-row checkin-row--skeleton">
+              <span class="reflect-skeleton reflect-skeleton-circle"></span>
+              <span class="history-skeleton-copy-stack">
+                <span class="reflect-skeleton reflect-skeleton-line"></span>
+                <span class="reflect-skeleton reflect-skeleton-line reflect-skeleton-line--sm"></span>
+              </span>
+              <span class="reflect-skeleton reflect-skeleton-line"></span>
+              <span class="reflect-skeleton reflect-skeleton-circle"></span>
+            </article>
+          </div>
+        </section>
+
+        <section class="history-panel patterns-panel history-panel--skeleton" aria-hidden="true">
+          <div class="panel-heading compact">
+            <span class="reflect-skeleton reflect-skeleton-line history-skeleton-heading"></span>
+          </div>
+
+          <div class="pattern-grid">
+            <article class="pattern-card pattern-card--skeleton">
+              <span class="reflect-skeleton reflect-skeleton-circle"></span>
+              <span class="reflect-skeleton reflect-skeleton-line"></span>
+              <span class="reflect-skeleton reflect-skeleton-line reflect-skeleton-line--sm"></span>
+            </article>
+
+            <article class="pattern-card pattern-card--skeleton">
+              <span class="reflect-skeleton reflect-skeleton-circle"></span>
+              <span class="reflect-skeleton reflect-skeleton-line"></span>
+              <span class="reflect-skeleton reflect-skeleton-line reflect-skeleton-line--sm"></span>
+            </article>
+
+            <article class="pattern-card pattern-card--skeleton">
+              <span class="reflect-skeleton reflect-skeleton-circle"></span>
+              <span class="reflect-skeleton reflect-skeleton-line"></span>
+              <span class="reflect-skeleton reflect-skeleton-line reflect-skeleton-line--sm"></span>
+            </article>
+          </div>
+        </section>
+
+        <section class="history-panel highlights-panel history-panel--skeleton" aria-hidden="true">
+          <div class="panel-heading compact">
+            <span class="reflect-skeleton reflect-skeleton-line history-skeleton-heading"></span>
+          </div>
+
+          <div class="highlights-grid">
+            <article class="highlight-item highlight-item--skeleton">
+              <span class="reflect-skeleton reflect-skeleton-circle"></span>
+              <span class="reflect-skeleton reflect-skeleton-line"></span>
+              <span class="reflect-skeleton reflect-skeleton-line reflect-skeleton-line--sm"></span>
+            </article>
+
+            <article class="highlight-item highlight-item--skeleton">
+              <span class="reflect-skeleton reflect-skeleton-circle"></span>
+              <span class="reflect-skeleton reflect-skeleton-line"></span>
+              <span class="reflect-skeleton reflect-skeleton-line reflect-skeleton-line--sm"></span>
+            </article>
+
+            <article class="highlight-item highlight-item--skeleton">
+              <span class="reflect-skeleton reflect-skeleton-circle"></span>
+              <span class="reflect-skeleton reflect-skeleton-line"></span>
+              <span class="reflect-skeleton reflect-skeleton-line reflect-skeleton-line--sm"></span>
+            </article>
+          </div>
+        </section>
+      </section>
+    </ng-template>
   </main>
 </ion-content>

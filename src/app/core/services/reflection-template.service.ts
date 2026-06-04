@@ -9,15 +9,23 @@ import {
   ReflectionTemplateTranslations,
 } from '../models/reflection-template.model';
 
+interface ReflectionTemplatesState {
+  readonly templates: readonly ReflectionTemplate[];
+  readonly loading: boolean;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class ReflectionTemplateService {
   private readonly firestore = inject(Firestore);
 
-  readonly activeTemplates$ = this.loadActiveTemplates();
+  readonly activeTemplatesState$ = this.loadActiveTemplates();
+  readonly activeTemplates$ = this.activeTemplatesState$.pipe(
+    map((state) => state.templates),
+  );
 
-  private loadActiveTemplates(): Observable<readonly ReflectionTemplate[]> {
+  private loadActiveTemplates(): Observable<ReflectionTemplatesState> {
     const templatesRef = collection(this.firestore, 'reflectionTemplates');
     const templatesQuery = query(templatesRef, orderBy('order', 'asc'));
 
@@ -29,8 +37,9 @@ export class ReflectionTemplateService {
       ),
       map((templates) => templates.filter((template) => template.isActive === true)),
       map((templates) => this.sortTemplates(templates)),
-      catchError(() => of([])),
-      startWith([]),
+      map((templates) => this.toState(templates, false)),
+      catchError(() => of(this.toState([], false))),
+      startWith(this.toState([], true)),
       shareReplay({ bufferSize: 1, refCount: true }),
     );
   }
@@ -76,6 +85,13 @@ export class ReflectionTemplateService {
 
   private sortTemplates(templates: readonly ReflectionTemplate[]): ReflectionTemplate[] {
     return [...templates].sort((a, b) => a.order - b.order);
+  }
+
+  private toState(templates: readonly ReflectionTemplate[], loading: boolean): ReflectionTemplatesState {
+    return {
+      templates: [...templates],
+      loading,
+    };
   }
 }
 

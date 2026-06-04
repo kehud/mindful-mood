@@ -6,7 +6,7 @@ import { AuthService } from './core/services/auth.service';
 import { LocalizationService } from './core/services/localization.service';
 import { ThemeService } from './core/services/theme.service';
 
-const SPLASH_VISIBLE_MS = 2000;
+const SPLASH_VISIBLE_MS = 1500;
 const SPLASH_FADE_MS = 375;
 
 @Component({

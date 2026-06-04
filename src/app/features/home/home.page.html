@@ -12,9 +12,15 @@
 
         <p>
           <span>{{ greetingTranslationKey | t }}</span>
-          <span class="home-name">
-            <span>{{ nameLead((currentUser$ | async)?.displayName) }}</span>
-            <span class="home-name__accent">{{ nameRest((currentUser$ | async)?.displayName) }}</span>
+          <span class="home-name" *ngIf="currentUserView$ | async as userView">
+            <ng-container *ngIf="userView.resolved; else userNameSkeleton">
+              <span class="reflect-reveal">{{ nameLead(userView.displayName) }}</span>
+              <span class="home-name__accent reflect-reveal">{{ nameRest(userView.displayName) }}</span>
+            </ng-container>
+
+            <ng-template #userNameSkeleton>
+              <span class="home-name__skeleton reflect-skeleton" aria-hidden="true"></span>
+            </ng-template>
           </span>
         </p>
       </div>
@@ -41,11 +47,24 @@
       </div>
     </section>
 
-    <a class="reflection-card" routerLink="/tabs/history">
-      <span>
+    <a
+      class="reflection-card"
+      routerLink="/tabs/history"
+      [class.reflection-card--loading]="isDailyReflectionLoading()"
+      [attr.aria-busy]="isDailyReflectionLoading()"
+    >
+      <span *ngIf="!isDailyReflectionLoading(); else reflectionSkeleton" class="reflect-reveal">
         <strong>{{ dailyReflection().title }}</strong>
         <span>{{ dailyReflection().body }}</span>
       </span>
+
+      <ng-template #reflectionSkeleton>
+        <span class="reflection-card__skeleton" aria-hidden="true">
+          <span class="reflect-skeleton reflect-skeleton-line reflect-skeleton-line--lg"></span>
+          <span class="reflect-skeleton reflect-skeleton-line"></span>
+        </span>
+      </ng-template>
+
       <ion-icon name="chevron-forward-outline" aria-hidden="true"></ion-icon>
     </a>
   </main>

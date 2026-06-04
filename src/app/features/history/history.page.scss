@@ -110,6 +110,183 @@ ion-content.history-content {
   color: var(--ion-color-danger);
 }
 
+.history-hero:not(.history-hero--skeleton),
+.history-filter:not(.history-filter--skeleton),
+.history-empty-card,
+.history-panel:not(.history-panel--skeleton),
+.history-state {
+  animation: reflect-content-reveal 220ms var(--app-ease) both;
+}
+
+.history-loading-layout {
+  display: block;
+}
+
+.history-loading-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.history-hero--skeleton {
+  pointer-events: none;
+}
+
+.history-hero--skeleton > div {
+  display: grid;
+  gap: clamp(8px, 2.3vw, 12px);
+}
+
+.history-skeleton-title {
+  width: min(52%, 168px);
+  height: clamp(1.26rem, 5.9vw, 1.78rem);
+}
+
+.history-skeleton-subtitle {
+  width: min(72%, 220px);
+}
+
+.history-skeleton-calendar {
+  width: var(--history-calendar-size);
+  height: var(--history-calendar-size);
+  border-radius: clamp(14px, 3.8vw, 17px);
+}
+
+.history-filter--skeleton {
+  pointer-events: none;
+}
+
+.history-filter--skeleton span {
+  min-height: var(--history-filter-button-height);
+  border-radius: clamp(11px, 3.1vw, 14px);
+}
+
+.history-panel--skeleton {
+  pointer-events: none;
+}
+
+.history-skeleton-heading {
+  width: min(58%, 184px);
+}
+
+.history-skeleton-copy {
+  width: min(78%, 236px);
+  margin-top: clamp(6px, 1.6vw, 8px);
+}
+
+.history-skeleton-count {
+  width: clamp(48px, 16vw, 74px);
+}
+
+.history-skeleton-status {
+  width: clamp(74px, 23vw, 104px);
+  height: var(--history-status-height);
+  border-radius: clamp(10px, 2.8vw, 12px);
+}
+
+.mood-chart--skeleton .mood-scale span {
+  width: clamp(20px, 5.6vw, 25px);
+  height: clamp(20px, 5.6vw, 25px);
+}
+
+.history-skeleton-chart {
+  position: relative;
+  display: grid;
+  align-content: center;
+  gap: clamp(28px, 7.4vw, 36px);
+  min-height: var(--history-chart-height);
+  border-radius: clamp(18px, 4.8vw, 22px);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.12)),
+    color-mix(in srgb, var(--app-surface) 68%, transparent);
+  overflow: hidden;
+}
+
+.history-skeleton-chart::before {
+  content: "";
+  position: absolute;
+  inset-inline: 8%;
+  top: 50%;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgba(var(--ion-color-tertiary-rgb), 0.2),
+    rgba(var(--ion-color-secondary-rgb), 0.16),
+    rgba(var(--ion-color-primary-rgb), 0.24)
+  );
+  transform: translateY(-50%);
+}
+
+.history-skeleton-chart span {
+  height: 1px;
+  margin-inline: 8%;
+  border-radius: 999px;
+  background: rgba(92, 118, 133, 0.08);
+}
+
+.checkin-row--skeleton > .reflect-skeleton-circle:first-child {
+  width: var(--history-checkin-icon-size);
+  height: var(--history-checkin-icon-size);
+}
+
+.checkin-row--skeleton > .reflect-skeleton-line {
+  width: clamp(38px, 13vw, 58px);
+}
+
+.checkin-row--skeleton > .reflect-skeleton-circle:last-child {
+  width: clamp(10px, 3vw, 14px);
+  height: clamp(10px, 3vw, 14px);
+}
+
+.history-skeleton-copy-stack {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+}
+
+.history-skeleton-copy-stack .reflect-skeleton:first-child {
+  width: min(58%, 150px);
+}
+
+.history-skeleton-copy-stack .reflect-skeleton:last-child {
+  width: min(86%, 210px);
+}
+
+.pattern-card--skeleton {
+  gap: clamp(7px, 1.9vw, 10px);
+}
+
+.pattern-card--skeleton .reflect-skeleton-circle {
+  width: var(--history-pattern-icon-size);
+  height: var(--history-pattern-icon-size);
+}
+
+.pattern-card--skeleton .reflect-skeleton-line:nth-child(2) {
+  width: 72%;
+}
+
+.pattern-card--skeleton .reflect-skeleton-line:last-child {
+  width: 92%;
+}
+
+.highlight-item--skeleton .reflect-skeleton-circle {
+  width: var(--history-highlight-icon-size);
+  height: var(--history-highlight-icon-size);
+}
+
+.highlight-item--skeleton .reflect-skeleton-line {
+  width: 78%;
+}
+
+.highlight-item--skeleton .reflect-skeleton-line:last-child {
+  width: 58%;
+}
+
 .history-hero {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -787,6 +964,17 @@ ion-content.history-content {
 :host-context(.ion-palette-dark) .mood-scale {
   fill: rgba(248, 248, 255, 0.6);
   color: rgba(248, 248, 255, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .history-hero,
+  .history-filter,
+  .history-empty-card,
+  .history-panel,
+  .history-state {
+    animation: none;
+    transition: none;
+  }
 }
 
 @media (max-width: 380px) {

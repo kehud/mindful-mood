@@ -1,7 +1,9 @@
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { Component, NgZone, inject } from '@angular/core';
 import { IonicModule, LoadingController, NavController } from '@ionic/angular';
+import { map, shareReplay, startWith } from 'rxjs';
 
+import { AppUser } from '../../core/models/user-profile.model';
 import { AuthService } from '../../core/services/auth.service';
 import { AppLanguage, LocalizationService } from '../../core/services/localization.service';
 import { TranslationKey } from '../../core/services/localization.translations';
@@ -11,6 +13,11 @@ import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 interface ProfileSettingsItem {
   readonly icon: string;
   readonly labelKey: TranslationKey;
+}
+
+interface ProfileUserView {
+  readonly user: AppUser | null;
+  readonly resolved: boolean;
 }
 
 @Component({
@@ -28,7 +35,11 @@ export class ProfilePage {
   private readonly ngZone = inject(NgZone);
   private readonly themeService = inject(ThemeService);
 
-  readonly user$ = this.authService.currentUser$;
+  readonly userView$ = this.authService.currentUser$.pipe(
+    map((user): ProfileUserView => ({ user, resolved: true })),
+    startWith({ user: null, resolved: false }),
+    shareReplay({ bufferSize: 1, refCount: true }),
+  );
   readonly languageOptions = this.localization.availableLanguages;
   readonly currentLanguage = this.localization.currentLanguage;
   readonly isLanguageSwitching = this.localization.isSwitchingLanguage;

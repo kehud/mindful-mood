@@ -15,6 +15,7 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { reflectTabTransitionAnimation } from './shared/animations/reflect-tab-transition.animation';
 
 registerLocaleData(localeHe);
 
@@ -42,7 +43,9 @@ function provideFirebaseAuth() {
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(),
+    IonicModule.forRoot({
+      navAnimation: reflectTabTransitionAnimation,
+    }),
     AppRoutingModule,
   ],
   providers: [

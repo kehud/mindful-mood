@@ -2,6 +2,7 @@ import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
+import { map, shareReplay, startWith } from 'rxjs';
 
 import { emotionIconForLabel, influenceIconForLabel } from '../../core/config-option-icons';
 import { EmotionOption, InfluenceOption, MoodOption } from '../../core/models/config-option.model';
@@ -39,6 +40,11 @@ interface TrendBucket {
 interface FrequencyItem {
   readonly label: string;
   readonly count: number;
+}
+
+interface EntriesView {
+  readonly entries: readonly MoodEntry[];
+  readonly resolved: boolean;
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -108,7 +114,11 @@ export class HistoryPage {
   readonly influenceOptionsState$ = this.configService.influenceOptionsState$;
   readonly currentLanguage = this.localization.currentLanguage;
   readonly entries$ = this.moodEntryService.entries$;
-  readonly entriesLoading$ = this.moodEntryService.entriesLoading$;
+  readonly entriesView$ = this.entries$.pipe(
+    map((entries): EntriesView => ({ entries, resolved: true })),
+    startWith({ entries: [] as readonly MoodEntry[], resolved: false }),
+    shareReplay({ bufferSize: 1, refCount: true }),
+  );
   readonly entriesError$ = this.moodEntryService.entriesError$;
   readonly timeFilters = TIME_FILTERS;
 

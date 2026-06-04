@@ -115,10 +115,33 @@ ion-content.profile-content {
     inset 0 1px 0 rgba(255, 255, 255, 0.66);
 }
 
+.profile-avatar-skeleton {
+  flex: 0 0 auto;
+  width: var(--profile-avatar-size);
+  height: var(--profile-avatar-size);
+}
+
 .profile-user-copy {
   flex: 1 1 auto;
   min-width: 0;
   text-align: start;
+}
+
+.profile-user-copy--skeleton {
+  display: grid;
+  gap: 8px;
+}
+
+.profile-user-copy--skeleton .reflect-skeleton:first-child {
+  width: min(64%, 156px);
+}
+
+.profile-user-copy--skeleton .reflect-skeleton:last-child {
+  width: min(88%, 216px);
+}
+
+.profile-user-card--loading .user-chevron {
+  opacity: 0.34;
 }
 
 .profile-user-copy h2 {

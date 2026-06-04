@@ -1,8 +1,9 @@
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
+import { map, shareReplay, startWith } from 'rxjs';
 
 import { DailyReflectionText, ReflectionTemplate } from '../../core/models/reflection-template.model';
 import { AuthService } from '../../core/services/auth.service';
@@ -10,10 +11,15 @@ import { AppLanguage, LocalizationService } from '../../core/services/localizati
 import { ReflectionTemplateService } from '../../core/services/reflection-template.service';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
+interface HomeUserView {
+  readonly displayName: string | null | undefined;
+  readonly resolved: boolean;
+}
+
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [AsyncPipe, IonicModule, RouterLink, TranslatePipe],
+  imports: [AsyncPipe, IonicModule, NgIf, RouterLink, TranslatePipe],
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
@@ -21,14 +27,22 @@ export class HomePage {
   private readonly authService = inject(AuthService);
   private readonly localization = inject(LocalizationService);
   private readonly reflectionTemplateService = inject(ReflectionTemplateService);
-  private readonly reflectionTemplates = toSignal(this.reflectionTemplateService.activeTemplates$, {
-    initialValue: [] as readonly ReflectionTemplate[],
+  private readonly reflectionTemplatesState = toSignal(this.reflectionTemplateService.activeTemplatesState$, {
+    initialValue: {
+      templates: [] as readonly ReflectionTemplate[],
+      loading: true,
+    },
   });
 
-  readonly currentUser$ = this.authService.currentUser$;
+  readonly currentUserView$ = this.authService.currentUser$.pipe(
+    map((user): HomeUserView => ({ displayName: user?.displayName, resolved: true })),
+    startWith({ displayName: undefined, resolved: false }),
+    shareReplay({ bufferSize: 1, refCount: true }),
+  );
+  readonly isDailyReflectionLoading = computed(() => this.reflectionTemplatesState().loading);
   readonly dailyReflection = computed<DailyReflectionText>(() => {
     const language = this.localization.currentLanguage();
-    const template = this.selectDailyTemplate(this.reflectionTemplates());
+    const template = this.selectDailyTemplate(this.reflectionTemplatesState().templates);
 
     return template ? this.toDailyReflection(template, language) : this.fallbackReflection();
   });
