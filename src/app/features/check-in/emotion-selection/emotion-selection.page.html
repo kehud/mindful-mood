@@ -26,19 +26,21 @@
           <p class="selection-subtitle">{{ 'checkIn.emotions.subtitle' | t }}</p>
         </div>
 
-        <app-chip-selector
-          class="emotion-chip-selector"
-          [ariaLabel]="'checkIn.emotions.aria' | t"
-          tone="mint"
-          [options]="optionItems(displayedEmotionOptions(emotionConfig.options), currentLanguage())"
-          [selectedValues]="selectedEmotions"
-          (selectedValuesChange)="selectedEmotions = $event"
-        ></app-chip-selector>
+        <div class="chip-scroll">
+          <app-chip-selector
+            class="emotion-chip-selector"
+            [ariaLabel]="'checkIn.emotions.aria' | t"
+            tone="mint"
+            [options]="optionItems(displayedEmotionOptions(emotionConfig.options), currentLanguage())"
+            [selectedValues]="selectedEmotions"
+            (selectedValuesChange)="selectedEmotions = $event"
+          ></app-chip-selector>
 
-        <div class="show-more-row" *ngIf="shouldShowAllButton(emotionConfig.options)">
-          <ion-button fill="clear" size="small" type="button" (click)="toggleShowAll()">
-            {{ showAllToggleLabel(showAllEmotions) }}
-          </ion-button>
+          <div class="show-more-row" *ngIf="shouldShowAllButton(emotionConfig.options)">
+            <ion-button fill="clear" size="small" type="button" (click)="toggleShowAll()">
+              {{ showAllToggleLabel(showAllEmotions) }}
+            </ion-button>
+          </div>
         </div>
       </section>
 

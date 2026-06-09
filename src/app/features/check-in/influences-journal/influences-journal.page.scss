@@ -2,8 +2,19 @@
   display: block;
 }
 
+ion-content.checkin-immersive-content {
+  --overflow: hidden;
+}
+
+ion-content.checkin-immersive-content::part(scroll) {
+  overflow: hidden;
+}
+
 .reflect-flow-shell {
-  padding: calc(18px + env(safe-area-inset-top)) 24px calc(16px + env(safe-area-inset-bottom));
+  height: 100dvh;
+  min-height: 100dvh;
+  max-height: 100dvh;
+  padding: calc(18px + env(safe-area-inset-top)) 24px calc(14px + env(safe-area-inset-bottom));
 }
 
 .reflect-flow-shell::before {
@@ -19,6 +30,7 @@
 }
 
 .reflect-flow-shell .checkin-nav {
+  flex: 0 0 auto;
   grid-template-columns: 42px 1fr 42px;
   min-height: 42px;
   margin-bottom: clamp(34px, 5.6vh, 60px);
@@ -120,10 +132,15 @@
 }
 
 .selection-pane {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
   padding-top: 0;
 }
 
 .selection-toolbar {
+  flex: 0 0 auto;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -156,6 +173,20 @@
   display: block;
   width: calc(100% + 12px);
   margin-inline: -6px;
+}
+
+.chip-scroll {
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+:host .chip-scroll app-chip-selector {
+  width: 100%;
+  margin-inline: 0;
 }
 
 :host ::ng-deep app-chip-selector .chip-selector {
@@ -252,6 +283,10 @@
 }
 
 .reflect-flow-shell .bottom-action {
+  position: relative;
+  bottom: auto;
+  flex: 0 0 auto;
+  width: min(100%, 388px);
   margin-top: auto;
   padding-top: clamp(20px, 3.2vh, 30px);
   padding-bottom: 0;

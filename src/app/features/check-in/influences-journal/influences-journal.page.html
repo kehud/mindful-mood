@@ -26,25 +26,27 @@
           <p class="selection-subtitle">{{ 'checkIn.influences.subtitle' | t }}</p>
         </div>
 
-        <app-chip-selector
-          [ariaLabel]="'checkIn.influences.aria' | t"
-          tone="peach"
-          [options]="optionItems(influenceConfig.options.length > 10 ? influenceConfig.options.slice(0, 10) : influenceConfig.options, currentLanguage())"
-          [selectedValues]="selectedInfluences"
-          (selectedValuesChange)="selectedInfluences = $event"
-        ></app-chip-selector>
-
-        <details class="show-more-disclosure" *ngIf="influenceConfig.options.length > 10" [open]="showAllInfluences">
-          <summary (click)="toggleShowAllInfluences($event)">{{ showAllToggleLabel(showAllInfluences) }}</summary>
+        <div class="chip-scroll">
           <app-chip-selector
-            *ngIf="showAllInfluences"
             [ariaLabel]="'checkIn.influences.aria' | t"
             tone="peach"
-            [options]="optionItems(influenceConfig.options.slice(10), currentLanguage())"
+            [options]="optionItems(influenceConfig.options.length > 10 ? influenceConfig.options.slice(0, 10) : influenceConfig.options, currentLanguage())"
             [selectedValues]="selectedInfluences"
             (selectedValuesChange)="selectedInfluences = $event"
           ></app-chip-selector>
-        </details>
+
+          <details class="show-more-disclosure" *ngIf="influenceConfig.options.length > 10" [open]="showAllInfluences">
+            <summary (click)="toggleShowAllInfluences($event)">{{ showAllToggleLabel(showAllInfluences) }}</summary>
+            <app-chip-selector
+              *ngIf="showAllInfluences"
+              [ariaLabel]="'checkIn.influences.aria' | t"
+              tone="peach"
+              [options]="optionItems(influenceConfig.options.slice(10), currentLanguage())"
+              [selectedValues]="selectedInfluences"
+              (selectedValuesChange)="selectedInfluences = $event"
+            ></app-chip-selector>
+          </details>
+        </div>
       </section>
     </ng-container>
 
