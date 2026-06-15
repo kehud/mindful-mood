@@ -1,4 +1,8 @@
 ion-content.tools-content {
+  --tools-bottom-safe-space: max(var(--ion-safe-area-bottom, 0px), env(safe-area-inset-bottom, 0px));
+  --tools-tab-bar-height: calc(41px + var(--tools-bottom-safe-space));
+  --overflow: hidden;
+  --padding-bottom: 0;
   --background:
     radial-gradient(circle at 5% 10%, rgba(138, 216, 211, 0.23), transparent 38%),
     radial-gradient(circle at 96% 5%, rgba(247, 198, 173, 0.31), transparent 40%),
@@ -7,12 +11,11 @@ ion-content.tools-content {
 }
 
 ion-content.tools-content::part(scroll) {
-  overflow-y: hidden;
+  overflow: hidden;
+  overscroll-behavior: none;
 }
 
 .tools-shell {
-  --tools-bottom-safe-space: max(var(--ion-safe-area-bottom, 0px), env(safe-area-inset-bottom, 0px));
-  --tools-bottom-tab-space: 40px;
   --tools-inline-pad: clamp(17px, 5.05vw, 23px);
   --tools-top-space: clamp(13px, 4.58vw, 23px);
   --tools-section-gap: clamp(17px, 3.95vw, 25px);
@@ -36,7 +39,7 @@ ion-content.tools-content::part(scroll) {
   padding:
     calc(var(--tools-top-space) + env(safe-area-inset-top))
     var(--tools-inline-pad)
-    calc(14px + var(--tools-bottom-tab-space) + var(--tools-bottom-safe-space));
+    calc(14px + var(--tools-tab-bar-height));
   color: #17243a;
 }
 
@@ -111,11 +114,13 @@ ion-content.tools-content::part(scroll) {
 
 .tools-sections {
   display: grid;
-  align-content: start;
+  grid-template-rows: auto minmax(0, 1fr);
+  align-content: stretch;
   gap: var(--tools-section-gap);
   min-height: 0;
-  overflow-y: auto;
-  padding: 0 0 3px;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 0;
   scrollbar-width: none;
 }
 
@@ -126,8 +131,18 @@ ion-content.tools-content::part(scroll) {
 .tools-recommendations,
 .tools-all {
   display: grid;
-  align-content: start;
   gap: clamp(11px, 3.2vw, 16px);
+  min-height: 0;
+  overflow: hidden;
+}
+
+.tools-recommendations {
+  align-content: start;
+}
+
+.tools-all {
+  grid-template-rows: auto minmax(0, 1fr);
+  align-content: stretch;
 }
 
 .tools-section-heading {
@@ -163,8 +178,21 @@ ion-content.tools-content::part(scroll) {
 
 .tools-recommendation-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-columns: minmax(112px, 32%);
+  grid-auto-flow: column;
   gap: var(--tools-card-gap);
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  padding-bottom: 2px;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tools-recommendation-grid::-webkit-scrollbar {
+  display: none;
 }
 
 .tools-grid {
@@ -173,9 +201,13 @@ ion-content.tools-content::part(scroll) {
   align-content: start;
   gap: var(--tools-card-gap);
   min-height: 0;
+  overflow-x: hidden;
   overflow-y: auto;
-  padding: 0 0 3px;
+  overscroll-behavior-y: contain;
+  box-sizing: border-box;
+  padding: 0 0 max(16px, var(--tools-bottom-safe-space));
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .tools-grid::-webkit-scrollbar {
@@ -282,6 +314,7 @@ ion-content.tools-content::part(scroll) {
   min-height: clamp(134px, 20vh, 164px);
   border-radius: clamp(20px, 5.35vw, 25px);
   padding: clamp(14px, 3.45vw, 18px) clamp(9px, 2.95vw, 14px);
+  scroll-snap-align: start;
   text-align: center;
 }
 
@@ -364,7 +397,7 @@ ion-content.tools-content::part(scroll) {
     --tools-card-gap: 9px;
 
     gap: 14px;
-    padding-bottom: calc(12px + var(--tools-bottom-tab-space) + var(--tools-bottom-safe-space));
+    padding-bottom: calc(12px + var(--tools-tab-bar-height));
   }
 
   .tools-hero h1 {

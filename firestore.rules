@@ -67,8 +67,33 @@ service cloud.firestore {
       && request.resource.data.order is number;
     }
 
+    function isValidToolEngagement(userId, toolId) {
+      return request.resource.data.keys().hasOnly([
+        'userId',
+        'toolId',
+        'shownCount',
+        'openedCount',
+        'lastShownAt',
+        'lastOpenedAt',
+        'updatedAt'
+      ])
+      && request.resource.data.userId == userId
+      && request.resource.data.toolId == toolId
+      && (!request.resource.data.keys().hasAny(['shownCount']) || request.resource.data.shownCount is number)
+      && (!request.resource.data.keys().hasAny(['openedCount']) || request.resource.data.openedCount is number)
+      && (!request.resource.data.keys().hasAny(['lastShownAt']) || request.resource.data.lastShownAt is string)
+      && (!request.resource.data.keys().hasAny(['lastOpenedAt']) || request.resource.data.lastOpenedAt is string)
+      && request.resource.data.updatedAt is string;
+    }
+
     match /users/{userId} {
       allow read, write: if isOwner(userId);
+    }
+
+    match /users/{userId}/toolEngagement/{toolId} {
+      allow read: if isOwner(userId);
+      allow create, update: if isOwner(userId) && isValidToolEngagement(userId, toolId);
+      allow delete: if false;
     }
 
     match /moodEntries/{entryId} {

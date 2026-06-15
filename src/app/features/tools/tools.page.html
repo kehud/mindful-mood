@@ -19,22 +19,23 @@
           <p>{{ 'tools.recommendations.subtitle' | t }}</p>
         </div>
 
-        <div class="tools-recommendation-grid">
+        <div class="tools-recommendation-grid" *ngIf="recommendedTools$ | async as recommendedTools">
           <article
             class="tool-card tool-card--recommended"
-            *ngFor="let tool of recommendedTools; trackBy: trackTool"
+            *ngFor="let tool of recommendedTools; trackBy: trackRecommendation"
             [class.tool-card--teal]="tool.tone === 'teal'"
             [class.tool-card--peach]="tool.tone === 'peach'"
             [class.tool-card--violet]="tool.tone === 'violet'"
             [class.tool-card--plum]="tool.tone === 'plum'"
+            (click)="onRecommendationSelected(tool)"
           >
             <span class="tool-card__icon" aria-hidden="true">
               <ion-icon [name]="tool.icon"></ion-icon>
             </span>
 
             <div>
-              <h2>{{ tool.titleKey | t }}</h2>
-              <p>{{ tool.subtitleKey | t }}</p>
+              <h2>{{ recommendationTitle(tool) }}</h2>
+              <p>{{ recommendationSummary(tool) }}</p>
             </div>
           </article>
         </div>
@@ -46,7 +47,7 @@
         <section class="tools-grid" [attr.aria-label]="'tools.allTools' | t">
           <article
             class="tool-card"
-            *ngFor="let tool of tools; trackBy: trackTool"
+            *ngFor="let tool of allTools; trackBy: trackTool"
             [class.tool-card--teal]="tool.tone === 'teal'"
             [class.tool-card--peach]="tool.tone === 'peach'"
             [class.tool-card--violet]="tool.tone === 'violet'"
