@@ -403,7 +403,7 @@ export class ToolsPage {
       this.loadUserPreferences(userId).catch(() => this.emptyUserPreferences(userId)),
       this.engagementService.loadToolEngagementMap(userId).catch(() => ({})),
     ]);
-    const recommendations = this.recommendationService.getRecommendations(
+    const recommendations = await this.recommendationService.getRecommendations(
       latestMoodEntry,
       userPreferences,
       engagementMap,

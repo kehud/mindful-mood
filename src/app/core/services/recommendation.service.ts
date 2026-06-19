@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { RECOMMENDATION_TOOL_CATALOG } from '../recommendation-tool.catalog';
 import { MoodEntry } from '../models/mood-entry.model';
@@ -12,6 +12,8 @@ import {
   ToolEngagementMap,
   UserPreferences,
 } from '../models/recommendation.model';
+import { ToolDefinition } from '../models/tool.model';
+import { ToolService } from './tool.service';
 
 export const RECOMMENDATION_SCORE_WEIGHTS = {
   emotionMatch: 35,
@@ -57,31 +59,38 @@ const MODE_CATEGORY_TARGETS: Record<RecommendationMode, Record<RecommendationCat
   },
 };
 
+const TOOL_ICON_NAMES_BY_KEY: Record<string, string> = {
+  body: 'body-outline',
+  breathing: 'radio-button-on-outline',
+  create: 'color-palette-outline',
+  friend: 'people-circle-outline',
+  goal: 'flag-outline',
+  gratitude: 'sparkles-outline',
+  grounding: 'scan-outline',
+  learn: 'school-outline',
+  meditation: 'leaf-outline',
+  music: 'musical-notes-outline',
+  nature: 'flower-outline',
+  photography: 'camera-outline',
+  reading: 'book-outline',
+  walk: 'walk-outline',
+};
+
 @Injectable({
   providedIn: 'root',
 })
 export class RecommendationService {
-  getRecommendations(
+  private readonly toolService = inject(ToolService);
+
+  async getRecommendations(
     latestMoodEntry: MoodEntry | null | undefined,
     userPreferences: UserPreferences | null | undefined = null,
     engagementMap: ToolEngagementMap = {},
     limit = DEFAULT_RECOMMENDATION_LIMIT,
-  ): RecommendationResult[] {
-    const mode = this.detectMode(latestMoodEntry);
-    const recommendationLimit = this.normalizeLimit(limit);
-    const primaryTools = RECOMMENDATION_TOOL_CATALOG.filter((tool) =>
-      (tool.supportedModes as readonly RecommendationMode[]).includes(mode),
-    );
-    const fallbackTools = primaryTools.length < recommendationLimit
-      ? RECOMMENDATION_TOOL_CATALOG.filter((tool) => !primaryTools.some((primaryTool) => primaryTool.id === tool.id))
-      : [];
-    const scoredTools = [...primaryTools, ...fallbackTools]
-      .map((tool) => this.scoreTool(tool, mode, latestMoodEntry, userPreferences, engagementMap[tool.id]))
-      .sort((a, b) => b.score - a.score);
+  ): Promise<RecommendationResult[]> {
+    const catalog = await this.loadRecommendationCatalog();
 
-    return this.applyModeCategoryRules(scoredTools, mode, recommendationLimit)
-      .sort((a, b) => b.score - a.score)
-      .slice(0, recommendationLimit);
+    return this.getRecommendationsFromCatalog(catalog, latestMoodEntry, userPreferences, engagementMap, limit);
   }
 
   detectMode(latestMoodEntry: MoodEntry | null | undefined): RecommendationMode {
@@ -102,6 +111,104 @@ export class RecommendationService {
     }
 
     return latestMoodEntry.moodLevel >= 5 ? 'growth' : 'support';
+  }
+
+  private getRecommendationsFromCatalog(
+    catalog: readonly RecommendationTool[],
+    latestMoodEntry: MoodEntry | null | undefined,
+    userPreferences: UserPreferences | null | undefined,
+    engagementMap: ToolEngagementMap,
+    limit: number,
+  ): RecommendationResult[] {
+    const mode = this.detectMode(latestMoodEntry);
+    const recommendationLimit = this.normalizeLimit(limit);
+    const primaryTools = catalog.filter((tool) =>
+      (tool.supportedModes as readonly RecommendationMode[]).includes(mode),
+    );
+    const fallbackTools = primaryTools.length < recommendationLimit
+      ? catalog.filter((tool) => !primaryTools.some((primaryTool) => primaryTool.id === tool.id))
+      : [];
+    const scoredTools = [...primaryTools, ...fallbackTools]
+      .map((tool) => this.scoreTool(tool, mode, latestMoodEntry, userPreferences, engagementMap[tool.id]))
+      .sort((a, b) => b.score - a.score);
+
+    return this.applyModeCategoryRules(scoredTools, mode, recommendationLimit)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, recommendationLimit);
+  }
+
+  private async loadRecommendationCatalog(): Promise<readonly RecommendationTool[]> {
+    try {
+      const firestoreTools = await this.toolService.getEnabledTools();
+      const recommendationTools = firestoreTools
+        .map((tool) => this.toRecommendationTool(tool))
+        .filter((tool): tool is RecommendationTool => tool !== null);
+
+      if (!recommendationTools.length) {
+        throw new Error('No enabled Firestore recommendation tools are available.');
+      }
+
+      console.log('Recommendation tools source: Firestore');
+      return recommendationTools;
+    } catch {
+      console.log('Recommendation tools source: Local fallback');
+      return RECOMMENDATION_TOOL_CATALOG;
+    }
+  }
+
+  private toRecommendationTool(tool: ToolDefinition): RecommendationTool | null {
+    const supportedMoodRange = this.supportedMoodRange(tool.recommendationTags.moods);
+
+    if (!supportedMoodRange) {
+      return null;
+    }
+
+    return {
+      id: tool.id,
+      title: tool.title.en,
+      icon: iconNameForToolKey(tool.iconKey),
+      category: tool.category,
+      description: tool.description.en,
+      titleTranslations: tool.title,
+      descriptionTranslations: tool.description,
+      matchingEmotions: tool.recommendationTags.emotions,
+      matchingInfluences: tool.recommendationTags.influences,
+      matchingPreferences: tool.recommendationTags.activities,
+      supportedMoodRange,
+      supportedModes: this.supportedModes(tool, supportedMoodRange),
+    };
+  }
+
+  private supportedMoodRange(moods: readonly number[]): readonly [number, number] | null {
+    if (!moods.length) {
+      return null;
+    }
+
+    return [
+      Math.min(...moods),
+      Math.max(...moods),
+    ];
+  }
+
+  private supportedModes(
+    tool: ToolDefinition,
+    supportedMoodRange: readonly [number, number],
+  ): RecommendationMode[] {
+    if (tool.category === 'growth') {
+      return ['growth'];
+    }
+
+    const [minimumMood, maximumMood] = supportedMoodRange;
+
+    if (maximumMood <= 4) {
+      return ['support'];
+    }
+
+    if (minimumMood >= 5) {
+      return ['growth'];
+    }
+
+    return ['support', 'growth'];
   }
 
   private scoreTool(
@@ -427,4 +534,8 @@ export class RecommendationService {
   private roundScore(score: number): number {
     return Number(score.toFixed(2));
   }
+}
+
+function iconNameForToolKey(iconKey: string): string {
+  return TOOL_ICON_NAMES_BY_KEY[iconKey] ?? iconKey;
 }
