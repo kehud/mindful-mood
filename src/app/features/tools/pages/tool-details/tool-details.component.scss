@@ -1,0 +1,126 @@
+ion-content.tool-details-content {
+  --background:
+    radial-gradient(circle at 7% 7%, rgba(245, 188, 178, 0.25), transparent 36%),
+    radial-gradient(circle at 95% 11%, rgba(156, 218, 218, 0.23), transparent 36%),
+    radial-gradient(circle at 50% 64%, rgba(135, 214, 198, 0.195), transparent 42%),
+    radial-gradient(circle at 92% 94%, rgba(247, 220, 176, 0.205), transparent 34%),
+    linear-gradient(180deg, #fffaf5 0%, #f8fbf6 48%, #eef8f8 100%);
+}
+
+ion-content.tool-details-content::part(scroll) {
+  min-height: 100%;
+}
+
+.tool-details-feedback {
+  position: relative;
+  display: grid;
+  width: min(100%, 430px);
+  min-height: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  place-items: center;
+  padding:
+    calc(42px + env(safe-area-inset-top))
+    34px
+    calc(30px + env(safe-area-inset-bottom));
+  color: #173f42;
+  text-align: center;
+}
+
+.tool-details-feedback__nav {
+  position: absolute;
+  inset-block-start: calc(48px + env(safe-area-inset-top));
+  inset-inline-start: 34px;
+  width: 58px;
+  height: 58px;
+  --background: rgba(255, 255, 255, 0.68);
+  --background-activated: rgba(255, 255, 255, 0.82);
+  --background-hover: rgba(255, 255, 255, 0.78);
+  --border-radius: 999px;
+  --box-shadow: 0 16px 34px rgba(58, 72, 88, 0.07);
+  --color: #164b4d;
+  --padding-bottom: 0;
+  --padding-end: 0;
+  --padding-start: 0;
+  --padding-top: 0;
+}
+
+.tool-details-feedback__nav::part(native) {
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(18px) saturate(112%);
+  -webkit-backdrop-filter: blur(18px) saturate(112%);
+}
+
+.tool-details-feedback__nav ion-icon {
+  font-size: 1.78rem;
+  --ionicon-stroke-width: 28px;
+}
+
+.tool-details-feedback ion-spinner {
+  width: 30px;
+  height: 30px;
+  color: #68aaa5;
+}
+
+.tool-details-feedback h1 {
+  margin: 0;
+  color: #173f42;
+  font-size: clamp(1.7rem, 7vw, 2.1rem);
+  font-weight: 560;
+  letter-spacing: 0;
+  line-height: 1.13;
+}
+
+.tool-details-feedback p {
+  max-width: 280px;
+  margin: 14px auto 0;
+  color: rgba(23, 63, 66, 0.64);
+  font-size: clamp(0.96rem, 3.9vw, 1.08rem);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.46;
+}
+
+.tool-details-feedback__action {
+  width: min(100%, 308px);
+  margin: 28px auto 0;
+  --background: linear-gradient(135deg, rgba(139, 203, 188, 0.86), rgba(106, 176, 164, 0.88));
+  --background-activated: linear-gradient(135deg, rgba(105, 176, 164, 0.95), rgba(80, 148, 140, 0.96));
+  --border-radius: 22px;
+  --box-shadow: 0 16px 34px rgba(72, 144, 134, 0.18);
+  --color: #ffffff;
+  min-height: 58px;
+  font-size: 1.05rem;
+  font-weight: 540;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+:host-context(.ion-palette-dark) ion-content.tool-details-content {
+  --background:
+    radial-gradient(circle at 7% 7%, rgba(238, 128, 108, 0.135), transparent 34%),
+    radial-gradient(circle at 95% 11%, rgba(120, 201, 203, 0.16), transparent 34%),
+    radial-gradient(circle at 50% 64%, rgba(73, 197, 187, 0.15), transparent 40%),
+    linear-gradient(180deg, #121a2a 0%, #0d1726 50%, #071218 100%);
+}
+
+:host-context(.ion-palette-dark) .tool-details-feedback,
+:host-context(.ion-palette-dark) .tool-details-feedback h1 {
+  color: #f6fbff;
+}
+
+:host-context(.ion-palette-dark) .tool-details-feedback p {
+  color: rgba(246, 251, 255, 0.66);
+}
+
+:host-context(.ion-palette-dark) .tool-details-feedback__nav {
+  --background: rgba(255, 255, 255, 0.08);
+  --background-activated: rgba(255, 255, 255, 0.13);
+  --background-hover: rgba(255, 255, 255, 0.11);
+  --box-shadow: 0 16px 34px rgba(0, 0, 0, 0.22);
+  --color: #f6fbff;
+}
+
+:host-context(.ion-palette-dark) .tool-details-feedback__nav::part(native) {
+  border-color: rgba(255, 255, 255, 0.1);
+}

@@ -1,0 +1,66 @@
+<main class="tool-details-intro" [attr.dir]="currentDirection()">
+  <nav class="tool-details-intro__nav">
+    <ion-button
+      class="tool-details-intro__back"
+      fill="clear"
+      routerLink="/tabs/tools"
+      [attr.aria-label]="'common.back' | t"
+    >
+      <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+    </ion-button>
+  </nav>
+
+  <section class="tool-details-intro__hero">
+    <div class="tool-details-intro__aura" aria-hidden="true">
+      <span class="tool-details-intro__aura-layer tool-details-intro__aura-layer--one"></span>
+      <span class="tool-details-intro__aura-layer tool-details-intro__aura-layer--two"></span>
+      <span class="tool-details-intro__aura-layer tool-details-intro__aura-layer--three"></span>
+      <span class="tool-details-intro__aura-layer tool-details-intro__aura-layer--four"></span>
+      <span class="tool-details-intro__aura-layer tool-details-intro__aura-layer--five"></span>
+      <span class="tool-details-intro__aura-layer tool-details-intro__aura-layer--six"></span>
+      <span class="tool-details-intro__aura-core"></span>
+      <ion-icon [name]="toolIconName()"></ion-icon>
+    </div>
+
+    <h1>{{ title() }}</h1>
+    <p>{{ description() }}</p>
+  </section>
+
+  <section class="tool-details-intro__details">
+    <div class="tool-details-intro__duration" [class.tool-details-intro__duration--single]="!hasDuration()">
+      <span class="tool-details-intro__duration-value">
+        <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+        <span>{{ durationLabel() }}</span>
+      </span>
+
+      <span class="tool-details-intro__duration-divider" *ngIf="hasDuration()" aria-hidden="true"></span>
+      <span class="tool-details-intro__duration-flexible" *ngIf="hasDuration()">
+        {{ 'tools.details.flexible' | t }}
+      </span>
+    </div>
+
+    <section class="tool-details-intro__helps" *ngIf="helpTags.length">
+      <h2>{{ 'tools.details.helpsWith' | t }}</h2>
+
+      <div class="tool-details-intro__chips" *ngIf="emotionOptionsState$ | async as emotionOptionsState">
+        <span
+          class="tool-details-intro__chip"
+          *ngFor="let tag of helpTags; trackBy: trackTag"
+        >
+          {{ emotionLabel(tag, emotionOptionsState.options) }}
+        </span>
+      </div>
+    </section>
+
+    <aside class="tool-details-intro__recommendation">
+      <ion-icon name="sparkles-outline" aria-hidden="true"></ion-icon>
+      <p>{{ 'tools.details.recommendedFromLatestCheckIn' | t }}</p>
+    </aside>
+  </section>
+
+  <footer class="tool-details-intro__footer">
+    <ion-button class="tool-details-intro__start" expand="block" type="button">
+      {{ 'tools.details.start' | t }}
+    </ion-button>
+  </footer>
+</main>

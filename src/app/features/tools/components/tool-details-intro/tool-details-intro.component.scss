@@ -1,0 +1,585 @@
+:host {
+  display: block;
+  min-height: 100%;
+}
+
+.tool-details-intro {
+  --intro-accent: #78c9cb;
+  --intro-accent-rgb: 120, 201, 203;
+  --intro-ink: #173f42;
+  --intro-muted: rgba(23, 63, 66, 0.58);
+  --intro-soft: rgba(23, 63, 66, 0.44);
+  --intro-card-background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.48)),
+    rgba(255, 255, 255, 0.52);
+  --intro-card-border: rgba(255, 255, 255, 0.66);
+  --intro-card-shadow:
+    0 16px 36px rgba(58, 72, 88, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72);
+
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  width: min(100%, 430px);
+  min-height: 100dvh;
+  margin: 0 auto;
+  box-sizing: border-box;
+  flex-direction: column;
+  align-items: center;
+  padding:
+    calc(12px + env(safe-area-inset-top))
+    clamp(20px, 6.4vw, 28px)
+    calc(12px + env(safe-area-inset-bottom));
+  color: var(--intro-ink);
+}
+
+.tool-details-intro::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 8% 8%, rgba(245, 188, 178, 0.028), transparent 36%),
+    radial-gradient(circle at 94% 12%, rgba(var(--intro-accent-rgb), 0.026), transparent 36%),
+    radial-gradient(circle at 50% 62%, rgba(var(--intro-accent-rgb), 0.02), transparent 42%);
+}
+
+.tool-details-intro__nav,
+.tool-details-intro__hero,
+.tool-details-intro__details,
+.tool-details-intro__footer {
+  width: 100%;
+}
+
+.tool-details-intro__nav {
+  display: flex;
+  align-items: center;
+  min-height: 42px;
+}
+
+.tool-details-intro__back {
+  width: 37px;
+  height: 37px;
+  margin: 0;
+  --background: rgba(255, 255, 255, 0.58);
+  --background-activated: rgba(255, 255, 255, 0.72);
+  --background-hover: rgba(255, 255, 255, 0.66);
+  --border-radius: 999px;
+  --box-shadow: 0 10px 22px rgba(58, 72, 88, 0.05);
+  --color: #164b4d;
+  --padding-bottom: 0;
+  --padding-end: 0;
+  --padding-start: 0;
+  --padding-top: 0;
+}
+
+.tool-details-intro__back::part(native) {
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(16px) saturate(108%);
+  -webkit-backdrop-filter: blur(16px) saturate(108%);
+}
+
+.tool-details-intro__back ion-icon {
+  font-size: 1.12rem;
+  --ionicon-stroke-width: 26px;
+}
+
+.tool-details-intro__hero {
+  display: grid;
+  justify-items: center;
+  margin-top: clamp(2px, 0.8dvh, 8px);
+  text-align: center;
+}
+
+.tool-details-intro__aura {
+  position: relative;
+  display: grid;
+  width: clamp(121px, min(35.5vw, 18.8dvh), 155px);
+  aspect-ratio: 1;
+  place-items: center;
+  color: rgba(255, 255, 255, 0.94);
+  filter: saturate(1.16);
+  transform: translateY(clamp(-6px, -0.7dvh, -3px));
+}
+
+.tool-details-intro__aura::before {
+  content: "";
+  position: absolute;
+  inset: -10%;
+  border-radius: 999px;
+  background: radial-gradient(ellipse at center, rgba(var(--intro-accent-rgb), 0.36), transparent 74%);
+  filter: blur(18px);
+}
+
+.tool-details-intro__aura-layer,
+.tool-details-intro__aura-core {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+}
+
+.tool-details-intro__aura-layer {
+  top: 50%;
+  left: 50%;
+  width: var(--aura-width);
+  height: var(--aura-height);
+  border-radius: var(--aura-radius);
+  background:
+    radial-gradient(ellipse at var(--aura-highlight-x) var(--aura-highlight-y), rgba(255, 255, 255, var(--aura-highlight)), transparent 22%),
+    radial-gradient(ellipse at var(--aura-core-x) var(--aura-core-y), rgba(var(--intro-accent-rgb), var(--aura-core-opacity)), transparent 62%),
+    rgba(var(--intro-accent-rgb), var(--aura-opacity));
+  filter: blur(var(--aura-blur));
+  mix-blend-mode: multiply;
+  opacity: var(--aura-layer-opacity);
+  transform: translate(-50%, -50%) rotate(var(--aura-rotate)) translate(var(--aura-x), var(--aura-y));
+}
+
+.tool-details-intro__aura-layer--one {
+  --aura-width: 108%;
+  --aura-height: 88%;
+  --aura-radius: 42% 58% 55% 45%;
+  --aura-opacity: 0.35;
+  --aura-core-opacity: 0.48;
+  --aura-layer-opacity: 0.96;
+  --aura-blur: 1.1px;
+  --aura-rotate: -18deg;
+  --aura-x: -3%;
+  --aura-y: 1%;
+  --aura-highlight: 0.08;
+  --aura-highlight-x: 34%;
+  --aura-highlight-y: 28%;
+  --aura-core-x: 52%;
+  --aura-core-y: 56%;
+}
+
+.tool-details-intro__aura-layer--two {
+  --aura-width: 85%;
+  --aura-height: 110%;
+  --aura-radius: 58% 42% 48% 52%;
+  --aura-opacity: 0.33;
+  --aura-core-opacity: 0.45;
+  --aura-layer-opacity: 0.9;
+  --aura-blur: 1px;
+  --aura-rotate: 20deg;
+  --aura-x: 2%;
+  --aura-y: -2%;
+  --aura-highlight: 0.1;
+  --aura-highlight-x: 52%;
+  --aura-highlight-y: 32%;
+  --aura-core-x: 48%;
+  --aura-core-y: 58%;
+}
+
+.tool-details-intro__aura-layer--three {
+  --aura-width: 100%;
+  --aura-height: 93%;
+  --aura-radius: 46% 54% 62% 38%;
+  --aura-opacity: 0.4;
+  --aura-core-opacity: 0.52;
+  --aura-layer-opacity: 0.93;
+  --aura-blur: 1.3px;
+  --aura-rotate: -32deg;
+  --aura-x: -2%;
+  --aura-y: 2%;
+  --aura-highlight: 0.1;
+  --aura-highlight-x: 46%;
+  --aura-highlight-y: 38%;
+  --aura-core-x: 54%;
+  --aura-core-y: 50%;
+}
+
+.tool-details-intro__aura-layer--four {
+  --aura-width: 78%;
+  --aura-height: 95%;
+  --aura-radius: 64% 36% 47% 53%;
+  --aura-opacity: 0.42;
+  --aura-core-opacity: 0.56;
+  --aura-layer-opacity: 0.9;
+  --aura-blur: 1px;
+  --aura-rotate: 30deg;
+  --aura-x: 2%;
+  --aura-y: 1%;
+  --aura-highlight: 0.12;
+  --aura-highlight-x: 40%;
+  --aura-highlight-y: 30%;
+  --aura-core-x: 52%;
+  --aura-core-y: 55%;
+}
+
+.tool-details-intro__aura-layer--five {
+  --aura-width: 76%;
+  --aura-height: 76%;
+  --aura-radius: 44% 56% 43% 57%;
+  --aura-opacity: 0.48;
+  --aura-core-opacity: 0.62;
+  --aura-layer-opacity: 0.88;
+  --aura-blur: 1.4px;
+  --aura-rotate: -14deg;
+  --aura-x: 0%;
+  --aura-y: -1%;
+  --aura-highlight: 0.1;
+  --aura-highlight-x: 44%;
+  --aura-highlight-y: 36%;
+  --aura-core-x: 50%;
+  --aura-core-y: 54%;
+}
+
+.tool-details-intro__aura-layer--six {
+  --aura-width: 58%;
+  --aura-height: 65%;
+  --aura-radius: 56% 44% 52% 48%;
+  --aura-opacity: 0.54;
+  --aura-core-opacity: 0.7;
+  --aura-layer-opacity: 0.86;
+  --aura-blur: 1.6px;
+  --aura-rotate: 14deg;
+  --aura-x: 1%;
+  --aura-y: 1%;
+  --aura-highlight: 0.08;
+  --aura-highlight-x: 52%;
+  --aura-highlight-y: 34%;
+  --aura-core-x: 50%;
+  --aura-core-y: 56%;
+}
+
+.tool-details-intro__aura-core {
+  inset: 22% 23% 21% 24%;
+  border-radius: 46% 54% 43% 57%;
+  background:
+    radial-gradient(ellipse at 44% 38%, rgba(255, 255, 255, 0.22), transparent 24%),
+    radial-gradient(ellipse at 50% 56%, rgba(var(--intro-accent-rgb), 0.68), transparent 68%);
+  filter: blur(10px);
+  opacity: 0.86;
+}
+
+.tool-details-intro__aura ion-icon {
+  position: relative;
+  z-index: 1;
+  font-size: clamp(1.22rem, 5vw, 1.62rem);
+  --ionicon-stroke-width: 18px;
+}
+
+.tool-details-intro__hero h1 {
+  max-width: 340px;
+  margin: clamp(8px, 1.45dvh, 12px) auto 0;
+  color: var(--intro-ink);
+  font-size: clamp(1.46rem, 6vw, 1.92rem);
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.1;
+}
+
+.tool-details-intro__hero p {
+  max-width: 318px;
+  margin: clamp(5px, 1dvh, 9px) auto 0;
+  color: var(--intro-muted);
+  font-size: clamp(0.82rem, 3.3vw, 0.96rem);
+  font-weight: 380;
+  letter-spacing: 0;
+  line-height: 1.28;
+}
+
+.tool-details-intro__details {
+  display: grid;
+  gap: clamp(10px, 1.8dvh, 14px);
+  margin-top: clamp(12px, 2.1dvh, 18px);
+}
+
+.tool-details-intro__duration {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  min-height: clamp(44px, 6.2dvh, 54px);
+  border: 1px solid var(--intro-card-border);
+  border-radius: 16px;
+  background: var(--intro-card-background);
+  box-shadow: var(--intro-card-shadow);
+  overflow: hidden;
+  backdrop-filter: blur(28px) saturate(126%);
+  -webkit-backdrop-filter: blur(28px) saturate(126%);
+}
+
+.tool-details-intro__duration--single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.tool-details-intro__duration-value,
+.tool-details-intro__duration-flexible {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(7px, 2vw, 10px);
+  padding: clamp(8px, 1.7dvh, 11px) clamp(9px, 2.8vw, 14px);
+  color: color-mix(in srgb, var(--intro-ink) 88%, transparent);
+  font-size: clamp(0.84rem, 3.35vw, 1rem);
+  font-weight: 460;
+  letter-spacing: 0;
+  line-height: 1.12;
+  text-align: center;
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+
+.tool-details-intro__duration-value ion-icon {
+  flex: 0 0 auto;
+  color: rgba(72, 121, 116, 0.86);
+  font-size: clamp(1.26rem, 4.2vw, 1.5rem);
+  --ionicon-stroke-width: 24px;
+}
+
+.tool-details-intro__duration-divider {
+  width: 1px;
+  height: clamp(24px, 4.2dvh, 30px);
+  border-radius: 999px;
+  background: rgba(110, 134, 137, 0.12);
+}
+
+.tool-details-intro__helps {
+  display: grid;
+  gap: clamp(7px, 1.3dvh, 10px);
+}
+
+.tool-details-intro__helps h2 {
+  margin: 0;
+  color: var(--intro-muted);
+  font-size: clamp(0.84rem, 3.4vw, 1rem);
+  font-weight: 430;
+  letter-spacing: 0;
+  line-height: 1.2;
+}
+
+.tool-details-intro__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(7px, 2vw, 10px);
+}
+
+.tool-details-intro__chip {
+  display: inline-flex;
+  min-height: clamp(30px, 4.8dvh, 36px);
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(192, 217, 213, 0.56);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.48), rgba(255, 255, 255, 0.26)),
+    rgba(255, 255, 255, 0.28);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.52);
+  padding: 0 clamp(12px, 3.8vw, 16px);
+  color: var(--intro-ink);
+  font-size: clamp(0.78rem, 3.1vw, 0.92rem);
+  font-weight: 480;
+  letter-spacing: 0;
+  line-height: 1.12;
+  text-align: center;
+  backdrop-filter: blur(18px) saturate(112%);
+  -webkit-backdrop-filter: blur(18px) saturate(112%);
+}
+
+.tool-details-intro__recommendation {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(10px, 3vw, 14px);
+  min-height: clamp(48px, 6.7dvh, 58px);
+  border: 1px solid rgba(220, 235, 233, 0.72);
+  border-radius: 16px;
+  background: var(--intro-card-background);
+  box-shadow: var(--intro-card-shadow);
+  padding: clamp(8px, 1.55dvh, 10px) clamp(12px, 3.6vw, 16px);
+  backdrop-filter: blur(28px) saturate(126%);
+  -webkit-backdrop-filter: blur(28px) saturate(126%);
+}
+
+.tool-details-intro__recommendation ion-icon {
+  color: rgba(92, 171, 156, 0.82);
+  font-size: clamp(1.34rem, 4.6vw, 1.62rem);
+  --ionicon-stroke-width: 22px;
+}
+
+.tool-details-intro__recommendation p {
+  margin: 0;
+  color: color-mix(in srgb, var(--intro-ink) 76%, transparent);
+  font-size: clamp(0.84rem, 3.35vw, 0.98rem);
+  font-weight: 420;
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+
+.tool-details-intro__footer {
+  margin-top: auto;
+  padding-top: clamp(6px, 1.25dvh, 10px);
+}
+
+.tool-details-intro__start {
+  width: 100%;
+  margin: 0;
+  --background: linear-gradient(135deg, rgba(149, 207, 193, 0.92), rgba(119, 185, 174, 0.94));
+  --background-activated: linear-gradient(135deg, rgba(119, 185, 174, 1), rgba(92, 158, 149, 1));
+  --background-hover: linear-gradient(135deg, rgba(142, 201, 188, 0.96), rgba(110, 176, 165, 0.98));
+  --border-radius: 17px;
+  --box-shadow: 0 12px 26px rgba(72, 144, 134, 0.16);
+  --color: #ffffff;
+  min-height: clamp(50px, 7.2dvh, 60px);
+  font-size: clamp(1.05rem, 4.4vw, 1.25rem);
+  font-weight: 470;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.tool-details-intro__start::part(native) {
+  min-height: clamp(50px, 7.2dvh, 60px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+:host-context(.ion-palette-dark) .tool-details-intro {
+  --intro-ink: #f6fbff;
+  --intro-muted: rgba(246, 251, 255, 0.62);
+  --intro-soft: rgba(246, 251, 255, 0.46);
+  --intro-card-background:
+    linear-gradient(180deg, rgba(26, 39, 65, 0.72), rgba(12, 22, 42, 0.58)),
+    rgba(8, 18, 36, 0.68);
+  --intro-card-border: rgba(255, 255, 255, 0.1);
+  --intro-card-shadow:
+    0 18px 42px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+:host-context(.ion-palette-dark) .tool-details-intro::before {
+  background:
+    radial-gradient(circle at 8% 8%, rgba(238, 128, 108, 0.015), transparent 34%),
+    radial-gradient(circle at 94% 12%, rgba(var(--intro-accent-rgb), 0.018), transparent 34%),
+    radial-gradient(circle at 50% 62%, rgba(var(--intro-accent-rgb), 0.016), transparent 40%);
+}
+
+:host-context(.ion-palette-dark) .tool-details-intro__back {
+  --background: rgba(255, 255, 255, 0.08);
+  --background-activated: rgba(255, 255, 255, 0.13);
+  --background-hover: rgba(255, 255, 255, 0.11);
+  --box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+  --color: #f6fbff;
+}
+
+:host-context(.ion-palette-dark) .tool-details-intro__back::part(native) {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+:host-context(.ion-palette-dark) .tool-details-intro__aura-layer {
+  mix-blend-mode: screen;
+}
+
+:host-context(.ion-palette-dark) .tool-details-intro__duration-divider {
+  background: rgba(246, 251, 255, 0.12);
+}
+
+:host-context(.ion-palette-dark) .tool-details-intro__duration-value ion-icon,
+:host-context(.ion-palette-dark) .tool-details-intro__recommendation ion-icon {
+  color: rgba(150, 226, 215, 0.78);
+}
+
+:host-context(.ion-palette-dark) .tool-details-intro__chip {
+  border-color: rgba(255, 255, 255, 0.12);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04)),
+    rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+:host-context(.ion-palette-dark) .tool-details-intro__recommendation {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+@media (max-height: 760px) {
+  .tool-details-intro {
+    padding-top: calc(8px + env(safe-area-inset-top));
+    padding-bottom: calc(10px + env(safe-area-inset-bottom));
+  }
+
+  .tool-details-intro__nav {
+    min-height: 38px;
+  }
+
+  .tool-details-intro__back {
+    width: 34px;
+    height: 34px;
+  }
+
+  .tool-details-intro__hero {
+    margin-top: 0;
+  }
+
+  .tool-details-intro__aura {
+    width: clamp(109px, min(32.5vw, 17.3dvh), 134px);
+  }
+
+  .tool-details-intro__hero h1 {
+    margin-top: 7px;
+    font-size: clamp(1.32rem, 5.6vw, 1.7rem);
+  }
+
+  .tool-details-intro__hero p {
+    margin-top: 4px;
+    font-size: clamp(0.76rem, 3vw, 0.88rem);
+    line-height: 1.24;
+  }
+
+  .tool-details-intro__details {
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .tool-details-intro__duration {
+    min-height: 42px;
+  }
+
+  .tool-details-intro__helps {
+    gap: 6px;
+  }
+
+  .tool-details-intro__chip {
+    min-height: 28px;
+    border-radius: 12px;
+    padding-inline: 11px;
+  }
+
+  .tool-details-intro__recommendation {
+    min-height: 44px;
+    padding: 7px 11px;
+  }
+
+  .tool-details-intro__footer {
+    padding-top: 5px;
+  }
+
+  .tool-details-intro__start,
+  .tool-details-intro__start::part(native) {
+    min-height: 48px;
+  }
+}
+
+@media (max-width: 360px) {
+  .tool-details-intro {
+    padding-inline: 18px;
+  }
+
+  .tool-details-intro__duration-value,
+  .tool-details-intro__duration-flexible {
+    gap: 6px;
+    padding-inline: 8px;
+    font-size: 0.8rem;
+  }
+
+  .tool-details-intro__duration-value ion-icon {
+    font-size: 1.2rem;
+  }
+
+  .tool-details-intro__chips {
+    gap: 7px;
+  }
+
+  .tool-details-intro__chip {
+    padding-inline: 10px;
+  }
+}

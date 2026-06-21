@@ -1,0 +1,29 @@
+<ion-content class="tool-details-content" fullscreen>
+  <ng-container *ngIf="toolState$ | async as state">
+    <app-tool-details-intro *ngIf="state.tool as tool" [tool]="tool"></app-tool-details-intro>
+
+    <main class="tool-details-feedback" *ngIf="state.loading" aria-live="polite">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>{{ 'tools.details.loading' | t }}</p>
+    </main>
+
+    <main class="tool-details-feedback" *ngIf="!state.loading && !state.tool">
+      <ion-button
+        class="tool-details-feedback__nav"
+        fill="clear"
+        routerLink="/tabs/tools"
+        [attr.aria-label]="'common.back' | t"
+      >
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+
+      <section>
+        <h1>{{ 'tools.details.notFoundTitle' | t }}</h1>
+        <p>{{ 'tools.details.notFoundSubtitle' | t }}</p>
+        <ion-button class="tool-details-feedback__action" expand="block" routerLink="/tabs/tools">
+          {{ 'tools.details.backToTools' | t }}
+        </ion-button>
+      </section>
+    </main>
+  </ng-container>
+</ion-content>

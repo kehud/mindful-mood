@@ -74,6 +74,12 @@ const routes: Routes = [
     ],
   },
   {
+    path: 'tools/:toolId',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/tools/pages/tool-details/tool-details.component').then((m) => m.ToolDetailsPage),
+  },
+  {
     path: 'check-in',
     canActivate: [authGuard],
     children: [

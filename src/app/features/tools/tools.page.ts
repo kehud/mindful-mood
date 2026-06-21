@@ -1,6 +1,7 @@
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
+import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { catchError, combineLatest, from, of, shareReplay, startWith, switchMap, tap } from 'rxjs';
 
@@ -294,6 +295,7 @@ export class ToolsPage {
   private readonly localization = inject(LocalizationService);
   private readonly moodEntryService = inject(MoodEntryService);
   private readonly recommendationService = inject(RecommendationService);
+  private readonly router = inject(Router);
   // TEMP: UI testing limit = 5. Future recommendation count should be dynamic.
   private readonly recommendationLimit = 5;
   private readonly shownRecommendationKeys = new Set<string>();
@@ -388,11 +390,7 @@ export class ToolsPage {
   }
 
   onRecommendationSelected(tool: RecommendationCard): void {
-    if (!tool.engagementEnabled) {
-      return;
-    }
-
-    void this.engagementService.trackToolOpened(tool.id).catch(() => undefined);
+    void this.router.navigate(['/tools', tool.id]);
   }
 
   private async loadPersonalizedRecommendationCards(
