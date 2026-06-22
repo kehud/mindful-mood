@@ -1,6 +1,57 @@
 <ion-content class="tool-details-content" fullscreen>
   <ng-container *ngIf="toolState$ | async as state">
-    <app-tool-details-intro *ngIf="state.tool as tool" [tool]="tool"></app-tool-details-intro>
+    <ng-container *ngIf="state.tool as tool">
+      <ng-container *ngIf="isCompletedTherapeuticSession(tool); else activeSessionOrIntro">
+        <main class="tool-success-feedback" role="status" aria-live="polite">
+          <div class="tool-success-feedback__content">
+            <div class="tool-success-feedback__aura" aria-hidden="true">
+              <span class="tool-success-feedback__petal tool-success-feedback__petal--one"></span>
+              <span class="tool-success-feedback__petal tool-success-feedback__petal--two"></span>
+              <span class="tool-success-feedback__petal tool-success-feedback__petal--three"></span>
+              <span class="tool-success-feedback__petal tool-success-feedback__petal--four"></span>
+              <span class="tool-success-feedback__petal tool-success-feedback__petal--five"></span>
+              <span class="tool-success-feedback__petal tool-success-feedback__petal--six"></span>
+              <span class="tool-success-feedback__petal tool-success-feedback__petal--seven"></span>
+              <span class="tool-success-feedback__petal tool-success-feedback__petal--eight"></span>
+              <span class="tool-success-feedback__core">
+                <ion-icon name="checkmark-outline"></ion-icon>
+              </span>
+            </div>
+
+            <div class="tool-success-feedback__copy">
+              <h1>{{ successTitle(tool) }}</h1>
+              <p>{{ successMessage(tool) }}</p>
+              <ion-icon
+                class="tool-success-feedback__heart"
+                name="heart-outline"
+                aria-hidden="true"
+              ></ion-icon>
+              <ion-button
+                class="tool-success-feedback__action"
+                expand="block"
+                type="button"
+                (click)="finishCompletedSession()"
+              >
+                {{ 'common.done' | t }}
+              </ion-button>
+            </div>
+          </div>
+        </main>
+      </ng-container>
+
+      <ng-template #activeSessionOrIntro>
+        <app-therapeutic-session
+          *ngIf="isActiveTherapeuticSession(tool); else toolIntro"
+          [tool]="tool"
+          (exit)="exitActiveSession()"
+          (complete)="completeActiveSession()"
+        ></app-therapeutic-session>
+
+        <ng-template #toolIntro>
+          <app-tool-details-intro [tool]="tool" (start)="startTool(tool)"></app-tool-details-intro>
+        </ng-template>
+      </ng-template>
+    </ng-container>
 
     <main class="tool-details-feedback" *ngIf="state.loading" aria-live="polite">
       <ion-spinner name="crescent"></ion-spinner>

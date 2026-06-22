@@ -1,5 +1,5 @@
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
-import { Component, Input, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
@@ -38,6 +38,7 @@ export class ToolDetailsIntroComponent {
   private readonly localization = inject(LocalizationService);
 
   @Input({ required: true }) tool!: ToolDefinition;
+  @Output() readonly start = new EventEmitter<void>();
 
   readonly currentDirection = this.localization.direction;
   readonly emotionOptionsState$ = this.configService.emotionOptionsState$;
@@ -104,6 +105,10 @@ export class ToolDetailsIntroComponent {
 
   trackTag(_index: number, tag: string): string {
     return tag;
+  }
+
+  startSession(): void {
+    this.start.emit();
   }
 
   private localizedText(text: ToolLocalizedText): string {

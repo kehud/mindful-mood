@@ -96,6 +96,226 @@ ion-content.tool-details-content::part(scroll) {
   text-transform: none;
 }
 
+.tool-success-feedback {
+  position: relative;
+  display: flex;
+  width: auto;
+  max-width: none;
+  min-height: 100dvh;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  padding:
+    max(24px, env(safe-area-inset-top))
+    24px
+    max(28px, env(safe-area-inset-bottom));
+  overflow: hidden;
+  color: #18283a;
+  background:
+    radial-gradient(ellipse at 50% 36%, rgba(89, 203, 188, 0.2), transparent 34%),
+    radial-gradient(circle at 5% 17%, rgba(148, 217, 211, 0.28), transparent 42%),
+    radial-gradient(circle at 98% 10%, rgba(245, 204, 183, 0.28), transparent 39%),
+    radial-gradient(circle at 78% 82%, rgba(226, 202, 141, 0.12), transparent 36%),
+    linear-gradient(180deg, #fbfcf7 0%, #edf8f4 50%, #f8f4e8 100%);
+  animation: tool-success-feedback-fade-in 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.tool-success-feedback__content {
+  display: flex;
+  width: min(100%, 430px);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(1.2vh);
+}
+
+.tool-success-feedback__aura {
+  position: relative;
+  display: grid;
+  width: clamp(286px, 78vw, 356px);
+  max-width: calc(100vw - 28px);
+  aspect-ratio: 1;
+  flex: 0 0 auto;
+  place-items: center;
+}
+
+.tool-success-feedback__aura::before,
+.tool-success-feedback__aura::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.tool-success-feedback__aura::before {
+  inset: 4%;
+  background:
+    radial-gradient(
+      ellipse at 46% 54%,
+      rgba(42, 190, 178, 0.22) 0 26%,
+      rgba(139, 191, 118, 0.14) 54%,
+      transparent 76%
+    );
+  filter: blur(25px);
+}
+
+.tool-success-feedback__aura::after {
+  inset: 27%;
+  background:
+    radial-gradient(circle at 46% 42%, rgba(118, 213, 195, 0.34), rgba(123, 190, 123, 0.18) 68%, transparent 72%);
+  box-shadow: 0 0 76px rgba(44, 178, 169, 0.18);
+}
+
+.tool-success-feedback__petal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 70%;
+  height: 53%;
+  border-radius: 48% 52% 43% 57% / 57% 43% 57% 43%;
+  background:
+    radial-gradient(ellipse at 38% 34%, rgba(255, 255, 255, 0.1), transparent 24%),
+    linear-gradient(135deg, rgba(36, 189, 180, 0.27), rgba(143, 195, 117, 0.16));
+  opacity: 0.55;
+  transform-origin: center;
+}
+
+.tool-success-feedback__petal--one {
+  width: 73%;
+  height: 50%;
+  border-radius: 43% 57% 51% 49% / 49% 61% 39% 51%;
+  opacity: 0.5;
+  transform: translate(-54%, -50%) rotate(-8deg) translateX(8%);
+}
+
+.tool-success-feedback__petal--two {
+  width: 62%;
+  height: 76%;
+  border-radius: 58% 42% 53% 47% / 48% 59% 41% 52%;
+  opacity: 0.36;
+  transform: translate(-49%, -53%) rotate(31deg) translateX(7%);
+}
+
+.tool-success-feedback__petal--three {
+  width: 75%;
+  height: 48%;
+  border-radius: 52% 48% 61% 39% / 56% 46% 54% 44%;
+  opacity: 0.44;
+  transform: translate(-47%, -48%) rotate(73deg) translateX(9%);
+}
+
+.tool-success-feedback__petal--four {
+  width: 58%;
+  height: 82%;
+  border-radius: 62% 38% 45% 55% / 53% 43% 57% 47%;
+  opacity: 0.42;
+  transform: translate(-52%, -49%) rotate(119deg) translateX(5%);
+}
+
+.tool-success-feedback__petal--five {
+  width: 77%;
+  height: 51%;
+  border-radius: 46% 54% 39% 61% / 55% 42% 58% 45%;
+  opacity: 0.49;
+  transform: translate(-51%, -47%) rotate(168deg) translateX(10%);
+}
+
+.tool-success-feedback__petal--six {
+  width: 64%;
+  height: 73%;
+  border-radius: 39% 61% 56% 44% / 62% 49% 51% 38%;
+  opacity: 0.34;
+  transform: translate(-50%, -51%) rotate(218deg) translateX(7%);
+}
+
+.tool-success-feedback__petal--seven {
+  width: 74%;
+  height: 50%;
+  border-radius: 57% 43% 49% 51% / 44% 57% 43% 56%;
+  opacity: 0.4;
+  transform: translate(-53%, -52%) rotate(266deg) translateX(8%);
+}
+
+.tool-success-feedback__petal--eight {
+  width: 60%;
+  height: 77%;
+  border-radius: 54% 46% 58% 42% / 46% 62% 38% 54%;
+  opacity: 0.32;
+  transform: translate(-48%, -48%) rotate(317deg) translateX(6%);
+}
+
+.tool-success-feedback__core {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 41%;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  place-items: center;
+  color: #ffffff;
+  background:
+    radial-gradient(circle at 34% 24%, rgba(255, 255, 255, 0.19), transparent 34%),
+    radial-gradient(circle, rgba(78, 198, 182, 0.78) 0%, rgba(130, 188, 112, 0.64) 100%);
+  box-shadow:
+    inset 0 1px 28px rgba(255, 255, 255, 0.12),
+    0 20px 78px rgba(55, 180, 165, 0.2);
+}
+
+.tool-success-feedback__core ion-icon {
+  font-size: clamp(3.15rem, 12vw, 3.82rem);
+  --ionicon-stroke-width: 31px;
+  filter: drop-shadow(0 5px 12px rgba(23, 101, 96, 0.16));
+}
+
+.tool-success-feedback__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: clamp(40px, 5.5vh, 54px);
+  text-align: center;
+}
+
+.tool-success-feedback__copy h1 {
+  margin: 0;
+  color: #1c2e43;
+  font-size: clamp(1.68rem, 7.2vw, 2.06rem);
+  font-weight: 590;
+  letter-spacing: 0;
+  line-height: 1.12;
+}
+
+.tool-success-feedback__copy p {
+  max-width: min(76vw, 292px);
+  margin: clamp(19px, 2.6vh, 24px) 0 0;
+  color: rgba(28, 46, 67, 0.74);
+  font-size: clamp(1.04rem, 4.45vw, 1.24rem);
+  font-weight: 390;
+  letter-spacing: 0;
+  line-height: 1.5;
+}
+
+.tool-success-feedback__heart {
+  margin-top: clamp(38px, 5.1vh, 50px);
+  color: #0ca7a1;
+  font-size: clamp(1.78rem, 7.2vw, 2.08rem);
+  --ionicon-stroke-width: 32px;
+}
+
+.tool-success-feedback__action {
+  width: min(100%, 308px);
+  margin: clamp(30px, 4.8vh, 42px) auto 0;
+  --background: linear-gradient(135deg, rgba(139, 203, 188, 0.86), rgba(106, 176, 164, 0.88));
+  --background-activated: linear-gradient(135deg, rgba(105, 176, 164, 0.95), rgba(80, 148, 140, 0.96));
+  --border-radius: 22px;
+  --box-shadow: 0 16px 34px rgba(72, 144, 134, 0.18);
+  --color: #ffffff;
+  min-height: 58px;
+  font-size: 1.05rem;
+  font-weight: 540;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
 :host-context(.ion-palette-dark) ion-content.tool-details-content {
   --background:
     radial-gradient(circle at 7% 7%, rgba(238, 128, 108, 0.135), transparent 34%),
@@ -123,4 +343,74 @@ ion-content.tool-details-content::part(scroll) {
 
 :host-context(.ion-palette-dark) .tool-details-feedback__nav::part(native) {
   border-color: rgba(255, 255, 255, 0.1);
+}
+
+:host-context(.ion-palette-dark) .tool-success-feedback {
+  color: #f7fbff;
+  background:
+    radial-gradient(ellipse at 50% 36%, rgba(45, 167, 150, 0.2), transparent 34%),
+    radial-gradient(circle at 0% 52%, rgba(5, 134, 158, 0.19), transparent 37%),
+    radial-gradient(circle at 86% 20%, rgba(105, 104, 78, 0.12), transparent 34%),
+    radial-gradient(circle at 50% 100%, rgba(18, 71, 101, 0.18), transparent 38%),
+    linear-gradient(180deg, #121925 0%, #07111b 54%, #030a12 100%);
+}
+
+:host-context(.ion-palette-dark) .tool-success-feedback__aura::before {
+  background:
+    radial-gradient(
+      ellipse at 46% 54%,
+      rgba(36, 184, 170, 0.23) 0 28%,
+      rgba(139, 181, 111, 0.13) 56%,
+      transparent 76%
+    );
+  filter: blur(27px);
+}
+
+:host-context(.ion-palette-dark) .tool-success-feedback__aura::after {
+  background:
+    radial-gradient(circle at 46% 42%, rgba(109, 205, 187, 0.25), rgba(124, 178, 108, 0.13) 68%, transparent 72%);
+  box-shadow: 0 0 86px rgba(34, 185, 174, 0.18);
+}
+
+:host-context(.ion-palette-dark) .tool-success-feedback__petal {
+  background:
+    radial-gradient(ellipse at 38% 34%, rgba(255, 255, 255, 0.08), transparent 24%),
+    linear-gradient(135deg, rgba(23, 184, 176, 0.27), rgba(140, 178, 106, 0.16));
+}
+
+:host-context(.ion-palette-dark) .tool-success-feedback__core {
+  background:
+    radial-gradient(circle at 34% 24%, rgba(255, 255, 255, 0.13), transparent 34%),
+    radial-gradient(circle, rgba(75, 197, 181, 0.74) 0%, rgba(128, 183, 112, 0.58) 100%);
+  box-shadow:
+    inset 0 1px 26px rgba(255, 255, 255, 0.12),
+    0 22px 88px rgba(37, 183, 170, 0.22);
+}
+
+:host-context(.ion-palette-dark) .tool-success-feedback__copy h1 {
+  color: #f8fbff;
+}
+
+:host-context(.ion-palette-dark) .tool-success-feedback__copy p {
+  color: rgba(240, 245, 251, 0.72);
+}
+
+:host-context(.ion-palette-dark) .tool-success-feedback__heart {
+  color: #14b8b1;
+}
+
+@keyframes tool-success-feedback-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tool-success-feedback {
+    animation: none;
+  }
 }

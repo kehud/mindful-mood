@@ -1,3 +1,71 @@
-<p>
-  therapeutic-session works!
-</p>
+<main class="therapeutic-session" [attr.dir]="currentDirection()">
+  <nav class="therapeutic-session__nav">
+    <ion-button
+      class="therapeutic-session__exit"
+      fill="clear"
+      type="button"
+      (click)="exitSession()"
+      [attr.aria-label]="'tools.session.exit' | t"
+    >
+      <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+    </ion-button>
+  </nav>
+
+  <section class="therapeutic-session__stage" aria-live="polite">
+    <div class="therapeutic-session__aura">
+      <span class="therapeutic-session__aura-layer therapeutic-session__aura-layer--one"></span>
+      <span class="therapeutic-session__aura-layer therapeutic-session__aura-layer--two"></span>
+      <span class="therapeutic-session__aura-layer therapeutic-session__aura-layer--three"></span>
+      <span class="therapeutic-session__aura-layer therapeutic-session__aura-layer--four"></span>
+      <span class="therapeutic-session__aura-layer therapeutic-session__aura-layer--five"></span>
+      <span class="therapeutic-session__aura-core"></span>
+
+      <p class="therapeutic-session__guidance">{{ guidanceText() }}</p>
+      <p class="therapeutic-session__phase-duration">4s</p>
+    </div>
+  </section>
+
+  <header class="therapeutic-session__header">
+    <h1>{{ title() }}</h1>
+    <p>{{ currentDirection() === 'rtl' ? tool.description.he : tool.description.en }}</p>
+  </header>
+
+  <section class="therapeutic-session__details" aria-label="Session details">
+    <div class="therapeutic-session__info-card">
+      <div class="therapeutic-session__info-column">
+        <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+        <span class="therapeutic-session__info-copy">
+          <strong>{{ durationLabel() }}</strong>
+          <span>{{ currentDirection() === 'rtl' ? 'זמן שנותר' : 'Time left' }}</span>
+        </span>
+      </div>
+
+      <span class="therapeutic-session__info-divider" aria-hidden="true"></span>
+
+      <div class="therapeutic-session__info-column">
+        <ion-icon name="water-outline" aria-hidden="true"></ion-icon>
+        <span class="therapeutic-session__info-copy">
+          <strong>1 / 6</strong>
+          <span>{{ currentDirection() === 'rtl' ? 'מחזורים' : 'Cycles' }}</span>
+        </span>
+      </div>
+    </div>
+
+    <aside class="therapeutic-session__support-card">
+      <ion-icon name="sparkles-outline" aria-hidden="true"></ion-icon>
+      <p>
+        {{
+          currentDirection() === 'rtl'
+            ? 'התמקד בנשימה. אתה עושה את זה מצוין.'
+            : 'Focus on your breath. You’re doing great.'
+        }}
+      </p>
+    </aside>
+  </section>
+
+  <footer class="therapeutic-session__footer">
+    <ion-button class="therapeutic-session__pause" expand="block" type="button" (click)="completeSession()">
+      Pause
+    </ion-button>
+  </footer>
+</main>
