@@ -8,11 +8,13 @@ import { ToolDefinition, ToolLocalizedText } from '../../../../core/models/tool.
 import { LocalizationService } from '../../../../core/services/localization.service';
 import { ToolService } from '../../../../core/services/tool.service';
 import { TranslatePipe } from '../../../../shared/pipes/translate.pipe';
+import { ActionPromptComponent } from '../../components/action-prompt/action-prompt.component';
 import { TherapeuticSessionComponent } from '../../components/therapeutic-session/therapeutic-session.component';
 import { ToolDetailsIntroComponent } from '../../components/tool-details-intro/tool-details-intro.component';
 
 type ToolDetailsSessionState = 'intro' | 'active' | 'success';
 type ToolCompletionLocalizedText = Partial<ToolLocalizedText>;
+type ToolDefinitionWithType = ToolDefinition & { readonly type?: string };
 
 interface ToolDetailsState {
   readonly loading: boolean;
@@ -31,6 +33,7 @@ interface ToolCompletionTitleCandidate {
     IonicModule,
     NgIf,
     RouterLink,
+    ActionPromptComponent,
     TherapeuticSessionComponent,
     ToolDetailsIntroComponent,
     TranslatePipe,
@@ -64,18 +67,23 @@ export class ToolDetailsPage {
   );
 
   isActiveTherapeuticSession(tool: ToolDefinition): boolean {
-    return this.sessionState() === 'active' && tool.template === 'therapeutic_session';
+    return this.sessionState() === 'active' && this.isTherapeuticSessionTool(tool);
   }
 
-  isCompletedTherapeuticSession(tool: ToolDefinition): boolean {
-    return this.sessionState() === 'success' && tool.template === 'therapeutic_session';
+  isActiveActionPrompt(tool: ToolDefinition): boolean {
+    return this.sessionState() === 'active' && this.isActionPromptTool(tool);
+  }
+
+  isCompletedSession(tool: ToolDefinition): boolean {
+    return this.sessionState() === 'success' && this.isRunnableTool(tool);
   }
 
   startTool(tool: ToolDefinition): void {
-    if (tool.template !== 'therapeutic_session') {
+    if (!this.isRunnableTool(tool)) {
       return;
     }
 
+    this.logRenderedComponent(tool);
     this.sessionState.set('active');
   }
 
@@ -109,5 +117,23 @@ export class ToolDetailsPage {
     const language = this.localization.currentLanguage();
 
     return text[language]?.trim() || text.en?.trim() || text.he?.trim() || '';
+  }
+
+  private isRunnableTool(tool: ToolDefinition): boolean {
+    return this.isTherapeuticSessionTool(tool) || this.isActionPromptTool(tool);
+  }
+
+  private isTherapeuticSessionTool(tool: ToolDefinition): boolean {
+    return tool.template === 'therapeutic_session';
+  }
+
+  private isActionPromptTool(tool: ToolDefinition): boolean {
+    return tool.template === 'personal_activity' || tool.template === 'growth_action';
+  }
+
+  private logRenderedComponent(tool: ToolDefinition): void {
+    const typedTool = tool as ToolDefinitionWithType;
+
+    console.log('[ToolDetails] rendering component for type:', typedTool.type ?? tool.template);
   }
 }

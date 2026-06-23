@@ -1,7 +1,7 @@
 <ion-content class="tool-details-content" fullscreen>
   <ng-container *ngIf="toolState$ | async as state">
     <ng-container *ngIf="state.tool as tool">
-      <ng-container *ngIf="isCompletedTherapeuticSession(tool); else activeSessionOrIntro">
+      <ng-container *ngIf="isCompletedSession(tool); else activeSessionOrIntro">
         <main class="tool-success-feedback" role="status" aria-live="polite">
           <div class="tool-success-feedback__content">
             <div class="tool-success-feedback__aura" aria-hidden="true">
@@ -41,11 +41,20 @@
 
       <ng-template #activeSessionOrIntro>
         <app-therapeutic-session
-          *ngIf="isActiveTherapeuticSession(tool); else toolIntro"
+          *ngIf="isActiveTherapeuticSession(tool); else actionPromptOrIntro"
           [tool]="tool"
           (exit)="exitActiveSession()"
           (complete)="completeActiveSession()"
         ></app-therapeutic-session>
+
+        <ng-template #actionPromptOrIntro>
+          <app-action-prompt
+            *ngIf="isActiveActionPrompt(tool); else toolIntro"
+            [tool]="tool"
+            (exit)="exitActiveSession()"
+            (complete)="completeActiveSession()"
+          ></app-action-prompt>
+        </ng-template>
 
         <ng-template #toolIntro>
           <app-tool-details-intro [tool]="tool" (start)="startTool(tool)"></app-tool-details-intro>

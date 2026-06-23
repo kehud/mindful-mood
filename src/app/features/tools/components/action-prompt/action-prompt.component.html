@@ -1,3 +1,40 @@
-<p>
-  action-prompt works!
-</p>
+<main class="action-prompt" [attr.dir]="currentDirection()">
+  <nav class="action-prompt__nav">
+    <ion-button
+      class="action-prompt__exit"
+      fill="clear"
+      type="button"
+      (click)="exitPrompt()"
+      [attr.aria-label]="'common.back' | t"
+    >
+      <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+    </ion-button>
+  </nav>
+
+  <section class="action-prompt__body">
+    <header class="action-prompt__header">
+      <h1>{{ title() }}</h1>
+    </header>
+
+    <section class="action-prompt__stage" aria-live="polite">
+      <div class="action-prompt__aura">
+        <span class="action-prompt__aura-layer action-prompt__aura-layer--one"></span>
+        <span class="action-prompt__aura-layer action-prompt__aura-layer--two"></span>
+        <span class="action-prompt__aura-layer action-prompt__aura-layer--three"></span>
+        <span class="action-prompt__aura-layer action-prompt__aura-layer--four"></span>
+        <span class="action-prompt__aura-layer action-prompt__aura-layer--five"></span>
+        <span class="action-prompt__aura-core"></span>
+      </div>
+    </section>
+
+    <header class="action-prompt__copy">
+      <p>{{ promptText() }}</p>
+    </header>
+  </section>
+
+  <footer class="action-prompt__footer">
+    <ion-button class="action-prompt__cta" expand="block" type="button" (click)="completePrompt()">
+      I'm Done
+    </ion-button>
+  </footer>
+</main>

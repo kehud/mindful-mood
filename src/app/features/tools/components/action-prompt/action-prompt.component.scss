@@ -1,0 +1,394 @@
+:host {
+  display: block;
+  min-height: 100%;
+}
+
+.action-prompt {
+  --action-accent: #78c9cb;
+  --action-accent-rgb: 120, 201, 203;
+  --action-ink: #173f42;
+  --action-muted: rgba(23, 63, 66, 0.58);
+  --action-aura-size: clamp(154px, min(46vw, 22dvh), 198px);
+  --action-title-to-aura-gap: clamp(56px, 7.1dvh, 70px);
+  --action-aura-to-copy-gap: clamp(56px, 7.3dvh, 78px);
+  --action-body-block-padding-start: clamp(0px, 1dvh, 10px);
+  --action-body-block-padding-end: clamp(104px, 14.5dvh, 142px);
+
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  width: min(100%, 430px);
+  min-height: 100dvh;
+  margin: 0 auto;
+  box-sizing: border-box;
+  flex-direction: column;
+  align-items: center;
+  padding:
+    calc(12px + env(safe-area-inset-top))
+    clamp(20px, 6.4vw, 28px)
+    calc(12px + env(safe-area-inset-bottom));
+  color: var(--action-ink);
+}
+
+.action-prompt::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 8% 8%, rgba(245, 188, 178, 0.028), transparent 36%),
+    radial-gradient(circle at 94% 12%, rgba(var(--action-accent-rgb), 0.026), transparent 36%),
+    radial-gradient(circle at 50% 62%, rgba(var(--action-accent-rgb), 0.02), transparent 42%);
+}
+
+.action-prompt__nav,
+.action-prompt__body,
+.action-prompt__stage,
+.action-prompt__header,
+.action-prompt__copy,
+.action-prompt__footer {
+  width: 100%;
+}
+
+.action-prompt__nav {
+  position: relative;
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+}
+
+.action-prompt__exit {
+  width: 37px;
+  height: 37px;
+  margin: 0;
+  --background: rgba(255, 255, 255, 0.58);
+  --background-activated: rgba(255, 255, 255, 0.72);
+  --background-hover: rgba(255, 255, 255, 0.66);
+  --border-radius: 999px;
+  --box-shadow: 0 10px 22px rgba(58, 72, 88, 0.05);
+  --color: #164b4d;
+  --padding-bottom: 0;
+  --padding-end: 0;
+  --padding-start: 0;
+  --padding-top: 0;
+}
+
+.action-prompt__exit::part(native) {
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(16px) saturate(108%);
+  -webkit-backdrop-filter: blur(16px) saturate(108%);
+}
+
+.action-prompt__exit ion-icon {
+  font-size: 1.12rem;
+  --ionicon-stroke-width: 26px;
+}
+
+.action-prompt__body {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-block:
+    var(--action-body-block-padding-start)
+    var(--action-body-block-padding-end);
+}
+
+.action-prompt__stage {
+  display: grid;
+  justify-items: center;
+  margin-top: var(--action-title-to-aura-gap);
+  place-items: center;
+}
+
+.action-prompt__aura {
+  position: relative;
+  display: flex;
+  width: var(--action-aura-size);
+  aspect-ratio: 1;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  flex: 0 0 var(--action-aura-size);
+  gap: clamp(1px, 0.35dvh, 3px);
+  contain: layout;
+  filter:
+    saturate(1.06)
+    drop-shadow(0 18px 28px rgba(var(--action-accent-rgb), 0.08));
+  transform-origin: center;
+}
+
+.action-prompt__aura::before {
+  content: "";
+  position: absolute;
+  inset: -11%;
+  border-radius: 48% 52% 54% 46%;
+  background: radial-gradient(ellipse at center, rgba(var(--action-accent-rgb), 0.24), transparent 74%);
+  filter: blur(18px);
+}
+
+.action-prompt__aura-layer,
+.action-prompt__aura-core {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+}
+
+.action-prompt__aura-layer {
+  top: 50%;
+  left: 50%;
+  width: var(--aura-width);
+  height: var(--aura-height);
+  border-radius: var(--aura-radius);
+  background:
+    radial-gradient(
+      ellipse at var(--aura-highlight-x) var(--aura-highlight-y),
+      rgba(255, 255, 255, var(--aura-highlight)),
+      transparent 22%
+    ),
+    radial-gradient(
+      ellipse at var(--aura-core-x) var(--aura-core-y),
+      rgba(var(--action-accent-rgb), var(--aura-core-opacity)),
+      transparent 64%
+    ),
+    rgba(var(--action-accent-rgb), var(--aura-opacity));
+  filter: blur(var(--aura-blur));
+  mix-blend-mode: multiply;
+  opacity: var(--aura-layer-opacity);
+  transform: translate(-50%, -50%) rotate(var(--aura-rotate)) translate(var(--aura-x), var(--aura-y));
+}
+
+.action-prompt__aura-layer--one {
+  --aura-width: 108%;
+  --aura-height: 88%;
+  --aura-radius: 42% 58% 55% 45%;
+  --aura-opacity: 0.27;
+  --aura-core-opacity: 0.36;
+  --aura-layer-opacity: 0.74;
+  --aura-blur: 1.1px;
+  --aura-rotate: -18deg;
+  --aura-x: -3%;
+  --aura-y: 1%;
+  --aura-highlight: 0.08;
+  --aura-highlight-x: 34%;
+  --aura-highlight-y: 28%;
+  --aura-core-x: 52%;
+  --aura-core-y: 56%;
+}
+
+.action-prompt__aura-layer--two {
+  --aura-width: 85%;
+  --aura-height: 110%;
+  --aura-radius: 58% 42% 48% 52%;
+  --aura-opacity: 0.25;
+  --aura-core-opacity: 0.34;
+  --aura-layer-opacity: 0.7;
+  --aura-blur: 1px;
+  --aura-rotate: 20deg;
+  --aura-x: 2%;
+  --aura-y: -2%;
+  --aura-highlight: 0.1;
+  --aura-highlight-x: 52%;
+  --aura-highlight-y: 32%;
+  --aura-core-x: 48%;
+  --aura-core-y: 58%;
+}
+
+.action-prompt__aura-layer--three {
+  --aura-width: 100%;
+  --aura-height: 93%;
+  --aura-radius: 46% 54% 62% 38%;
+  --aura-opacity: 0.3;
+  --aura-core-opacity: 0.39;
+  --aura-layer-opacity: 0.72;
+  --aura-blur: 1.3px;
+  --aura-rotate: -32deg;
+  --aura-x: -2%;
+  --aura-y: 2%;
+  --aura-highlight: 0.1;
+  --aura-highlight-x: 46%;
+  --aura-highlight-y: 38%;
+  --aura-core-x: 54%;
+  --aura-core-y: 50%;
+}
+
+.action-prompt__aura-layer--four {
+  --aura-width: 78%;
+  --aura-height: 95%;
+  --aura-radius: 64% 36% 47% 53%;
+  --aura-opacity: 0.31;
+  --aura-core-opacity: 0.41;
+  --aura-layer-opacity: 0.68;
+  --aura-blur: 1px;
+  --aura-rotate: 30deg;
+  --aura-x: 2%;
+  --aura-y: 1%;
+  --aura-highlight: 0.12;
+  --aura-highlight-x: 40%;
+  --aura-highlight-y: 30%;
+  --aura-core-x: 52%;
+  --aura-core-y: 55%;
+}
+
+.action-prompt__aura-layer--five {
+  --aura-width: 67%;
+  --aura-height: 72%;
+  --aura-radius: 44% 56% 43% 57%;
+  --aura-opacity: 0.36;
+  --aura-core-opacity: 0.46;
+  --aura-layer-opacity: 0.68;
+  --aura-blur: 1.4px;
+  --aura-rotate: -14deg;
+  --aura-x: 0%;
+  --aura-y: -1%;
+  --aura-highlight: 0.1;
+  --aura-highlight-x: 44%;
+  --aura-highlight-y: 36%;
+  --aura-core-x: 50%;
+  --aura-core-y: 54%;
+}
+
+.action-prompt__aura-core {
+  inset: 21% 22% 20% 23%;
+  border-radius: 46% 54% 43% 57%;
+  background:
+    radial-gradient(ellipse at 44% 38%, rgba(255, 255, 255, 0.24), transparent 24%),
+    radial-gradient(ellipse at 50% 56%, rgba(var(--action-accent-rgb), 0.48), transparent 68%);
+  filter: blur(10px);
+  opacity: 0.68;
+}
+
+.action-prompt__header {
+  text-align: center;
+}
+
+.action-prompt__header h1 {
+  max-width: 340px;
+  margin: 0 auto;
+  color: var(--action-ink);
+  font-size: clamp(1.36rem, 5.6vw, 1.86rem);
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.1;
+}
+
+.action-prompt__copy {
+  margin-top: var(--action-aura-to-copy-gap);
+  text-align: center;
+}
+
+.action-prompt__copy p {
+  max-width: clamp(252px, 74vw, 318px);
+  margin: 0 auto;
+  color: var(--action-muted);
+  font-size: clamp(0.92rem, 3.65vw, 1.08rem);
+  font-weight: 380;
+  letter-spacing: 0;
+  line-height: 1.48;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.action-prompt__footer {
+  padding-top: clamp(9px, 1.9dvh, 16px);
+}
+
+.action-prompt__cta {
+  width: 100%;
+  margin: 0;
+  --background: linear-gradient(135deg, rgba(149, 207, 193, 0.92), rgba(119, 185, 174, 0.94));
+  --background-activated: linear-gradient(135deg, rgba(119, 185, 174, 1), rgba(92, 158, 149, 1));
+  --background-hover: linear-gradient(135deg, rgba(142, 201, 188, 0.96), rgba(110, 176, 165, 0.98));
+  --border-radius: 17px;
+  --box-shadow: 0 12px 26px rgba(72, 144, 134, 0.16);
+  --color: #ffffff;
+  min-height: clamp(50px, 7.2dvh, 60px);
+  font-size: clamp(1.05rem, 4.4vw, 1.25rem);
+  font-weight: 470;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.action-prompt__cta::part(native) {
+  min-height: clamp(50px, 7.2dvh, 60px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+:host-context(.ion-palette-dark) .action-prompt {
+  --action-ink: #f6fbff;
+  --action-muted: rgba(246, 251, 255, 0.62);
+}
+
+:host-context(.ion-palette-dark) .action-prompt::before {
+  background:
+    radial-gradient(circle at 8% 8%, rgba(238, 128, 108, 0.015), transparent 34%),
+    radial-gradient(circle at 94% 12%, rgba(var(--action-accent-rgb), 0.018), transparent 34%),
+    radial-gradient(circle at 50% 62%, rgba(var(--action-accent-rgb), 0.016), transparent 40%);
+}
+
+:host-context(.ion-palette-dark) .action-prompt__exit {
+  --background: rgba(255, 255, 255, 0.08);
+  --background-activated: rgba(255, 255, 255, 0.13);
+  --background-hover: rgba(255, 255, 255, 0.11);
+  --box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+  --color: #f6fbff;
+}
+
+:host-context(.ion-palette-dark) .action-prompt__exit::part(native) {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+:host-context(.ion-palette-dark) .action-prompt__aura-layer {
+  mix-blend-mode: screen;
+}
+
+@media (max-height: 760px) {
+  .action-prompt {
+    padding-top: calc(8px + env(safe-area-inset-top));
+    padding-bottom: calc(10px + env(safe-area-inset-bottom));
+  }
+
+  .action-prompt__nav {
+    min-height: 38px;
+  }
+
+  .action-prompt__exit {
+    width: 34px;
+    height: 34px;
+  }
+
+  .action-prompt {
+    --action-aura-size: clamp(132px, min(40vw, 19dvh), 162px);
+    --action-title-to-aura-gap: clamp(30px, 5.3dvh, 40px);
+    --action-aura-to-copy-gap: clamp(28px, 5.1dvh, 38px);
+    --action-body-block-padding-start: clamp(0px, 0.8dvh, 6px);
+    --action-body-block-padding-end: clamp(46px, 9.5dvh, 72px);
+  }
+
+  .action-prompt__header h1 {
+    font-size: clamp(1.22rem, 5.2vw, 1.52rem);
+  }
+
+  .action-prompt__copy p {
+    font-size: clamp(0.86rem, 3.35vw, 0.98rem);
+    line-height: 1.42;
+  }
+
+  .action-prompt__footer {
+    padding-top: 6px;
+  }
+
+  .action-prompt__cta,
+  .action-prompt__cta::part(native) {
+    min-height: 48px;
+  }
+}
+
+@media (max-width: 360px) {
+  .action-prompt {
+    padding-inline: 18px;
+  }
+}

@@ -3,6 +3,8 @@ export interface ToolLocalizedText {
   he: string;
 }
 
+export type ToolPromptText = ToolLocalizedText | string;
+
 export interface ToolRecommendationTags {
   emotions: string[];
   influences: string[];
@@ -21,6 +23,10 @@ export interface ToolDefinition {
   enableHaptics?: boolean;
   title: ToolLocalizedText;
   description: ToolLocalizedText;
+  prompt?: ToolPromptText;
+  actionPrompt?: ToolPromptText;
+  icon?: string;
+  emoji?: string;
   microPrompt?: ToolLocalizedText;
   completionText?: ToolLocalizedText;
   steps?: ToolLocalizedText[];

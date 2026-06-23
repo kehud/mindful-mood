@@ -5,6 +5,7 @@ import {
   ToolCategory,
   ToolDefinition,
   ToolLocalizedText,
+  ToolPromptText,
   ToolRecommendationTags,
   ToolSessionMode,
   ToolTemplate,
@@ -52,6 +53,10 @@ export class ToolService {
     const enableHaptics = readOptionalBoolean(data, 'enableHaptics');
     const title = readLocalizedText(data, 'title');
     const description = readLocalizedText(data, 'description');
+    const prompt = readOptionalLocalizedTextOrString(data, 'prompt');
+    const actionPrompt = readOptionalLocalizedTextOrString(data, 'actionPrompt');
+    const icon = readOptionalString(data, 'icon');
+    const emoji = readOptionalString(data, 'emoji');
     const microPrompt = readOptionalLocalizedText(data, 'microPrompt');
     const completionText = readOptionalLocalizedText(data, 'completionText');
     const steps = readOptionalLocalizedTextArray(data, 'steps');
@@ -68,6 +73,10 @@ export class ToolService {
       enableHaptics === null ||
       title === null ||
       description === null ||
+      prompt === null ||
+      actionPrompt === null ||
+      icon === null ||
+      emoji === null ||
       microPrompt === null ||
       completionText === null ||
       steps === null ||
@@ -88,6 +97,10 @@ export class ToolService {
       ...(enableHaptics !== undefined ? { enableHaptics } : {}),
       title,
       description,
+      ...(prompt !== undefined ? { prompt } : {}),
+      ...(actionPrompt !== undefined ? { actionPrompt } : {}),
+      ...(icon !== undefined ? { icon } : {}),
+      ...(emoji !== undefined ? { emoji } : {}),
       ...(microPrompt ? { microPrompt } : {}),
       ...(completionText ? { completionText } : {}),
       ...(steps ? { steps } : {}),
@@ -133,6 +146,16 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function readString(data: Record<string, unknown>, key: string): string | null {
   const value = data[key];
+
+  return typeof value === 'string' && value.trim() ? value.trim() : null;
+}
+
+function readOptionalString(data: Record<string, unknown>, key: string): string | null | undefined {
+  const value = data[key];
+
+  if (value === undefined) {
+    return undefined;
+  }
 
   return typeof value === 'string' && value.trim() ? value.trim() : null;
 }
@@ -215,6 +238,23 @@ function readOptionalLocalizedText(
 
   if (value === undefined) {
     return undefined;
+  }
+
+  return readLocalizedText(data, key);
+}
+
+function readOptionalLocalizedTextOrString(
+  data: Record<string, unknown>,
+  key: string,
+): ToolPromptText | null | undefined {
+  const value = data[key];
+
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (typeof value === 'string') {
+    return value.trim() ? value.trim() : null;
   }
 
   return readLocalizedText(data, key);
