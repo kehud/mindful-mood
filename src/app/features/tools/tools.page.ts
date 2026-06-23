@@ -1,6 +1,6 @@
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { Firestore, doc, getDoc } from '@angular/fire/firestore';
+import { Firestore, collection, doc, getDoc, getDocs, orderBy, query } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { catchError, combineLatest, from, of, shareReplay, startWith, switchMap, tap } from 'rxjs';
@@ -199,73 +199,44 @@ interface ToolCard {
   readonly category: RecommendationCategory;
 }
 
-// TEMP scroll test items.
-const TEMP_SCROLL_TEST_TOOLS: readonly ToolCard[] = [
-  {
-    id: 'temp-breathing-scroll-test',
-    titleKey: 'tools.breathe',
-    subtitleKey: 'tools.breatheSubtitle',
-    icon: 'radio-button-on-outline',
-    tone: 'teal',
-    category: 'therapeutic',
-  },
-  {
-    id: 'temp-reflection-scroll-test',
-    titleKey: 'tools.reflect',
-    subtitleKey: 'tools.reflectSubtitle',
-    icon: 'pencil-outline',
-    tone: 'peach',
-    category: 'therapeutic',
-  },
-  {
-    id: 'temp-grounding-scroll-test',
-    titleKey: 'tools.ground',
-    subtitleKey: 'tools.groundSubtitle',
-    icon: 'leaf-outline',
-    tone: 'violet',
-    category: 'therapeutic',
-  },
-  {
-    id: 'temp-sleep-scroll-test',
-    titleKey: 'tools.sleep',
-    subtitleKey: 'tools.sleepSubtitle',
-    icon: 'moon-outline',
-    tone: 'plum',
-    category: 'therapeutic',
-  },
-  {
-    id: 'temp-breathing-scroll-test-2',
-    titleKey: 'tools.breathe',
-    subtitleKey: 'tools.breatheSubtitle',
-    icon: 'radio-button-on-outline',
-    tone: 'teal',
-    category: 'therapeutic',
-  },
-  {
-    id: 'temp-reflection-scroll-test-2',
-    titleKey: 'tools.reflect',
-    subtitleKey: 'tools.reflectSubtitle',
-    icon: 'pencil-outline',
-    tone: 'peach',
-    category: 'therapeutic',
-  },
-  {
-    id: 'temp-grounding-scroll-test-2',
-    titleKey: 'tools.ground',
-    subtitleKey: 'tools.groundSubtitle',
-    icon: 'leaf-outline',
-    tone: 'violet',
-    category: 'therapeutic',
-  },
-  {
-    id: 'temp-sleep-scroll-test-2',
-    titleKey: 'tools.sleep',
-    subtitleKey: 'tools.sleepSubtitle',
-    icon: 'moon-outline',
-    tone: 'plum',
-    category: 'therapeutic',
-  },
-];
+interface MomentCategoryCard {
+  readonly id: string;
+  readonly title: RecommendationLocalizedText;
+  readonly description?: RecommendationLocalizedText;
+  readonly icon: string;
+  readonly tone: ToolTone;
+  readonly order?: number;
+}
+
+const MOMENT_CATEGORY_ICON_NAMES_BY_KEY: Readonly<Record<string, string>> = {
+  breathing: 'radio-button-on-outline',
+  create: 'color-palette-outline',
+  friend: 'people-circle-outline',
+  goal: 'flag-outline',
+  gratitude: 'sparkles-outline',
+  grounding: 'leaf-outline',
+  learn: 'school-outline',
+  meditation: 'sparkles-outline',
+  music: 'musical-notes-outline',
+  reflect: 'pencil-outline',
+  sleep: 'moon-outline',
+  walk: 'walk-outline',
+};
+
+const MOMENT_CATEGORY_TONES_BY_KEY: Readonly<Record<string, ToolTone>> = {
+  breathing: 'teal',
+  create: 'peach',
+  friend: 'plum',
+  goal: 'violet',
+  grounding: 'violet',
+  learn: 'teal',
+  music: 'plum',
+  reflect: 'peach',
+  sleep: 'plum',
+  walk: 'teal',
+};
+
+const MOMENT_CATEGORY_TONES: readonly ToolTone[] = ['teal', 'peach', 'violet', 'plum'];
 
 interface RecommendationCard {
   readonly id: string;
@@ -335,7 +306,11 @@ export class ToolsPage {
     },
   ];
 
-  readonly allTools: readonly ToolCard[] = [...this.tools, ...TEMP_SCROLL_TEST_TOOLS];
+  readonly momentCategories$ = from(this.loadMomentCategories()).pipe(
+    catchError(() => of([])),
+    startWith([]),
+    shareReplay({ bufferSize: 1, refCount: true }),
+  );
 
   readonly recommendedTools$ = combineLatest([
     this.authService.currentUser$,
@@ -361,8 +336,20 @@ export class ToolsPage {
     return tool.id;
   }
 
+  trackCategory(_index: number, category: MomentCategoryCard): string {
+    return category.id;
+  }
+
   trackRecommendation(_index: number, tool: RecommendationCard): string {
     return tool.id;
+  }
+
+  categoryTitle(category: MomentCategoryCard): string {
+    return this.localizedRecommendationText(category.title, titleFromId(category.id));
+  }
+
+  categoryDescription(category: MomentCategoryCard): string {
+    return this.localizedRecommendationText(category.description, '');
   }
 
   recommendationTitle(tool: RecommendationCard): string {
@@ -391,6 +378,51 @@ export class ToolsPage {
 
   onRecommendationSelected(tool: RecommendationCard): void {
     void this.router.navigate(['/tools', tool.id]);
+  }
+
+  onCategorySelected(category: MomentCategoryCard): void {
+    console.log('[All Moments] category clicked:', category.id);
+    void this.router.navigate(['/tools/category', category.id]);
+  }
+
+  private async loadMomentCategories(): Promise<MomentCategoryCard[]> {
+    const categoriesQuery = query(
+      collection(this.firestore, 'momentCategories'),
+      orderBy('order'),
+    );
+    const categoriesSnapshot = await getDocs(categoriesQuery);
+
+    return categoriesSnapshot.docs
+      .map((snapshot, index) => this.toMomentCategoryCard(snapshot.id, snapshot.data(), index))
+      .filter((category): category is MomentCategoryCard => category !== null);
+  }
+
+  private toMomentCategoryCard(
+    id: string,
+    data: unknown,
+    index: number,
+  ): MomentCategoryCard | null {
+    if (!isRecord(data)) {
+      return null;
+    }
+
+    if (readOptionalBoolean(data, 'enabled') === false) {
+      return null;
+    }
+
+    const iconKey = readString(data, 'iconKey') ?? id;
+    const icon = readString(data, 'icon') ?? iconNameForMomentCategoryKey(iconKey);
+    const description = readOptionalLocalizedText(data, 'description');
+    const order = readOptionalNumber(data, 'order');
+
+    return {
+      id,
+      title: readLocalizedText(data, 'title') ?? { en: titleFromId(id) },
+      ...(description ? { description } : {}),
+      icon,
+      tone: toneForMomentCategoryKey(iconKey, index),
+      ...(order !== undefined ? { order } : {}),
+    };
   }
 
   private async loadPersonalizedRecommendationCards(
@@ -558,6 +590,47 @@ function readString(data: Record<string, unknown>, key: string): string | null {
   return typeof value === 'string' && value.trim() ? value.trim() : null;
 }
 
+function readLocalizedText(data: Record<string, unknown>, key: string): RecommendationLocalizedText | null {
+  const value = data[key];
+
+  if (!isRecord(value)) {
+    return null;
+  }
+
+  const en = readString(value, 'en');
+  const he = readString(value, 'he');
+
+  return en
+    ? {
+        en,
+        ...(he ? { he } : {}),
+      }
+    : null;
+}
+
+function readOptionalLocalizedText(
+  data: Record<string, unknown>,
+  key: string,
+): RecommendationLocalizedText | undefined {
+  if (data[key] === undefined) {
+    return undefined;
+  }
+
+  return readLocalizedText(data, key) ?? undefined;
+}
+
+function readOptionalNumber(data: Record<string, unknown>, key: string): number | undefined {
+  const value = data[key];
+
+  return typeof value === 'number' && Number.isFinite(value) ? value : undefined;
+}
+
+function readOptionalBoolean(data: Record<string, unknown>, key: string): boolean | undefined {
+  const value = data[key];
+
+  return typeof value === 'boolean' ? value : undefined;
+}
+
 function readStringArray(data: Record<string, unknown>, key: string): string[] | null {
   const value = data[key];
 
@@ -583,4 +656,20 @@ function readRecommendationCategories(
   return values.filter((value): value is RecommendationCategory =>
     value === 'therapeutic' || value === 'personal' || value === 'growth',
   );
+}
+
+function iconNameForMomentCategoryKey(iconKey: string): string {
+  return MOMENT_CATEGORY_ICON_NAMES_BY_KEY[iconKey] ?? iconKey;
+}
+
+function toneForMomentCategoryKey(iconKey: string, index: number): ToolTone {
+  return MOMENT_CATEGORY_TONES_BY_KEY[iconKey] ?? MOMENT_CATEGORY_TONES[index % MOMENT_CATEGORY_TONES.length];
+}
+
+function titleFromId(id: string): string {
+  return id
+    .split(/[-_]+/)
+    .filter(Boolean)
+    .map((part) => `${part.charAt(0).toUpperCase()}${part.slice(1)}`)
+    .join(' ') || id;
 }

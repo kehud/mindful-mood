@@ -44,22 +44,27 @@
       <section class="tools-all" aria-labelledby="tools-all-title">
         <h2 id="tools-all-title" class="tools-list-title">{{ 'tools.allTools' | t }}</h2>
 
-        <section class="tools-grid" [attr.aria-label]="'tools.allTools' | t">
+        <section
+          class="tools-grid"
+          *ngIf="momentCategories$ | async as momentCategories"
+          [attr.aria-label]="'tools.allTools' | t"
+        >
           <article
             class="tool-card"
-            *ngFor="let tool of allTools; trackBy: trackTool"
-            [class.tool-card--teal]="tool.tone === 'teal'"
-            [class.tool-card--peach]="tool.tone === 'peach'"
-            [class.tool-card--violet]="tool.tone === 'violet'"
-            [class.tool-card--plum]="tool.tone === 'plum'"
+            *ngFor="let category of momentCategories; trackBy: trackCategory"
+            [class.tool-card--teal]="category.tone === 'teal'"
+            [class.tool-card--peach]="category.tone === 'peach'"
+            [class.tool-card--violet]="category.tone === 'violet'"
+            [class.tool-card--plum]="category.tone === 'plum'"
+            (click)="onCategorySelected(category)"
           >
             <span class="tool-card__icon" aria-hidden="true">
-              <ion-icon [name]="tool.icon"></ion-icon>
+              <ion-icon [name]="category.icon"></ion-icon>
             </span>
 
             <div>
-              <h2>{{ tool.titleKey | t }}</h2>
-              <p>{{ tool.subtitleKey | t }}</p>
+              <h2>{{ categoryTitle(category) }}</h2>
+              <p>{{ categoryDescription(category) }}</p>
             </div>
           </article>
         </section>

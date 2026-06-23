@@ -74,6 +74,12 @@ const routes: Routes = [
     ],
   },
   {
+    path: 'tools/category/:categoryId',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/tools/tools.page').then((m) => m.ToolsPage),
+  },
+  {
     path: 'tools/:toolId',
     canActivate: [authGuard],
     loadComponent: () =>
