@@ -77,7 +77,9 @@ const routes: Routes = [
     path: 'tools/category/:categoryId',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./features/tools/tools.page').then((m) => m.ToolsPage),
+      import('./features/tools/pages/category-tools/category-tools.component').then(
+        (m) => m.CategoryToolsComponent,
+      ),
   },
   {
     path: 'tools/:toolId',

@@ -1,0 +1,26 @@
+.category-tools-placeholder {
+  padding: 24px;
+}
+
+.category-tools-list {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+}
+
+.category-tools-list__button {
+  align-items: flex-start;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  text-align: start;
+  width: 100%;
+}
+
+.category-tools-list__button span,
+.category-tools-list__button small {
+  display: block;
+}

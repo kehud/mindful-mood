@@ -1,0 +1,24 @@
+<main class="category-tools-placeholder" *ngIf="categoryState$ | async as state">
+  <p *ngIf="state.loading">Loading tools...</p>
+
+  <section *ngIf="!state.loading">
+    <ion-icon *ngIf="state.category?.icon as icon" [name]="icon" aria-hidden="true"></ion-icon>
+    <h1>{{ state.category?.title || state.categoryId || 'Category tools page works' }}</h1>
+    <p *ngIf="state.category?.description as description">{{ description }}</p>
+
+    <p *ngIf="state.tools.length === 0">No tools found for this category.</p>
+
+    <ul class="category-tools-list" *ngIf="state.tools.length > 0">
+      <li *ngFor="let tool of state.tools; trackBy: trackTool">
+        <button class="category-tools-list__button" type="button" (click)="openTool(tool)">
+          <ion-icon *ngIf="tool.icon as icon" [name]="icon" aria-hidden="true"></ion-icon>
+
+          <span>
+            <strong>{{ tool.title }}</strong>
+            <small *ngIf="tool.description as description">{{ description }}</small>
+          </span>
+        </button>
+      </li>
+    </ul>
+  </section>
+</main>
