@@ -81,6 +81,8 @@ export class CategoryToolsComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
+  readonly currentLanguage = this.localization.currentLanguage;
+
   readonly categoryState$ = this.route.paramMap.pipe(
     map((params) => params.get('categoryId')?.trim() ?? ''),
     distinctUntilChanged(),

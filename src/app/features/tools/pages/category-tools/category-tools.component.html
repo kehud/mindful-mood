@@ -70,8 +70,8 @@
         <aside class="category-tools-helper" *ngIf="state.tools.length > 0">
           <ion-icon name="sparkles-outline" aria-hidden="true"></ion-icon>
           <span>
-            <strong>Not sure which one to try?</strong>
-            <small>All of these moments are short and effective.</small>
+            <strong>{{ currentLanguage() === 'he' ? 'לא בטוחים במה לבחור?' : 'Not sure which one to try?' }}</strong>
+            <small>{{ currentLanguage() === 'he' ? 'כל הרגעים האלה קצרים ואפקטיביים.' : 'All of these moments are short and effective.' }}</small>
           </span>
         </aside>
       </section>

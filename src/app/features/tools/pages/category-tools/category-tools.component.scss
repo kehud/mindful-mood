@@ -418,14 +418,6 @@ ion-content.category-tools-content::part(scroll) {
   animation-delay: 120ms;
 }
 
-:host-context([dir="rtl"]) .category-tools-back ion-icon {
-  transform: rotate(180deg);
-}
-
-:host-context([dir="rtl"]) .category-tools-row__chevron {
-  transform: rotate(180deg);
-}
-
 :host-context(.ion-palette-dark) ion-content.category-tools-content {
   --background:
     radial-gradient(circle at 50% 36%, rgba(35, 63, 160, 0.34), transparent 37%),
