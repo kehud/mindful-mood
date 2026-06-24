@@ -1,24 +1,80 @@
-<main class="category-tools-placeholder" *ngIf="categoryState$ | async as state">
-  <p *ngIf="state.loading">Loading tools...</p>
+<ion-content class="category-tools-content" fullscreen>
+  <main class="category-tools-shell" *ngIf="categoryState$ | async as state">
+    <nav class="category-tools-nav" aria-label="Category navigation">
+      <button class="category-tools-back" type="button" (click)="backToTools()" aria-label="Back to tools">
+        <ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon>
+      </button>
 
-  <section *ngIf="!state.loading">
-    <ion-icon *ngIf="state.category?.icon as icon" [name]="icon" aria-hidden="true"></ion-icon>
-    <h1>{{ state.category?.title || state.categoryId || 'Category tools page works' }}</h1>
-    <p *ngIf="state.category?.description as description">{{ description }}</p>
+      <button class="category-tools-favorite" type="button" aria-label="Favorite category">
+        <ion-icon name="heart-outline" aria-hidden="true"></ion-icon>
+      </button>
+    </nav>
 
-    <p *ngIf="state.tools.length === 0">No tools found for this category.</p>
+    <section class="category-tools-loading" *ngIf="state.loading" aria-live="polite">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Loading moments...</p>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </section>
 
-    <ul class="category-tools-list" *ngIf="state.tools.length > 0">
-      <li *ngFor="let tool of state.tools; trackBy: trackTool">
-        <button class="category-tools-list__button" type="button" (click)="openTool(tool)">
-          <ion-icon *ngIf="tool.icon as icon" [name]="icon" aria-hidden="true"></ion-icon>
+    <section class="category-tools-page" *ngIf="!state.loading">
+      <header class="category-tools-header">
+        <span class="category-tools-header__icon" aria-hidden="true">
+          <ion-icon [name]="state.category?.icon || 'sparkles-outline'"></ion-icon>
+        </span>
 
+        <h1>{{ state.category?.title || state.categoryId || 'Category tools page works' }}</h1>
+        <p *ngIf="state.category?.description as description">{{ description }}</p>
+      </header>
+
+      <section class="category-tools-section" aria-labelledby="category-tools-title">
+        <h2 id="category-tools-title">Practices</h2>
+
+        <section class="category-tools-empty" *ngIf="state.tools.length === 0">
+          <p>No moments found for this category yet.</p>
+          <small *ngIf="state.categoryId">Category: {{ state.categoryId }}</small>
+        </section>
+
+        <ul class="category-tools-list" *ngIf="state.tools.length > 0">
+          <li *ngFor="let tool of state.tools; trackBy: trackTool">
+            <button class="category-tools-row" type="button" (click)="openTool(tool)">
+              <span class="category-tools-row__icon" aria-hidden="true">
+                <span class="category-tools-row__emoji" *ngIf="tool.emoji as emoji; else toolIcon">
+                  {{ emoji }}
+                </span>
+
+                <ng-template #toolIcon>
+                  <ion-icon [name]="tool.icon"></ion-icon>
+                </ng-template>
+              </span>
+
+              <span class="category-tools-row__copy">
+                <strong>{{ tool.title }}</strong>
+                <small *ngIf="tool.description as description">{{ description }}</small>
+
+                <span class="category-tools-row__duration" *ngIf="tool.durationLabel as durationLabel">
+                  <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+                  <span>{{ durationLabel }}</span>
+                </span>
+              </span>
+
+              <ion-icon
+                class="category-tools-row__chevron"
+                name="chevron-forward-outline"
+                aria-hidden="true"
+              ></ion-icon>
+            </button>
+          </li>
+        </ul>
+
+        <aside class="category-tools-helper" *ngIf="state.tools.length > 0">
+          <ion-icon name="sparkles-outline" aria-hidden="true"></ion-icon>
           <span>
-            <strong>{{ tool.title }}</strong>
-            <small *ngIf="tool.description as description">{{ description }}</small>
+            <strong>Not sure which one to try?</strong>
+            <small>All of these moments are short and effective.</small>
           </span>
-        </button>
-      </li>
-    </ul>
-  </section>
-</main>
+        </aside>
+      </section>
+    </section>
+  </main>
+</ion-content>
