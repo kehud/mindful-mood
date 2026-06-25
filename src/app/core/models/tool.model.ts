@@ -14,6 +14,8 @@ export interface ToolRecommendationTags {
 
 export interface ToolDefinition {
   id: string;
+  type?: string;
+  momentCategory?: string;
   enabled: boolean;
   category: 'therapeutic' | 'personal' | 'growth';
   template: 'therapeutic_session' | 'personal_activity' | 'growth_action';

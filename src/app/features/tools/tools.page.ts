@@ -13,7 +13,7 @@ import {
   UserPreferences,
 } from '../../core/models/recommendation.model';
 import { AuthService } from '../../core/services/auth.service';
-import { EngagementService } from '../../core/services/engagement.service';
+import { EngagementService, TrackableTool } from '../../core/services/engagement.service';
 import { LocalizationService } from '../../core/services/localization.service';
 import { MoodEntryService } from '../../core/services/mood-entry.service';
 import { RecommendationService } from '../../core/services/recommendation.service';
@@ -240,6 +240,7 @@ const MOMENT_CATEGORY_TONES: readonly ToolTone[] = ['teal', 'peach', 'violet', '
 
 interface RecommendationCard {
   readonly id: string;
+  readonly trackingTool: TrackableTool;
   readonly title: string;
   readonly titleKey?: string;
   readonly titleTranslations?: RecommendationLocalizedText;
@@ -469,6 +470,11 @@ export class ToolsPage {
 
     return {
       id: tool.id,
+      trackingTool: {
+        id: tool.id,
+        type: tool.type,
+        momentCategory: tool.momentCategory,
+      },
       title: tool.title,
       titleTranslations: tool.titleTranslations,
       description: tool.description,
@@ -487,6 +493,9 @@ export class ToolsPage {
   ): RecommendationCard[] {
     return this.tools.slice(0, this.recommendationLimit).map((tool) => ({
       id: tool.id,
+      trackingTool: {
+        id: tool.id,
+      },
       title: '',
       titleKey: tool.titleKey,
       description: '',
@@ -509,7 +518,7 @@ export class ToolsPage {
       }
 
       this.shownRecommendationKeys.add(recommendation.shownKey);
-      void this.engagementService.trackToolShown(recommendation.id).catch(() => undefined);
+      void this.engagementService.trackToolShown(recommendation.trackingTool, 'recommendation').catch(() => undefined);
     });
   }
 

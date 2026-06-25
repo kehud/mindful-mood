@@ -45,6 +45,8 @@ export class ToolService {
     }
 
     const enabled = readBoolean(data, 'enabled');
+    const type = readOptionalString(data, 'type');
+    const momentCategory = readOptionalString(data, 'momentCategory');
     const category = readToolCategory(data, 'category');
     const template = readToolTemplate(data, 'template');
     const sessionMode = readOptionalToolSessionMode(data, 'sessionMode');
@@ -88,6 +90,8 @@ export class ToolService {
 
     return {
       id,
+      ...(type ? { type } : {}),
+      ...(momentCategory ? { momentCategory } : {}),
       enabled,
       category,
       template,

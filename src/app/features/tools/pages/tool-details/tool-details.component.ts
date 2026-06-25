@@ -5,6 +5,7 @@ import { IonicModule, NavController } from '@ionic/angular';
 import { catchError, distinctUntilChanged, from, map, of, shareReplay, startWith, switchMap, tap } from 'rxjs';
 
 import { ToolDefinition, ToolLocalizedText } from '../../../../core/models/tool.model';
+import { EngagementService } from '../../../../core/services/engagement.service';
 import { LocalizationService } from '../../../../core/services/localization.service';
 import { ToolService } from '../../../../core/services/tool.service';
 import { TranslatePipe } from '../../../../shared/pipes/translate.pipe';
@@ -43,6 +44,7 @@ interface ToolCompletionTitleCandidate {
 })
 export class ToolDetailsPage {
   private readonly route = inject(ActivatedRoute);
+  private readonly engagementService = inject(EngagementService);
   private readonly localization = inject(LocalizationService);
   private readonly navController = inject(NavController);
   private readonly toolService = inject(ToolService);
@@ -79,20 +81,29 @@ export class ToolDetailsPage {
   }
 
   startTool(tool: ToolDefinition): void {
-    if (!this.isRunnableTool(tool)) {
+    if (!this.isRunnableTool(tool) || this.sessionState() !== 'intro') {
       return;
     }
 
     this.logRenderedComponent(tool);
     this.sessionState.set('active');
+    void this.engagementService.trackToolOpened(tool, 'tool_details').catch(() => undefined);
   }
 
   exitActiveSession(): void {
     this.sessionState.set('intro');
   }
 
-  completeActiveSession(): void {
+  completeActiveSession(tool: ToolDefinition, shouldTrackCompletion: boolean): void {
+    if (this.sessionState() !== 'active') {
+      return;
+    }
+
     this.sessionState.set('success');
+
+    if (shouldTrackCompletion) {
+      void this.engagementService.trackToolCompleted(tool, 'tool_details').catch(() => undefined);
+    }
   }
 
   async finishCompletedSession(): Promise<void> {

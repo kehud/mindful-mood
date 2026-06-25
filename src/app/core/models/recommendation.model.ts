@@ -22,6 +22,8 @@ export interface UserPreferences {
 
 export interface RecommendationTool {
   readonly id: string;
+  readonly type?: string;
+  readonly momentCategory?: string;
   readonly title: string;
   readonly icon: string;
   readonly category: RecommendationCategory;

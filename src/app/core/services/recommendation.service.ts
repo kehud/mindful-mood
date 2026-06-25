@@ -165,6 +165,8 @@ export class RecommendationService {
 
     return {
       id: tool.id,
+      ...(tool.type ? { type: tool.type } : {}),
+      ...(tool.momentCategory ? { momentCategory: tool.momentCategory } : {}),
       title: tool.title.en,
       icon: iconNameForToolKey(tool.iconKey),
       category: tool.category,

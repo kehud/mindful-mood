@@ -21,69 +21,12 @@ service cloud.firestore {
       ])
       && request.resource.data.userId == request.auth.uid
       && request.resource.data.moodLevel is number
+      && request.resource.data.moodLevel >= 1
+      && request.resource.data.moodLevel <= 7
       && request.resource.data.emotions is list
       && request.resource.data.influences is list
       && request.resource.data.journalNote is string
       && request.resource.data.createdAt is string;
-    }
-
-    function isValidMoodOption() {
-      return request.resource.data.keys().hasOnly([
-        'value',
-        'label',
-        'icon',
-        'color',
-        'order'
-      ])
-      && request.resource.data.value is number
-      && request.resource.data.label is string
-      && request.resource.data.icon is string
-      && request.resource.data.color is string
-      && request.resource.data.order is number;
-    }
-
-    function isValidEmotionOption() {
-      return request.resource.data.keys().hasOnly([
-        'label',
-        'category',
-        'moodRange',
-        'isActive',
-        'order'
-      ])
-      && request.resource.data.keys().hasAll(['label', 'order'])
-      && request.resource.data.label is string
-      && (!request.resource.data.keys().hasAny(['category']) || request.resource.data.category is string)
-      && (!request.resource.data.keys().hasAny(['moodRange']) || request.resource.data.moodRange is list)
-      && (!request.resource.data.keys().hasAny(['isActive']) || request.resource.data.isActive is bool)
-      && request.resource.data.order is number;
-    }
-
-    function isValidInfluenceOption() {
-      return request.resource.data.keys().hasOnly([
-        'label',
-        'order'
-      ])
-      && request.resource.data.label is string
-      && request.resource.data.order is number;
-    }
-
-    function isValidToolEngagement(userId, toolId) {
-      return request.resource.data.keys().hasOnly([
-        'userId',
-        'toolId',
-        'shownCount',
-        'openedCount',
-        'lastShownAt',
-        'lastOpenedAt',
-        'updatedAt'
-      ])
-      && request.resource.data.userId == userId
-      && request.resource.data.toolId == toolId
-      && (!request.resource.data.keys().hasAny(['shownCount']) || request.resource.data.shownCount is number)
-      && (!request.resource.data.keys().hasAny(['openedCount']) || request.resource.data.openedCount is number)
-      && (!request.resource.data.keys().hasAny(['lastShownAt']) || request.resource.data.lastShownAt is string)
-      && (!request.resource.data.keys().hasAny(['lastOpenedAt']) || request.resource.data.lastOpenedAt is string)
-      && request.resource.data.updatedAt is string;
     }
 
     match /users/{userId} {
@@ -91,9 +34,19 @@ service cloud.firestore {
     }
 
     match /users/{userId}/toolEngagement/{toolId} {
-      allow read: if isOwner(userId);
-      allow create, update: if isOwner(userId) && isValidToolEngagement(userId, toolId);
-      allow delete: if false;
+      allow read, write: if isOwner(userId);
+    }
+
+    match /users/{userId}/toolEvents/{eventId} {
+      allow read, write: if isOwner(userId);
+    }
+
+    match /toolStats/{toolId} {
+      allow read, write: if isSignedIn();
+    }
+
+    match /categoryStats/{categoryId} {
+      allow read, write: if isSignedIn();
     }
 
     match /moodEntries/{entryId} {
@@ -105,26 +58,33 @@ service cloud.firestore {
         && isValidMoodEntry();
     }
 
-    match /moodOptions/{optionId} {
-      allow read: if isSignedIn();
-      allow create, update: if isSignedIn() && isValidMoodOption();
-      allow delete: if false;
+    match /moodOptions/{docId} {
+      allow read: if true;
+      allow write: if true;
     }
 
-    match /emotionOptions/{optionId} {
-      allow read: if isSignedIn();
-      allow create, update: if isSignedIn() && isValidEmotionOption();
-      allow delete: if false;
+    match /emotionOptions/{docId} {
+      allow read: if true;
+      allow write: if true;
     }
 
-    match /influenceOptions/{optionId} {
-      allow read: if isSignedIn();
-      allow create, update: if isSignedIn() && isValidInfluenceOption();
-      allow delete: if false;
+    match /influenceOptions/{docId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    match /reflectionTemplates/{docId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    match /users/{docId} {
+      allow read: if true;
+      allow write: if true;
     }
 
     match /{document=**} {
-      allow read, write: if false;
+      allow read, write: if true;
     }
   }
 }

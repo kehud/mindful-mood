@@ -40,11 +40,12 @@
       </ng-container>
 
       <ng-template #activeSessionOrIntro>
+        <!-- TODO: When the therapeutic session timer engine is implemented, call EngagementService.trackToolCompleted(tool, 'tool_details') only from the timer-finished handler, immediately before transitioning to Success. Pause and Success Done must not track completion. -->
         <app-therapeutic-session
           *ngIf="isActiveTherapeuticSession(tool); else actionPromptOrIntro"
           [tool]="tool"
           (exit)="exitActiveSession()"
-          (complete)="completeActiveSession()"
+          (complete)="completeActiveSession(tool, false)"
         ></app-therapeutic-session>
 
         <ng-template #actionPromptOrIntro>
@@ -52,7 +53,7 @@
             *ngIf="isActiveActionPrompt(tool); else toolIntro"
             [tool]="tool"
             (exit)="exitActiveSession()"
-            (complete)="completeActiveSession()"
+            (complete)="completeActiveSession(tool, true)"
           ></app-action-prompt>
         </ng-template>
 
