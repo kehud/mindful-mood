@@ -1,4 +1,15 @@
-<main class="therapeutic-session" [attr.dir]="currentDirection()">
+<main
+  class="therapeutic-session"
+  [class.therapeutic-session--running]="isRunning()"
+  [class.therapeutic-session--paused]="isPaused"
+  [class.therapeutic-session--completed]="isCompleted()"
+  [class.therapeutic-session--phase-inhale]="isBreathingPhase('inhale')"
+  [class.therapeutic-session--phase-hold-expanded]="isBreathingPhase('holdExpanded')"
+  [class.therapeutic-session--phase-exhale]="isBreathingPhase('exhale')"
+  [class.therapeutic-session--phase-hold-contracted]="isBreathingPhase('holdContracted')"
+  [style.--aura-phase-duration]="breathingPhaseDurationCss()"
+  [attr.dir]="currentDirection()"
+>
   <nav class="therapeutic-session__nav">
     <ion-button
       class="therapeutic-session__exit"
@@ -20,8 +31,8 @@
       <span class="therapeutic-session__aura-layer therapeutic-session__aura-layer--five"></span>
       <span class="therapeutic-session__aura-core"></span>
 
-      <p class="therapeutic-session__guidance">{{ guidanceText() }}</p>
-      <p class="therapeutic-session__phase-duration">4s</p>
+      <p class="therapeutic-session__breathing-phase">{{ breathingPhaseLabel() }}</p>
+      <p class="therapeutic-session__phase-duration">{{ remainingTimeLabel() }}</p>
     </div>
   </section>
 
@@ -35,7 +46,7 @@
       <div class="therapeutic-session__info-column">
         <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
         <span class="therapeutic-session__info-copy">
-          <strong>{{ durationLabel() }}</strong>
+          <strong>{{ remainingTimeLabel() }}</strong>
           <span>{{ currentDirection() === 'rtl' ? 'זמן שנותר' : 'Time left' }}</span>
         </span>
       </div>
@@ -64,8 +75,8 @@
   </section>
 
   <footer class="therapeutic-session__footer">
-    <ion-button class="therapeutic-session__pause" expand="block" type="button" (click)="completeSession()">
-      Pause
+    <ion-button class="therapeutic-session__pause" expand="block" type="button" (click)="togglePause()">
+      {{ pauseButtonLabel() }}
     </ion-button>
   </footer>
 </main>

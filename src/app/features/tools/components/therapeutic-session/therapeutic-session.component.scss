@@ -4,8 +4,29 @@
 }
 
 .therapeutic-session {
+  --aura-size: clamp(194px, min(70vw, 31dvh), 288px);
+  --aura-max-size: min(calc(100vw - 44px), 372px);
+  --aura-primary-color: 120, 201, 203;
+  --aura-secondary-color: 245, 188, 178;
+  --aura-animation-duration: 8.2s;
+  --aura-phase-duration: var(--aura-animation-duration);
+  --aura-phase-easing: cubic-bezier(0.42, 0, 0.22, 1);
+  --aura-container-scale-min: 0.985;
+  --aura-container-scale-max: 1.035;
+  --aura-scale-min: 0.9;
+  --aura-scale-max: 1.24;
+  --aura-blur: clamp(20px, 5.8vw, 30px);
+  --aura-glow-opacity: 0.72;
+  --aura-glow-opacity-expanded: 1;
+  --aura-secondary-glow-opacity: 0.16;
+  --aura-saturation-min: 1.14;
+  --aura-saturation-max: 1.38;
+  --aura-shadow-opacity-min: 0.11;
+  --aura-shadow-opacity-max: 0.24;
+  --aura-completed-scale: 1.02;
+  --aura-completed-glow-opacity: 0.68;
   --session-accent: #78c9cb;
-  --session-accent-rgb: 120, 201, 203;
+  --session-accent-rgb: var(--aura-primary-color);
   --session-ink: #173f42;
   --session-muted: rgba(23, 63, 66, 0.58);
   --session-card-background:
@@ -15,8 +36,8 @@
   --session-card-shadow:
     0 16px 36px rgba(58, 72, 88, 0.06),
     inset 0 1px 0 rgba(255, 255, 255, 0.72);
-  --session-aura-size: clamp(140px, min(42vw, 20dvh), 178px);
-  --session-aura-region-height: clamp(246px, 32dvh, 292px);
+  --session-aura-size: min(var(--aura-size), var(--aura-max-size));
+  --session-aura-region-height: clamp(300px, 41dvh, 366px);
   --session-aura-top-offset: clamp(24px, 3.4dvh, 34px);
   --session-lower-content-offset: clamp(24px, 3.4dvh, 34px);
 
@@ -36,6 +57,18 @@
   color: var(--session-ink);
 }
 
+/*
+  Aura tuning guide:
+  - Breathing phase durations: update inhaleMs, holdExpandedMs, exhaleMs, and holdContractedMs in therapeutic-session.component.ts.
+  - Bigger aura: increase --aura-size or --aura-max-size; keep the compact-height override conservative for small screens.
+  - Slower/faster aura motion: adjust the phase durations in TypeScript; --aura-phase-duration is set from the active phase.
+  - Stronger/weaker expansion: widen or narrow --aura-scale-min and --aura-scale-max.
+  - Stronger/weaker glow: tune --aura-glow-opacity, --aura-glow-opacity-expanded, --aura-blur, and --aura-secondary-glow-opacity.
+  - Small-screen safety: lower the compact-height --aura-size or --aura-scale-max.
+  Scenario A - Larger, more visible breathing: increase --aura-size/--aura-max-size, increase --aura-scale-max, and slightly raise --aura-glow-opacity-expanded.
+  Scenario B - Slower, calmer breathing: increase inhaleMs/exhaleMs and lower --aura-scale-max if it feels too dramatic.
+  Scenario C - Softer aura: reduce --aura-glow-opacity, --aura-glow-opacity-expanded, and --aura-secondary-glow-opacity.
+*/
 .therapeutic-session::before {
   content: "";
   position: absolute;
@@ -110,9 +143,11 @@
   gap: clamp(1px, 0.35dvh, 3px);
   contain: layout;
   filter:
-    saturate(1.24)
-    drop-shadow(0 18px 28px rgba(var(--session-accent-rgb), 0.13));
+    saturate(var(--aura-saturation-min))
+    drop-shadow(0 16px 24px rgba(var(--session-accent-rgb), var(--aura-shadow-opacity-min)));
+  transform: scale(var(--aura-container-scale-min)) translateY(1px);
   transform-origin: center;
+  will-change: transform, filter;
 }
 
 .therapeutic-session__aura::before {
@@ -120,8 +155,14 @@
   position: absolute;
   inset: -11%;
   border-radius: 48% 52% 54% 46%;
-  background: radial-gradient(ellipse at center, rgba(var(--session-accent-rgb), 0.36), transparent 74%);
-  filter: blur(18px);
+  background:
+    radial-gradient(ellipse at 42% 42%, rgba(var(--aura-secondary-color), var(--aura-secondary-glow-opacity)), transparent 50%),
+    radial-gradient(ellipse at center, rgba(var(--session-accent-rgb), 0.36), transparent 74%);
+  filter: blur(var(--aura-blur));
+  opacity: var(--aura-glow-opacity);
+  transform: scale(var(--aura-scale-min));
+  transform-origin: center;
+  will-change: transform, opacity, filter;
 }
 
 .therapeutic-session__aura-layer,
@@ -149,10 +190,16 @@
       transparent 64%
     ),
     rgba(var(--session-accent-rgb), var(--aura-opacity));
-  filter: blur(var(--aura-blur));
+  filter: blur(var(--aura-layer-blur)) saturate(var(--aura-saturation-min));
   mix-blend-mode: multiply;
   opacity: var(--aura-layer-opacity);
-  transform: translate(-50%, -50%) rotate(var(--aura-rotate)) translate(var(--aura-x), var(--aura-y));
+  transform:
+    translate(-50%, -50%)
+    rotate(calc(var(--aura-rotate) - 3deg))
+    translate(calc(var(--aura-x) - 1%), calc(var(--aura-y) + 1%))
+    scale(var(--aura-scale-min));
+  transform-origin: center;
+  will-change: transform, opacity, filter;
 }
 
 .therapeutic-session__aura-layer--one {
@@ -162,7 +209,8 @@
   --aura-opacity: 0.38;
   --aura-core-opacity: 0.52;
   --aura-layer-opacity: 0.96;
-  --aura-blur: 1.1px;
+  --aura-layer-opacity-expanded: 1;
+  --aura-layer-blur: 1.1px;
   --aura-rotate: -18deg;
   --aura-x: -3%;
   --aura-y: 1%;
@@ -180,7 +228,8 @@
   --aura-opacity: 0.36;
   --aura-core-opacity: 0.5;
   --aura-layer-opacity: 0.91;
-  --aura-blur: 1px;
+  --aura-layer-opacity-expanded: 0.98;
+  --aura-layer-blur: 1px;
   --aura-rotate: 20deg;
   --aura-x: 2%;
   --aura-y: -2%;
@@ -198,7 +247,8 @@
   --aura-opacity: 0.42;
   --aura-core-opacity: 0.56;
   --aura-layer-opacity: 0.94;
-  --aura-blur: 1.3px;
+  --aura-layer-opacity-expanded: 1;
+  --aura-layer-blur: 1.3px;
   --aura-rotate: -32deg;
   --aura-x: -2%;
   --aura-y: 2%;
@@ -216,7 +266,8 @@
   --aura-opacity: 0.44;
   --aura-core-opacity: 0.59;
   --aura-layer-opacity: 0.9;
-  --aura-blur: 1px;
+  --aura-layer-opacity-expanded: 0.98;
+  --aura-layer-blur: 1px;
   --aura-rotate: 30deg;
   --aura-x: 2%;
   --aura-y: 1%;
@@ -234,7 +285,8 @@
   --aura-opacity: 0.52;
   --aura-core-opacity: 0.68;
   --aura-layer-opacity: 0.9;
-  --aura-blur: 1.4px;
+  --aura-layer-opacity-expanded: 0.98;
+  --aura-layer-blur: 1.4px;
   --aura-rotate: -14deg;
   --aura-x: 0%;
   --aura-y: -1%;
@@ -252,10 +304,168 @@
     radial-gradient(ellipse at 44% 38%, rgba(255, 255, 255, 0.24), transparent 24%),
     radial-gradient(ellipse at 50% 56%, rgba(var(--session-accent-rgb), 0.7), transparent 68%);
   filter: blur(10px);
-  opacity: 0.9;
+  opacity: 0.78;
+  transform: scale(var(--aura-scale-min));
+  transform-origin: center;
+  will-change: transform, opacity;
 }
 
-.therapeutic-session__guidance,
+.therapeutic-session--phase-inhale .therapeutic-session__aura {
+  animation: therapeutic-aura-container-expand var(--aura-phase-duration) var(--aura-phase-easing) forwards;
+}
+
+.therapeutic-session--phase-inhale .therapeutic-session__aura::before {
+  animation: therapeutic-aura-glow-expand var(--aura-phase-duration) var(--aura-phase-easing) forwards;
+}
+
+.therapeutic-session--phase-inhale .therapeutic-session__aura-layer {
+  animation: therapeutic-aura-layer-expand var(--aura-phase-duration) var(--aura-phase-easing) forwards;
+}
+
+.therapeutic-session--phase-inhale .therapeutic-session__aura-core {
+  animation: therapeutic-aura-core-expand var(--aura-phase-duration) var(--aura-phase-easing) forwards;
+}
+
+.therapeutic-session--phase-hold-expanded .therapeutic-session__aura {
+  filter:
+    saturate(var(--aura-saturation-max))
+    drop-shadow(0 24px 42px rgba(var(--session-accent-rgb), var(--aura-shadow-opacity-max)));
+  transform: scale(var(--aura-container-scale-max)) translateY(-2px);
+}
+
+.therapeutic-session--phase-hold-expanded .therapeutic-session__aura::before {
+  filter: blur(var(--aura-blur)) saturate(var(--aura-saturation-max));
+  opacity: var(--aura-glow-opacity-expanded);
+  transform: scale(var(--aura-scale-max));
+}
+
+.therapeutic-session--phase-hold-expanded .therapeutic-session__aura-layer {
+  filter: blur(var(--aura-layer-blur)) saturate(var(--aura-saturation-max));
+  opacity: var(--aura-layer-opacity-expanded);
+  transform:
+    translate(-50%, -50%)
+    rotate(calc(var(--aura-rotate) + 3deg))
+    translate(calc(var(--aura-x) + 1%), calc(var(--aura-y) - 1%))
+    scale(var(--aura-scale-max));
+}
+
+.therapeutic-session--phase-hold-expanded .therapeutic-session__aura-core {
+  opacity: 0.96;
+  transform: scale(var(--aura-scale-max));
+}
+
+.therapeutic-session--phase-exhale .therapeutic-session__aura {
+  animation: therapeutic-aura-container-expand var(--aura-phase-duration) var(--aura-phase-easing) reverse forwards;
+}
+
+.therapeutic-session--phase-exhale .therapeutic-session__aura::before {
+  animation: therapeutic-aura-glow-expand var(--aura-phase-duration) var(--aura-phase-easing) reverse forwards;
+}
+
+.therapeutic-session--phase-exhale .therapeutic-session__aura-layer {
+  animation: therapeutic-aura-layer-expand var(--aura-phase-duration) var(--aura-phase-easing) reverse forwards;
+}
+
+.therapeutic-session--phase-exhale .therapeutic-session__aura-core {
+  animation: therapeutic-aura-core-expand var(--aura-phase-duration) var(--aura-phase-easing) reverse forwards;
+}
+
+.therapeutic-session--paused .therapeutic-session__aura,
+.therapeutic-session--paused .therapeutic-session__aura::before,
+.therapeutic-session--paused .therapeutic-session__aura-layer,
+.therapeutic-session--paused .therapeutic-session__aura-core {
+  animation-play-state: paused;
+}
+
+.therapeutic-session--completed .therapeutic-session__aura {
+  animation: therapeutic-aura-settle 900ms ease-out forwards;
+}
+
+.therapeutic-session--completed .therapeutic-session__aura::before {
+  animation: none;
+  opacity: var(--aura-completed-glow-opacity);
+  transform: scale(var(--aura-completed-scale));
+}
+
+.therapeutic-session--completed .therapeutic-session__aura-layer,
+.therapeutic-session--completed .therapeutic-session__aura-core {
+  animation: none;
+}
+
+@keyframes therapeutic-aura-container-expand {
+  from {
+    filter:
+      saturate(var(--aura-saturation-min))
+      drop-shadow(0 16px 24px rgba(var(--session-accent-rgb), var(--aura-shadow-opacity-min)));
+    transform: scale(var(--aura-container-scale-min)) translateY(1px);
+  }
+
+  to {
+    filter:
+      saturate(var(--aura-saturation-max))
+      drop-shadow(0 24px 42px rgba(var(--session-accent-rgb), var(--aura-shadow-opacity-max)));
+    transform: scale(var(--aura-container-scale-max)) translateY(-2px);
+  }
+}
+
+@keyframes therapeutic-aura-glow-expand {
+  from {
+    opacity: var(--aura-glow-opacity);
+    filter: blur(var(--aura-blur)) saturate(var(--aura-saturation-min));
+    transform: scale(var(--aura-scale-min));
+  }
+
+  to {
+    opacity: var(--aura-glow-opacity-expanded);
+    filter: blur(var(--aura-blur)) saturate(var(--aura-saturation-max));
+    transform: scale(var(--aura-scale-max));
+  }
+}
+
+@keyframes therapeutic-aura-layer-expand {
+  from {
+    opacity: var(--aura-layer-opacity);
+    filter: blur(var(--aura-layer-blur)) saturate(var(--aura-saturation-min));
+    transform:
+      translate(-50%, -50%)
+      rotate(calc(var(--aura-rotate) - 3deg))
+      translate(calc(var(--aura-x) - 1%), calc(var(--aura-y) + 1%))
+      scale(var(--aura-scale-min));
+  }
+
+  to {
+    opacity: var(--aura-layer-opacity-expanded);
+    filter: blur(var(--aura-layer-blur)) saturate(var(--aura-saturation-max));
+    transform:
+      translate(-50%, -50%)
+      rotate(calc(var(--aura-rotate) + 3deg))
+      translate(calc(var(--aura-x) + 1%), calc(var(--aura-y) - 1%))
+      scale(var(--aura-scale-max));
+  }
+}
+
+@keyframes therapeutic-aura-core-expand {
+  from {
+    opacity: 0.78;
+    transform: scale(var(--aura-scale-min));
+  }
+
+  to {
+    opacity: 0.96;
+    transform: scale(var(--aura-scale-max));
+  }
+}
+
+@keyframes therapeutic-aura-settle {
+  to {
+    filter:
+      saturate(1.12)
+      drop-shadow(0 14px 22px rgba(var(--session-accent-rgb), var(--aura-shadow-opacity-min)));
+    transform: scale(var(--aura-completed-scale));
+  }
+}
+
+.therapeutic-session__breathing-phase,
 .therapeutic-session__phase-duration {
   position: relative;
   z-index: 1;
@@ -265,16 +475,25 @@
   text-align: center;
 }
 
-.therapeutic-session__guidance {
-  width: 74%;
-  font-size: clamp(1.02rem, 4.15vw, 1.32rem);
-  font-weight: 610;
-  line-height: 1.16;
-  overflow-wrap: anywhere;
+.therapeutic-session__breathing-phase {
+  display: flex;
+  width: 78%;
+  min-height: clamp(22px, 4.8vw, 28px);
+  align-items: center;
+  justify-content: center;
+  color: color-mix(in srgb, var(--session-ink) 78%, transparent);
+  font-size: clamp(1rem, 4.1vw, 1.28rem);
+  font-weight: 460;
+  line-height: 1.1;
+  opacity: 0.76;
+  transition:
+    color 220ms ease,
+    opacity 220ms ease;
   text-wrap: balance;
 }
 
 .therapeutic-session__phase-duration {
+  min-height: clamp(16px, 3.4vw, 20px);
   color: color-mix(in srgb, var(--session-ink) 78%, transparent);
   font-size: clamp(0.78rem, 3.1vw, 0.94rem);
   font-weight: 520;
@@ -490,14 +709,19 @@
   }
 
   .therapeutic-session {
-    --session-aura-size: clamp(120px, min(36vw, 17.8dvh), 146px);
-    --session-aura-region-height: clamp(176px, 29dvh, 214px);
+    --aura-size: clamp(176px, min(62vw, 30dvh), 218px);
+    --aura-max-size: min(calc(100vw - 38px), 324px);
+    --aura-container-scale-max: 1.025;
+    --aura-scale-max: 1.16;
+    --aura-blur: clamp(16px, 5vw, 24px);
+    --session-aura-region-height: clamp(224px, 34dvh, 258px);
     --session-aura-top-offset: clamp(12px, 2.2dvh, 18px);
     --session-lower-content-offset: clamp(18px, 3.1dvh, 24px);
   }
 
-  .therapeutic-session__guidance {
-    font-size: clamp(0.94rem, 3.8vw, 1.12rem);
+  .therapeutic-session__breathing-phase {
+    min-height: clamp(20px, 4.4vw, 24px);
+    font-size: clamp(0.92rem, 3.7vw, 1.08rem);
   }
 
   .therapeutic-session__phase-duration {
@@ -571,6 +795,8 @@
 
 @media (max-width: 360px) {
   .therapeutic-session {
+    --aura-max-size: min(calc(100vw - 34px), 318px);
+    --aura-scale-max: 1.15;
     padding-inline: 18px;
   }
 
@@ -581,5 +807,14 @@
 
   .therapeutic-session__info-column ion-icon {
     font-size: 1.18rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .therapeutic-session__aura,
+  .therapeutic-session__aura::before,
+  .therapeutic-session__aura-layer,
+  .therapeutic-session__aura-core {
+    animation: none;
   }
 }

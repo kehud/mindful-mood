@@ -25,6 +25,7 @@ type GlobalStatsCollection = 'toolStats' | 'categoryStats';
 export interface TrackableTool {
   id?: string | null;
   type?: string | null;
+  template?: string | null;
   momentCategory?: string | null;
 }
 
@@ -301,7 +302,7 @@ export class EngagementService {
 
     return {
       id: normalizedToolId,
-      type: this.normalizeEventValue(tool.type),
+      type: this.normalizeEventValue(tool.type?.trim() || tool.template),
       momentCategory: this.normalizeEventValue(tool.momentCategory),
       categoryStatsId: this.normalizeOptionalDocumentId(tool.momentCategory),
     };

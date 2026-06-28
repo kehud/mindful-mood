@@ -495,6 +495,7 @@ export class ToolsPage {
       id: tool.id,
       trackingTool: {
         id: tool.id,
+        // TODO: Local fallback cards do not have a safe Firestore type/momentCategory yet.
       },
       title: '',
       titleKey: tool.titleKey,
