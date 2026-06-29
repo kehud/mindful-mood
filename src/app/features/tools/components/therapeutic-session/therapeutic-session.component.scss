@@ -4,20 +4,29 @@
 }
 
 .therapeutic-session {
-  --aura-size: clamp(194px, min(70vw, 31dvh), 288px);
-  --aura-max-size: min(calc(100vw - 44px), 372px);
-  --aura-primary-color: 120, 201, 203;
-  --aura-secondary-color: 245, 188, 178;
+  --session-config-aura-size: clamp(194px, min(70vw, 31dvh), 288px);
+  --session-config-aura-max-size: min(calc(100vw - 44px), 372px);
+  --session-config-aura-primary-color: 120, 201, 203;
+  --session-config-aura-secondary-color: 245, 188, 178;
+  --session-config-aura-scale-min: 0.9;
+  --session-config-aura-scale-max: 1.24;
+  --session-config-aura-glow-opacity: 0.72;
+  --session-config-aura-glow-opacity-expanded: 1;
+  --session-config-aura-blur: clamp(20px, 5.8vw, 30px);
+  --aura-size: var(--session-config-aura-size);
+  --aura-max-size: var(--session-config-aura-max-size);
+  --aura-primary-color: var(--session-config-aura-primary-color);
+  --aura-secondary-color: var(--session-config-aura-secondary-color);
   --aura-animation-duration: 8.2s;
   --aura-phase-duration: var(--aura-animation-duration);
   --aura-phase-easing: cubic-bezier(0.42, 0, 0.22, 1);
   --aura-container-scale-min: 0.985;
   --aura-container-scale-max: 1.035;
-  --aura-scale-min: 0.9;
-  --aura-scale-max: 1.24;
-  --aura-blur: clamp(20px, 5.8vw, 30px);
-  --aura-glow-opacity: 0.72;
-  --aura-glow-opacity-expanded: 1;
+  --aura-scale-min: var(--session-config-aura-scale-min);
+  --aura-scale-max: var(--session-config-aura-scale-max);
+  --aura-blur: var(--session-config-aura-blur);
+  --aura-glow-opacity: var(--session-config-aura-glow-opacity);
+  --aura-glow-opacity-expanded: var(--session-config-aura-glow-opacity-expanded);
   --aura-secondary-glow-opacity: 0.16;
   --aura-saturation-min: 1.14;
   --aura-saturation-max: 1.38;
@@ -58,16 +67,8 @@
 }
 
 /*
-  Aura tuning guide:
-  - Breathing phase durations: update inhaleMs, holdExpandedMs, exhaleMs, and holdContractedMs in therapeutic-session.component.ts.
-  - Bigger aura: increase --aura-size or --aura-max-size; keep the compact-height override conservative for small screens.
-  - Slower/faster aura motion: adjust the phase durations in TypeScript; --aura-phase-duration is set from the active phase.
-  - Stronger/weaker expansion: widen or narrow --aura-scale-min and --aura-scale-max.
-  - Stronger/weaker glow: tune --aura-glow-opacity, --aura-glow-opacity-expanded, --aura-blur, and --aura-secondary-glow-opacity.
-  - Small-screen safety: lower the compact-height --aura-size or --aura-scale-max.
-  Scenario A - Larger, more visible breathing: increase --aura-size/--aura-max-size, increase --aura-scale-max, and slightly raise --aura-glow-opacity-expanded.
-  Scenario B - Slower, calmer breathing: increase inhaleMs/exhaleMs and lower --aura-scale-max if it feels too dramatic.
-  Scenario C - Softer aura: reduce --aura-glow-opacity, --aura-glow-opacity-expanded, and --aura-secondary-glow-opacity.
+  Core aura tuning lives in therapeutic-session.config.ts.
+  These variables map config values into the existing responsive aura styles.
 */
 .therapeutic-session::before {
   content: "";

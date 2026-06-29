@@ -8,6 +8,15 @@
   [class.therapeutic-session--phase-exhale]="isBreathingPhase('exhale')"
   [class.therapeutic-session--phase-hold-contracted]="isBreathingPhase('holdContracted')"
   [style.--aura-phase-duration]="breathingPhaseDurationCss()"
+  [style.--session-config-aura-size]="sessionConfig.aura.size"
+  [style.--session-config-aura-max-size]="sessionConfig.aura.maxSize"
+  [style.--session-config-aura-primary-color]="sessionConfig.aura.primaryColor"
+  [style.--session-config-aura-secondary-color]="sessionConfig.aura.secondaryColor"
+  [style.--session-config-aura-scale-min]="sessionConfig.aura.scaleMin"
+  [style.--session-config-aura-scale-max]="sessionConfig.aura.scaleMax"
+  [style.--session-config-aura-glow-opacity]="sessionConfig.aura.glowOpacity"
+  [style.--session-config-aura-glow-opacity-expanded]="sessionConfig.aura.glowOpacityExpanded"
+  [style.--session-config-aura-blur]="sessionConfig.aura.blur"
   [attr.dir]="currentDirection()"
 >
   <nav class="therapeutic-session__nav">
@@ -42,25 +51,27 @@
   </header>
 
   <section class="therapeutic-session__details" aria-label="Session details">
-    <div class="therapeutic-session__info-card">
-      <div class="therapeutic-session__info-column">
-        <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
-        <span class="therapeutic-session__info-copy">
-          <strong>{{ remainingTimeLabel() }}</strong>
-          <span>{{ currentDirection() === 'rtl' ? 'זמן שנותר' : 'Time left' }}</span>
-        </span>
-      </div>
+    @if (showSessionStatsCard()) {
+      <div class="therapeutic-session__info-card">
+        <div class="therapeutic-session__info-column">
+          <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+          <span class="therapeutic-session__info-copy">
+            <strong>{{ remainingTimeLabel() }}</strong>
+            <span>{{ currentDirection() === 'rtl' ? 'זמן שנותר' : 'Time left' }}</span>
+          </span>
+        </div>
 
-      <span class="therapeutic-session__info-divider" aria-hidden="true"></span>
+        <span class="therapeutic-session__info-divider" aria-hidden="true"></span>
 
-      <div class="therapeutic-session__info-column">
-        <ion-icon name="water-outline" aria-hidden="true"></ion-icon>
-        <span class="therapeutic-session__info-copy">
-          <strong>1 / 6</strong>
-          <span>{{ currentDirection() === 'rtl' ? 'מחזורים' : 'Cycles' }}</span>
-        </span>
+        <div class="therapeutic-session__info-column">
+          <ion-icon name="water-outline" aria-hidden="true"></ion-icon>
+          <span class="therapeutic-session__info-copy">
+            <strong>{{ cycleProgressLabel() }}</strong>
+            <span>{{ currentDirection() === 'rtl' ? 'מחזורים' : 'Cycles' }}</span>
+          </span>
+        </div>
       </div>
-    </div>
+    }
 
     <aside class="therapeutic-session__support-card">
       <ion-icon name="sparkles-outline" aria-hidden="true"></ion-icon>

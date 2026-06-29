@@ -2,23 +2,19 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } fro
 import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
 import { IonicModule } from '@ionic/angular';
 
-import { ToolDefinition, ToolLocalizedText } from '../../../../core/models/tool.model';
+import type { ToolDefinition, ToolLocalizedText } from '../../../../core/models/tool.model';
 import { LocalizationService } from '../../../../core/services/localization.service';
 import { TranslatePipe } from '../../../../shared/pipes/translate.pipe';
+import {
+  THERAPEUTIC_SESSION_DEFAULT_CONFIG,
+  therapeuticSessionConfigForTool,
+} from './therapeutic-session.config';
+import type { TherapeuticSessionConfig } from './therapeutic-session.config';
 
 // TODO: Replace this fallback once every therapeutic session tool has a configured durationSeconds.
 const FALLBACK_SESSION_DURATION_SECONDS = 60;
 
 type BreathingPhase = 'inhale' | 'holdExpanded' | 'exhale' | 'holdContracted';
-
-// Breathing rhythm tuning: adjust inhale/exhale duration here, and hold duration with the hold*Ms values.
-// Aura min/max size, glow, and color strength are controlled by the CSS variables in the component stylesheet.
-const BREATHING_PHASE_DURATIONS = {
-  inhaleMs: 4200,
-  holdExpandedMs: 1200,
-  exhaleMs: 5200,
-  holdContractedMs: 1200,
-} as const;
 
 const BREATHING_PHASE_SEQUENCE: readonly BreathingPhase[] = [
   'inhale',
@@ -34,15 +30,6 @@ const BREATHING_PHASE_LABELS: Record<BreathingPhase, ToolLocalizedText> = {
   holdContracted: { en: 'Hold', he: 'החזק' },
 };
 
-const BREATHING_HAPTICS_CONFIG = {
-  enableRhythmHaptics: true,
-  inhaleHapticsEnabled: true,
-  exhaleHapticsEnabled: true,
-  completionHapticsEnabled: true,
-  inhaleTapGapMs: 90,
-  exhaleTapGapMs: 140,
-} as const;
-
 @Component({
   selector: 'app-therapeutic-session',
   standalone: true,
@@ -57,24 +44,30 @@ export class TherapeuticSessionComponent implements OnInit, OnDestroy {
   private breathingPhaseIndex = 0;
   private breathingPhaseTransitionId = 0;
   private breathingPhaseStartedAt = 0;
-  private breathingPhaseRemainingMs: number = BREATHING_PHASE_DURATIONS.inhaleMs;
-  private hapticTapTimeoutId: ReturnType<typeof setTimeout> | null = null;
+  private breathingPhaseRemainingMs: number = THERAPEUTIC_SESSION_DEFAULT_CONFIG.breathing.inhaleMs;
+  private hapticTapTimeoutIds: ReturnType<typeof setTimeout>[] = [];
   private lastRhythmHapticTransitionId: number | null = null;
   private hasPlayedCompletionHaptic = false;
   private hasCompleted = false;
+  private totalSessionSeconds = FALLBACK_SESSION_DURATION_SECONDS;
 
   @Input({ required: true }) tool!: ToolDefinition;
   @Output() readonly exit = new EventEmitter<void>();
   @Output() readonly complete = new EventEmitter<void>();
 
+  sessionConfig: TherapeuticSessionConfig = THERAPEUTIC_SESSION_DEFAULT_CONFIG;
   readonly currentDirection = this.localization.direction;
   remainingSeconds = 0;
   isPaused = false;
   breathingPhase: BreathingPhase = 'inhale';
-  breathingPhaseDurationMs: number = BREATHING_PHASE_DURATIONS.inhaleMs;
+  breathingPhaseDurationMs: number = THERAPEUTIC_SESSION_DEFAULT_CONFIG.breathing.inhaleMs;
 
   ngOnInit(): void {
+    this.sessionConfig = therapeuticSessionConfigForTool(this.tool);
     this.remainingSeconds = this.resolveDurationSeconds();
+    this.totalSessionSeconds = this.remainingSeconds;
+    this.breathingPhaseRemainingMs = this.sessionConfig.breathing.inhaleMs;
+    this.breathingPhaseDurationMs = this.sessionConfig.breathing.inhaleMs;
     this.startTimer();
     this.startBreathingCycle();
   }
@@ -103,6 +96,14 @@ export class TherapeuticSessionComponent implements OnInit, OnDestroy {
 
   breathingPhaseDurationCss(): string {
     return `${this.breathingPhaseDurationMs}ms`;
+  }
+
+  showSessionStatsCard(): boolean {
+    return this.sessionConfig.ui.showSessionStatsCard;
+  }
+
+  cycleProgressLabel(): string {
+    return `${this.currentCycle()} / ${this.totalCycles()}`;
   }
 
   isBreathingPhase(phase: BreathingPhase): boolean {
@@ -194,7 +195,7 @@ export class TherapeuticSessionComponent implements OnInit, OnDestroy {
   }
 
   private startBreathingCycle(): void {
-    this.enterBreathingPhase(0, BREATHING_PHASE_DURATIONS.inhaleMs);
+    this.enterBreathingPhase(0, this.sessionConfig.breathing.inhaleMs);
   }
 
   private pauseBreathingCycle(): void {
@@ -243,15 +244,17 @@ export class TherapeuticSessionComponent implements OnInit, OnDestroy {
   }
 
   private durationForBreathingPhase(phase: BreathingPhase): number {
+    const durations = this.sessionConfig.breathing;
+
     switch (phase) {
       case 'inhale':
-        return BREATHING_PHASE_DURATIONS.inhaleMs;
+        return durations.inhaleMs;
       case 'holdExpanded':
-        return BREATHING_PHASE_DURATIONS.holdExpandedMs;
+        return durations.holdExpandedMs;
       case 'exhale':
-        return BREATHING_PHASE_DURATIONS.exhaleMs;
+        return durations.exhaleMs;
       case 'holdContracted':
-        return BREATHING_PHASE_DURATIONS.holdContractedMs;
+        return durations.holdContractedMs;
     }
   }
 
@@ -265,38 +268,68 @@ export class TherapeuticSessionComponent implements OnInit, OnDestroy {
   }
 
   private triggerPhaseHaptics(phase: BreathingPhase, transitionId: number): void {
+    const haptics = this.sessionConfig.haptics;
+
     if (
-      !BREATHING_HAPTICS_CONFIG.enableRhythmHaptics ||
+      !haptics.enabled ||
       this.hasCompleted ||
       this.lastRhythmHapticTransitionId === transitionId
     ) {
       return;
     }
 
-    if (phase === 'inhale' && BREATHING_HAPTICS_CONFIG.inhaleHapticsEnabled) {
+    if (phase === 'inhale' && haptics.inhaleTaps > 0) {
       this.lastRhythmHapticTransitionId = transitionId;
-      this.triggerDoubleTap(BREATHING_HAPTICS_CONFIG.inhaleTapGapMs);
+      this.triggerTapPattern(haptics.inhaleTaps, haptics.inhaleTapGapMs, haptics.inhaleStyle);
       return;
     }
 
-    if (phase === 'exhale' && BREATHING_HAPTICS_CONFIG.exhaleHapticsEnabled) {
+    if (phase === 'exhale' && haptics.exhaleTaps > 0) {
       this.lastRhythmHapticTransitionId = transitionId;
-      this.triggerDoubleTap(BREATHING_HAPTICS_CONFIG.exhaleTapGapMs);
+      this.triggerTapPattern(haptics.exhaleTaps, haptics.exhaleTapGapMs, haptics.exhaleStyle);
+      return;
+    }
+
+    if (
+      phase === 'holdExpanded' &&
+      haptics.holdHapticsEnabled &&
+      haptics.holdExpandedHapticEnabled
+    ) {
+      this.lastRhythmHapticTransitionId = transitionId;
+      this.triggerTapPattern(1, 0, haptics.holdHapticStyle);
+      return;
+    }
+
+    if (
+      phase === 'holdContracted' &&
+      haptics.holdHapticsEnabled &&
+      haptics.holdContractedHapticEnabled
+    ) {
+      this.lastRhythmHapticTransitionId = transitionId;
+      this.triggerTapPattern(1, 0, haptics.holdHapticStyle);
     }
   }
 
-  private triggerDoubleTap(gapMs: number): void {
+  private triggerTapPattern(tapCount: number, gapMs: number, style: ImpactStyle): void {
     this.clearPendingHapticTap();
-    this.triggerGentleTap();
-    this.hapticTapTimeoutId = setTimeout(() => {
-      this.hapticTapTimeoutId = null;
-      this.triggerGentleTap();
-    }, gapMs);
+    this.triggerTap(style);
+
+    const safeTapCount = Math.max(1, Math.floor(tapCount));
+    const safeGapMs = Math.max(0, Math.round(gapMs));
+
+    for (let tapIndex = 1; tapIndex < safeTapCount; tapIndex += 1) {
+      const timeoutId = setTimeout(() => {
+        this.hapticTapTimeoutIds = this.hapticTapTimeoutIds.filter((id) => id !== timeoutId);
+        this.triggerTap(style);
+      }, safeGapMs * tapIndex);
+
+      this.hapticTapTimeoutIds.push(timeoutId);
+    }
   }
 
-  private triggerGentleTap(): void {
+  private triggerTap(style: ImpactStyle): void {
     try {
-      void Haptics.impact({ style: ImpactStyle.Light }).catch(() => undefined);
+      void Haptics.impact({ style }).catch(() => undefined);
     } catch {
       // Haptics are optional on web/simulator.
     }
@@ -304,7 +337,7 @@ export class TherapeuticSessionComponent implements OnInit, OnDestroy {
 
   private triggerCompletionHaptic(): void {
     if (
-      !BREATHING_HAPTICS_CONFIG.completionHapticsEnabled ||
+      !this.sessionConfig.haptics.completionEnabled ||
       this.hasPlayedCompletionHaptic
     ) {
       return;
@@ -320,12 +353,34 @@ export class TherapeuticSessionComponent implements OnInit, OnDestroy {
   }
 
   private clearPendingHapticTap(): void {
-    if (this.hapticTapTimeoutId === null) {
+    if (!this.hapticTapTimeoutIds.length) {
       return;
     }
 
-    clearTimeout(this.hapticTapTimeoutId);
-    this.hapticTapTimeoutId = null;
+    this.hapticTapTimeoutIds.forEach((timeoutId) => clearTimeout(timeoutId));
+    this.hapticTapTimeoutIds = [];
+  }
+
+  private currentCycle(): number {
+    const cycleDurationSeconds = this.breathingCycleDurationSeconds();
+    const elapsedSeconds = Math.max(0, this.totalSessionSeconds - this.remainingSeconds);
+
+    return Math.min(this.totalCycles(), Math.floor(elapsedSeconds / cycleDurationSeconds) + 1);
+  }
+
+  private totalCycles(): number {
+    return Math.max(1, Math.ceil(this.totalSessionSeconds / this.breathingCycleDurationSeconds()));
+  }
+
+  private breathingCycleDurationSeconds(): number {
+    const durations = this.sessionConfig.breathing;
+    const cycleDurationMs =
+      durations.inhaleMs +
+      durations.holdExpandedMs +
+      durations.exhaleMs +
+      durations.holdContractedMs;
+
+    return Math.max(1, cycleDurationMs / 1000);
   }
 
   private formatDuration(totalSeconds: number): string {
